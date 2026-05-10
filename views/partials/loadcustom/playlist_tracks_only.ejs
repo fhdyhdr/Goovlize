@@ -1,0 +1,162 @@
+
+
+<% tracks.forEach(function(track) { %>
+    <div class="track-container listmusic"
+     onclick="trackClicked(this)"
+      data-id="<%= track.id_music %>"
+      data-src="<%= track.audio_file %>"
+      data-lyric="<%= track.lyric %>"
+      data-line-durations="<%= track.line_durations %>"
+      data-cover="<%= track.cover_music %>"
+      data-title="<%= track.title_music %>"
+      data-artist-ids="<%= track.artist_ids %>"
+      data-artist="<%= track.artist_names %>"
+      data-playlist="<%= playlist.hashid %>"
+      data-album-id="<%= track.albums[0]?.id_al %>"
+      data-playlist_name="<%= playlist.playlist_name %>">
+
+
+
+
+
+        <div class="track-info">
+          <img
+            src="<%= track.cover_music %>"
+            class="track-image"
+          />
+          <div class="track-details">
+            <p class="track-title">
+              <%= track.title_music %>
+            </p>
+            <p class="track-artist"> <% const artistNames =
+                      track.artist_names.split(',').map(name => name.trim());
+                      const artistIds = track.artist_ids.split(',').map(id =>
+                      id.trim()); artistNames.forEach(function(name, index) {
+                      const id = artistIds[index]; %>
+                      <span
+                        class="clickable-artist"
+                        onclick="handleArtistClick('<%= id %>')"
+                        ><%= name %></span
+                      ><%= (index < artistNames.length - 1) ? ', ' : '' %> <%
+                      }); %></p>
+          </div>
+        </div>
+
+<% if (track.albums && track.albums.length) { %> <%
+    track.albums.forEach(function(album) { %>
+    <span class="track-album"><%= album.album_name %></span>
+    <% }); %> <% } else { %>
+    <span class="track-album"><%= track.title_music %></span>
+   <% } %>
+   
+    <span class="track-time"><%= track.duration %></span>
+    <div class="track-actions">
+
+
+           <i
+                  onclick="event.stopPropagation(); event.preventDefault(); trackHeart(this)"
+                  class="<%= track.isFavorite ? 'fas' : 'far' %> fa-heart fav_playlist"
+                  style="<%= track.isFavorite ? 'color:#ffff;' : '' %>"
+                ></i>
+
+
+
+
+<div class="dropdown-container" onclick="event.stopPropagation();">
+<i class="fa-solid fa-ellipsis track-menu"
+   onclick="handleEllipsisClick(this)"></i>
+
+  <div class="dropdown-content">
+   <li
+   class="favDropdown"
+   onclick="trackHeartDropdown(this)">
+   <a href="javascript:void(0);">
+   <i
+    class="<%= track.isFavorite ? 'fas' : 'far' %> fa-heart"
+    style="<%= track.isFavorite ? 'color:#ffff;' : '' %>"></i>
+    <span>Favorites</span>
+    </a>
+  </li>
+
+
+<% if (isOwner) { %>
+  <li class="favDropdown" onclick="removeMusicFromCustom(this)"
+  data-music-id="<%= track.id_music %>"
+  data-playlist-id="<%= playlist.id_cus %>">
+  <a href="javascript:void(0);">
+  <i class="fa-solid fa-ban"></i>
+  <span>Delete from Playlist</span>
+  </a>
+  </li>
+  <% } %>
+
+
+  <% if (track.albums && track.albums.length) { %> <%
+   track.albums.forEach(function(album) { %>
+    <a href="javascript:void(0);" onclick="getAlbum1('<%= track.id_music %>', '<%= album.id_al %>')"><i class="fa-solid fa-compact-disc"></i>Album</a>
+  <% }); %> <% } else { %>
+    <a href="javascript:void(0);" onclick="getAlbum2('<%= track.id_music %>', null)" ><i class="fa-solid fa-compact-disc"></i>Album</a>
+   <% } %>
+
+    <% if (artistNames.length === 1) { %>
+    <a href="javascript:void(0);"><i class="fa-solid fa-user"></i>Artist</a>
+   <% } else if (artistNames.length > 1) { %>
+    <div class="dropdown-submenu">
+      <a href="javascript:void(0);">
+        <i class="fa-solid fa-user"></i>
+        <span>Artist</span>
+        <span class="arrow">▸</span>
+      </a>
+      <div class="submenu-content">
+        <% artistNames.forEach(function(name, index) { %>
+        <a href=""><%= name %></a>
+        <% }); %>
+      </div>
+    </div>
+  <% } %>
+
+
+    <div class="dropdown-submenu">
+      <a href="javascript:void(0);">
+        <i class="fa-solid fa-plus"></i>
+        <span>Add To Playlist</span>
+        <span class="arrow">▸</span>
+      </a>
+      <div class="submenu-content">
+         <% if (track.custom_playlists &&
+            track.custom_playlists.length > 0) { %> <%
+            track.custom_playlists.forEach(function(pl) { %>
+
+
+                        <li
+                          class="sub-addplaylist"
+                          data-playlist-id="<%= pl.id_cus %>"
+                          data-music-id="<%= track.id_music %>"
+                          onclick="addCusDesk('<%= pl.id_cus %>', '<%= track.id_music %>')"
+                        >
+                          <a href="javascript:void(0);">
+                            <% if (pl.exists) { %>
+                            <i
+                              class="fa-solid fa-circle-check"
+                              style="color: #4caf50; margin-right: 5px"
+                            ></i>
+                            <% } else { %>
+                            <i
+                              class="fa-regular fa-circle-check"
+                              style="color: #b0b0b0; margin-right: 5px"
+                            ></i>
+                            <% } %>
+                            <span><%= pl.playlist_name %></span>
+                          </a>
+                        </li>
+
+         <% }); %> <% } %>
+      </div>
+    </div>
+  </div>
+</div>
+        
+    </div>
+
+      </div>
+<% }); %>

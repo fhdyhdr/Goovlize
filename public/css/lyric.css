@@ -1,0 +1,265 @@
+.scroller h1{
+	color: #2d2421;
+	margin-bottom: 50px;
+	font-weight: 700;
+}
+
+
+
+@layer scroller {
+
+
+	.resizer2{
+		aspect-ratio: 3 / 4;
+		resize: both;
+		overflow: hidden;
+		min-width: 90%;
+    max-height: 77vh;
+		padding: 0.25rem;
+    margin-top: 40px !important;
+		margin-left: 0;
+    cursor: pointer;
+	}
+	.scroller {
+		width: 100%;
+		height: 100%;		
+		overflow: auto;
+		position: relative;
+		overflow-x: hidden;
+		padding: 0.75rem;
+	}
+	article {
+		display: flex;
+		gap: 1rem;
+		flex-direction: column;
+	}
+}
+
+@layer mask {
+	.scroller {
+		--mask-width: 100%;
+	}
+	
+
+	@supports (animation-timeline: scroll()) {
+		.scroller {
+			scroll-timeline: --scroller;
+			-webkit-mask: linear-gradient(white, transparent) 0 0 / var(--mask-width) 0 no-repeat,
+				linear-gradient(white, white) 0 50% / 100% 100% no-repeat,
+				linear-gradient(transparent, white) 0 100% / var(--mask-width) calc(var(--mask-size) * 1px) no-repeat;
+			        mask: linear-gradient(white, transparent) 0 0 / var(--mask-width) 0 no-repeat,
+				linear-gradient(white, white) 0 50% / 100% 100% no-repeat,
+				linear-gradient(transparent, white) 0 100% / var(--mask-width) calc(var(--mask-size) * 1px) no-repeat;
+			-webkit-mask-composite: xor;
+			        mask-composite: exclude;
+			-webkit-mask-repeat: none;
+			        mask-repeat: none;
+			-webkit-animation: mask-up both linear, mask-down both linear;
+			        animation: mask-up both linear, mask-down both linear;
+			animation-timeline: scroll(self);
+			animation-range: 0 calc(var(--mask-range) * 1px), calc(100% - (var(--mask-range) * 1px)) 100%;
+		}
+		@-webkit-keyframes mask-up {
+			100% {
+				-webkit-mask-size: var(--mask-width) calc(var(--mask-size) * 1px), 100% 100%, var(--mask-width) calc(var(--mask-size) * 1px);
+				        mask-size: var(--mask-width) calc(var(--mask-size) * 1px), 100% 100%, var(--mask-width) calc(var(--mask-size) * 1px);
+			}
+		}
+		@keyframes mask-up {
+			100% {
+				-webkit-mask-size: var(--mask-width) calc(var(--mask-size) * 1px), 100% 100%, var(--mask-width) calc(var(--mask-size) * 1px);
+				        mask-size: var(--mask-width) calc(var(--mask-size) * 1px), 100% 100%, var(--mask-width) calc(var(--mask-size) * 1px);
+			}
+		}
+		@-webkit-keyframes mask-down {
+			100% {
+				-webkit-mask-size: var(--mask-width) calc(var(--mask-size) * 1px), 100% 100%, var(--mask-width) 0;
+				        mask-size: var(--mask-width) calc(var(--mask-size) * 1px), 100% 100%, var(--mask-width) 0;
+			}
+		}
+		@keyframes mask-down {
+			100% {
+				-webkit-mask-size: var(--mask-width) calc(var(--mask-size) * 1px), 100% 100%, var(--mask-width) 0;
+				        mask-size: var(--mask-width) calc(var(--mask-size) * 1px), 100% 100%, var(--mask-width) 0;
+			}
+		}
+
+
+
+
+		
+	}
+}
+
+
+
+@layer mask {
+  .scroller {
+    --mask-fade-height: 100px; /* Total area fade di atas dan bawah */
+
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      transparent 0,
+      black var(--mask-fade-height),
+      black calc(100% - var(--mask-fade-height)),
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to bottom,
+      transparent 0,
+      black var(--mask-fade-height),
+      black calc(100% - var(--mask-fade-height)),
+      transparent 100%
+    );
+
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+  }
+}
+
+
+/* Container utama lyric page */
+.page_lyric {
+  display: flex;
+  justify-content: center; /* Pusatkan secara horizontal */
+  width: 100%;
+}
+
+/* Container pembungkus lyric */
+.resizer2 {
+  width: 100%; /* Lebar relatif */
+  max-width: 800px; /* Lebar maksimum */
+  margin: 0 auto; /* Pusatkan */
+}
+
+/* Container scroll */
+.scrollerScreen {
+  width: 100%;
+}
+
+/* Container lirik */
+.lyric-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Pusatkan child elements */
+  width: 100%;
+}
+
+/* Paragraf lirik */
+#lyricScreen p {
+  text-align: left; /* Rata kiri */
+  width: 90%; /* Lebar 90% dari parent */
+  max-width: 1300px; /* Lebar maksimum */
+  line-height: 2;
+  font-size: 3rem;
+  color: #b2b2b2;
+  transition: all 0.3s ease;
+}
+
+#lyricScreen p.highlightedlyric {
+  color: #ffffff;
+  font-weight: bold;
+  text-shadow: 0 0 12px rgba(255, 255, 255, 0.453);
+}
+
+
+.music-icon-line {
+  color: #aaa;
+  text-align: left;
+  display: flex;
+  justify-content: flex-start;
+  width: 90%;
+  margin: 0 auto 13px;
+  min-height: 40px; /* Ensure consistent height */
+}
+
+.music-wave {
+  width: 60px;
+  height: 60px;
+  padding: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin: 0;
+}
+
+.music-wave span {
+  height: 8px;
+  width: 8px;
+  background-color: #FEE1C0;
+  display: block;
+  border-radius: 1px;
+  transition: height 0.3s ease-out;
+}
+
+/* Static wave (non-animated) */
+.music-wave.static span {
+  height: 7px;
+}
+
+/* Animated wave */
+.music-wave.animate span {
+  animation: wave 0.7s infinite ease-in-out;
+}
+
+.music-wave.animate span:nth-child(1) { animation-delay: 0.2s; }
+.music-wave.animate span:nth-child(2) { animation-delay: 0.4s; }
+.music-wave.animate span:nth-child(3) { animation-delay: 0.6s; }
+
+.music-wave.animate.paused span {
+  animation-play-state: paused;
+  height: 7px;
+}
+
+@keyframes wave {
+  50% {
+    height: 100%;
+  }
+}
+
+
+#lyricScreen p:first-child {
+  margin-top: 100px;
+}
+
+#lyricScreen p:last-child {
+  margin-bottom: 100px;
+}
+
+
+
+@media screen and (orientation: landscape) and (max-width: 1024px) {
+  .resizer2 {
+    max-height: 65vh;
+    min-width: 85%;
+  }
+  
+  #lyricScreen p {
+    font-size: 2rem;
+    margin: 0 auto 10px;
+  }
+  
+  .lyric-container {
+    padding: 20vh 0;
+    min-height: calc(100% + 30vh);
+  }
+}
+
+
+
+
+/* Lirik tanpa timing */
+#lyricScreen p.no-timing {
+  color: #ffffff !important;
+  opacity: 1;
+}
+
+#lyricScreen p.no-timing:hover {
+  transform: translateX(5px);
+}
+
+#lyricScreen p:hover:not(.no-timing) {
+  transform: translateX(5px);
+}

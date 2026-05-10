@@ -1,0 +1,1418 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta charset="UTF-8" />
+    <title><%= userProfile.name_user %> - Profile</title>
+    <link rel="stylesheet" href="/css/n.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      /* Styles sama seperti playlist */
+      .dropdown-container {
+        position: relative;
+        display: inline-block;
+      }
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: 100%;
+        background-color: #2a292f;
+        min-width: 180px;
+        z-index: 1;
+        border-radius: 6px;
+      }
+      .dropdown-content a {
+        color: #fff;
+        padding: 10px 14px;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 14px;
+      }
+      .dropdown-content i {
+        font-size: 15px;
+      }
+      .dropdown-content a:hover {
+        background-color: #1b1b1b;
+      }
+      .show {
+        display: block;
+      }
+      .dropdown-submenu {
+        position: relative;
+      }
+      .dropdown-submenu > a {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 14px;
+        color: #fff;
+        font-size: 14px;
+        gap: 10px;
+      }
+      .dropdown-submenu > a:hover {
+        background-color: #1b1b1b;
+      }
+      .arrow {
+        margin-left: auto;
+        font-size: 20px;
+        opacity: 0.7;
+      }
+      .submenu-content {
+        display: none;
+        position: absolute;
+        top: 0;
+        right: 100%;
+        background-color: #37353e;
+        min-width: 160px;
+        border-radius: 6px;
+        z-index: 2;
+      }
+      .submenu-content a {
+        padding: 10px 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+        color: #fff;
+        font-size: 14px;
+      }
+      .submenu-content a:hover {
+        background-color: #1b1b1b;
+      }
+      .dropdown-submenu:hover .submenu-content {
+        display: block;
+      }
+      .playlist-name {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 1.2em;
+        max-height: calc(1.2em * 3);
+      }
+
+      /* PERBAIKAN: Track album hover area */
+      .track-album {
+        font-size: 0.875rem;
+        color: var(--text_muted);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: left;
+        position: relative;
+        display: block; /* PERUBAHAN: dari inline-block ke block */
+        cursor: pointer;
+        width: 100%; /* PERUBAHAN: agar memenuhi container */
+      }
+
+      /* Hover hanya pada teks, bukan seluruh area */
+      :root[style*="--device: desktop"] .track-album:hover {
+        text-decoration: underline;
+      }
+
+      /* PERBAIKAN: Container untuk track-album agar benar-benar rata kiri */
+      .track-album-container {
+        flex: 1;
+        display: block; /* PERUBAHAN: dari flex ke block */
+        padding: 0 1rem;
+        text-align: left; /* PERUBAHAN: pastikan rata kiri */
+        min-width: 0; /* PERUBAHAN: penting untuk text ellipsis */
+      }
+
+      /* PERBAIKAN: Track number dengan width tetap untuk alignment */
+      .track-number {
+        margin-right: 10px;
+        min-width: 25px; /* PERUBAHAN: Lebar sedikit lebih besar untuk angka 2 digit */
+        text-align: center;
+        display: inline-block;
+        font-variant-numeric: tabular-nums; /* Agar angka memiliki lebar yang konsisten */
+        flex-shrink: 0; /* PERUBAHAN: agar tidak mengecil */
+      }
+
+      .banner-profile .banner-img-container {
+        border-radius: 50%;
+        width: clamp(160px, 20cqi, 279px);
+        height: clamp(160px, 20cqi, 279px);
+      }
+
+      .banner-profile .banner-img-container img {
+        border-radius: 50%;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      @media only screen and (orientation: landscape) {
+
+        :root[style*="--device: mobile"] .banner-text-content {
+          gap: clamp(0.01rem, 0.4cqi, 1rem);
+        }
+      }
+
+      #btn-follow-user, #btn-button {
+        --text-color: rgb(255, 255, 255);
+        --bg-color-sup: #404040;
+        --bg-color: linear-gradient(
+          135deg,
+          #2c3e50 0%,
+          #34495e 50%,
+          #2c3e50 100%
+        );
+        --bg-hover-color: linear-gradient(
+          135deg,
+          #34495e 0%,
+          #2c3e50 50%,
+          #34495e 100%
+        );
+        --online-status: #1abc9c;
+        --font-size: 16px;
+        --btn-transition: all 0.3s ease-out;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .button-profile {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 0 2.17382px rgba(0, 0, 0, 0.049),
+          0 1.75px 6.01034px rgba(0, 0, 0, 0.07),
+          0 3.63px 14.4706px rgba(0, 0, 0, 0.091),
+          0 22px 48px rgba(0, 0, 0, 0.14);
+        background-color: var(--bg-color);
+        border-radius: 68px;
+        cursor: pointer;
+        width: fit-content;
+        border: 0;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .button-profile:active {
+        transform: scale(0.99);
+      }
+
+      .content-avatar {
+        margin: 0;
+        transition: var(--btn-transition);
+        position: relative;
+      }
+
+      .avatar {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        overflow: hidden;
+        background-color: var(--bg-color-sup);
+      }
+
+      .user-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .status-user {
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        right: 1px;
+        bottom: 1px;
+        border-radius: 50%;
+        outline: solid 2px var(--bg-color);
+        background-color: var(--online-status);
+        transition: var(--btn-transition);
+      }
+
+      .notice-content {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        padding: 0 11px;
+        text-align: initial;
+        color: var(--text-color);
+      }
+
+      @container music-container (min-width: 0) {
+        .button-profile {
+          padding: clamp(4px, 1cqi, 8px) clamp(6px, 2cqi, 10px);
+          height: clamp(48px, 5cqi, 55px);
+        }
+
+        .content-avatar {
+          width: clamp(33px, 5cqi, 40px);
+          height: clamp(33px, 5cqi, 40px);
+        }
+
+        .lable-button {
+          font-size: clamp(0.95em, 1cqi, 1.2em);
+        }
+      }
+
+      .followers{
+        margin-right: 30px;
+      }.other-page .carousel__wrapper {
+  margin-bottom: 32px;
+  padding: 0 50px;
+}
+
+.other-page .carousel__header {
+  margin-bottom: 20px;
+  padding: 0;
+}
+
+.other-page .carousel__controls {
+  display: none;
+}
+
+.other-page .carousel__content {
+  overflow: visible !important;
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px;
+  cursor: default;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.other-page .card-container {
+  width: 100% !important;
+  /* Pastikan container tidak melebar karena content */
+  min-width: 0; /* Penting untuk mencegah overflow */
+}
+
+.other-page .visual-card {
+  width: 100% !important;
+  /* Buat card persegi dengan aspect ratio 1:1 */
+  aspect-ratio: 1 / 1;
+  height: auto !important;
+  /* Pastikan card tidak melebar */
+  min-width: 0;
+}
+
+.other-page .card-text-content {
+  min-height: 55px;
+  padding: 0 4px;
+  margin-top: 8px;
+  /* Pastikan text content tidak melebar */
+  min-width: 0;
+  width: 100%;
+}
+
+.other-page .visual-title {
+  font-size: 0.9em;
+  margin-bottom: 4px;
+  /* PERBAIKAN: Tambahkan text truncation */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  min-width: 0;
+  line-height: 1.3;
+}
+
+.other-page .visual-description {
+  font-size: 0.8em;
+  line-height: 1.4;
+  /* PERBAIKAN: Tambahkan text truncation untuk description juga */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  min-width: 0;
+  color: #b3b3b3;
+}
+
+.other-page .svg-circle-wrapper {
+  width: 2.8rem;
+  height: 2.8rem;
+}
+
+.other-page .svg-circle-wrapper .svg-icon {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+/* Collage Grid Styles - PERBAIKAN: Pastikan collage tidak overflow */
+.visual-image {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  /* Pastikan image container tidak melebar */
+  min-width: 0;
+}
+
+.collage-grid {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  gap: 2px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.collage-item {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  /* Pastikan collage item tidak overflow */
+  min-width: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .other-page .carousel__content {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 18px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .other-page .carousel__wrapper {
+    padding: 0 30px;
+  }
+  
+  .other-page .carousel__content {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 16px;
+  }
+  
+  .other-page .card-text-content {
+    min-height: 50px;
+  }
+  
+  .other-page .visual-title {
+    font-size: 0.85em;
+  }
+}
+
+@media (max-width: 768px) {
+  .other-page .carousel__content {
+    /* 3 kolom di tablet */
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+  
+  .other-page .card-text-content {
+    min-height: 45px;
+  }
+  
+  .other-page .visual-title {
+    font-size: 0.85em;
+  }
+  
+  .other-page .visual-description {
+    font-size: 0.75em;
+  }
+  
+  .other-page .svg-circle-wrapper {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+  
+  .other-page .svg-circle-wrapper .svg-icon {
+    width: 1.4rem;
+    height: 1.4rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .other-page .carousel__wrapper {
+    padding: 0 20px;
+  }
+  
+  .other-page .carousel__content {
+    /* Tetap 3 kolom di mobile */
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  
+  .other-page .card-text-content {
+    min-height: 40px;
+  }
+  
+  .other-page .visual-title {
+    font-size: 0.8em;
+  }
+  
+  .other-page .visual-description {
+    font-size: 0.7em;
+  }
+  
+  .other-page .svg-circle-wrapper {
+    width: 2.2rem;
+    height: 2.2rem;
+  }
+  
+  .other-page .svg-circle-wrapper .svg-icon {
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+}
+
+/* Untuk layar sangat kecil, 2 kolom dengan text yang lebih ketat */
+@media (max-width: 360px) {
+  .other-page .carousel__content {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  
+  .other-page .card-text-content {
+    min-height: 35px;
+    padding: 0 2px; /* Kurangi padding */
+  }
+  
+  .other-page .visual-title {
+    font-size: 0.75em;
+    line-height: 1.2;
+  }
+  
+  .other-page .visual-description {
+    font-size: 0.65em;
+    line-height: 1.2;
+  }
+  
+  .other-page .svg-circle-wrapper {
+    width: 2rem;
+    height: 2rem;
+  }
+  
+  .other-page .svg-circle-wrapper .svg-icon {
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+/* Hover effects */
+.other-page .visual-card:hover .svg-circle-wrapper,
+.other-page .visual-card:active .svg-circle-wrapper,
+.other-page .visual-card:focus .svg-circle-wrapper {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Empty state styles */
+.empty-playlist-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 40px 20px;
+  color: #b3b3b3;
+}
+
+.empty-playlist-icon {
+  margin-bottom: 20px;
+  opacity: 0.7;
+}
+
+.empty-playlist-title {
+  margin-bottom: 8px;
+  color: #ffffff;
+}
+
+.empty-playlist-description {
+  line-height: 1.4;
+}
+
+#errorusernm{
+  margin-top: 18px;
+}
+
+
+
+
+.user-cover-preview {
+  border-radius: 50%;
+  border: 3px solid #fff;
+}
+
+.user-cover-preview:hover .cover-upload-overlay {
+  opacity: 1;
+  visibility: visible;
+}
+
+.playlist-cover-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: all 0.3s ease;
+}
+
+.user-cover-preview:hover .playlist-cover-image {
+  filter: brightness(0.7);
+}
+
+/* Overlay untuk upload options */
+.cover-upload-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+/* Container untuk kedua opsi */
+.upload-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Jarak antara kedua opsi */
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 10px;
+}
+
+/* Style untuk setiap opsi */
+.upload-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  cursor: pointer;
+  padding: 9px 10px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  width: 100%;
+  max-width: 140px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
+}
+
+
+
+
+.upload-option i {
+  font-size: 24px;
+}
+
+.upload-option span {
+  font-size: 13px;
+}
+
+.upload-option:last-child i {
+  color: #ff6b6b;
+}
+
+.upload-option:last-child:hover {
+  background: rgba(255, 107, 107, 0.15);
+}
+
+.upload-option:last-child:hover i {
+  color: #ff5252;
+}
+.upload-option:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+:root[style*="--device: mobile"] .user-cover-preview{
+  width: 190px;
+  height: 190px;
+}
+:root[style*="--device: mobile"] .upload-option i{
+font-size: 20px;
+}
+
+:root[style*="--device: mobile"] .upload-option span{
+font-size: 10px;
+}
+:root[style*="--device: mobile"]  .upload-option {
+  padding: 6px 6px;
+  max-width: 90px;
+}
+
+
+@media only screen and (orientation: landscape) {
+  :root[style*="--device: mobile"] .upload-option span{
+      display: none;
+  }
+  :root[style*="--device: mobile"]  .upload-option {
+    max-width: 50px;
+    padding: 5px;
+  }
+  :root[style*="--device: mobile"] .upload-options {
+    gap: 5px;
+  }
+  :root[style*="--device: mobile"] .upload-option i{
+    margin-top:4px;
+  }
+
+}
+
+
+
+
+
+      @container music-container (min-width: 0) {
+
+        .empty-playlist-icon {
+            font-size: clamp(3em, 8cqi, 5em);
+
+          }
+
+          .empty-playlist-title {
+            font-size: clamp(0.9em, 1cqi, 1.3em);
+          }
+
+          .empty-playlist-description {
+            font-size: clamp(0.7em, 1cqi, 1em);
+          }
+
+
+
+      }
+
+
+
+
+
+
+
+
+
+.user-cover-preview.hide-overlay .cover-upload-overlay {
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+.user-item {
+  display: flex;
+  align-items: center;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.userFollowImg{
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 16px;
+  flex-shrink: 0;
+}
+
+
+
+.follow-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 0;
+}
+
+/* Search bar */
+.search-follow {
+  position: relative;
+  padding: 16px 20px;
+  border-bottom: 1px solid #2a2a2a;
+  flex-shrink: 0;
+}
+
+.search-follow input {
+  width: 100%;
+  padding: 10px 16px 10px 40px;
+  background-color: #2a2a2a;
+  border: 1px solid #3a3a3a;
+  border-radius: 20px;
+  color: #fff;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.search-follow input:focus {
+  outline: none;
+  border-color: #515151;
+  background-color: #333;
+}
+
+.search-follow .fa-search {
+  position: absolute;
+  left: 32px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888;
+  font-size: 14px;
+}
+
+/* Follow list */
+.follow-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 20px;
+  scrollbar-width: thin;
+  scrollbar-color: #444 #222;
+}
+
+.follow-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.follow-list::-webkit-scrollbar-track {
+  background: #222;
+}
+
+.follow-list::-webkit-scrollbar-thumb {
+  background: #444;
+  border-radius: 3px;
+}
+
+.follow-list::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.user-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 0;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+  position: relative;
+  min-height: 60px;
+}
+
+
+.userFollowImg {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 16px;
+  flex-shrink: 0;
+}
+
+.user-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0; /* PENTING: Agar ellipsis berfungsi di flex container */
+  margin-right: 16px;
+  overflow: hidden; /* Sembunyikan konten yang meluber */
+  max-width: calc(100% - 180px); /* Hitung berdasarkan button follow */
+}
+
+.user-info {
+  flex: 1;
+  min-width: 0;
+  margin-right: 16px;
+  max-width: 150px;
+}
+
+.user-name {
+  font-weight: 600;
+  color: #fff;
+  font-size: 15px;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-bio {
+  color: #aaa;
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.follow-button {
+  margin-left: auto; /* Ini yang mendorong button ke kanan */
+  padding: 8px 20px;
+  background-color: #fff;
+  color: #000;
+  border: none;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  min-width: 80px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.follow-button.following {
+  background-color: transparent;
+  color: #fff;
+  border: 1px solid #666;
+}
+
+
+.popup.follow .popup-content {
+  overflow: hidden; 
+  display: flex;
+  flex-direction: column;
+ 
+}
+
+:root[style*="--device: desktop"] .popup.follow .popup-content {
+  height: auto; 
+  max-height: 570px;
+  padding-top: 10px; 
+}
+
+:root[style*="--device: mobile"] .popup.follow .popup-content {
+  height: auto; 
+  max-height: 72vh;
+  position: absolute;
+  padding-top: 20px; 
+}
+
+
+.follow-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Ambil tinggi penuh dari parent */
+  flex: 1;
+  overflow: hidden; /* Hide overflow */
+}
+
+@media only screen and (orientation: landscape) {
+
+
+  :root[style*="--device: mobile"] .follow .popup-content {
+    width: 55%; 
+    max-height: 85vh !important; 
+    padding: 10px;
+  }
+
+  :root[style*="--device: mobile"] .follow-tabs{
+      display: none;
+  }
+
+  .follow-container {
+    padding: 0 !important;
+  }
+}
+
+
+.follow-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex: 1;
+  overflow: hidden;
+}
+
+.follow-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 20px;
+  scrollbar-width: thin;
+  scrollbar-color: #444 #222;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+}
+
+.follow-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.follow-list::-webkit-scrollbar-track {
+  background: #222;
+}
+
+.follow-list::-webkit-scrollbar-thumb {
+  background: #444;
+  border-radius: 3px;
+}
+
+.follow-list::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* PENTING: Pastikan container memiliki tinggi tetap */
+.popup.follow .popup-content {
+  display: flex;
+  flex-direction: column;
+  max-height: 80vh; /* Atau tinggi yang sesuai */
+}
+
+@media only screen and (orientation: landscape) {
+  :root[style*="--device: mobile"] .follow .popup-content {
+    width: 55%; 
+    max-height: 85vh !important; 
+    padding: 10px;
+  }
+}
+
+
+
+
+
+.playlist-description {
+  font-size: clamp(0.8rem, 1.2cqi, 1rem);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.4;
+  color: #b3b3b3;
+}
+
+/* Container untuk link followers/following */
+.followers-link,
+.following-link {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+}
+
+.followers-link .follow-text,
+.following-link .follow-text {
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.followers-link:hover .follow-text,
+.following-link:hover .follow-text {
+  color: #515151;
+}
+
+.followers-link:hover .follow-text::after,
+.following-link:hover .follow-text::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1px;
+  background-color: #515151;
+  animation: underlineAppear 0.2s ease forwards;
+}
+
+@keyframes underlineAppear {
+  from {
+    width: 0;
+    opacity: 0;
+  }
+  to {
+    width: 100%;
+    opacity: 1;
+  }
+}
+
+/* Angka tetap tanpa underline */
+.followers-link #follower-count,
+.following-link #following-count {
+  font-weight: 600;
+  color: #fff;
+  transition: color 0.2s ease;
+}
+
+.followers-link:hover #follower-count,
+.following-link:hover #following-count {
+  color: #515151;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* CSS untuk follow popup */
+.follow-tabs {
+  display: flex;
+  border-bottom: 1px solid #333;
+  margin: 0 20px;
+}
+
+.follow-tab {
+  flex: 1;
+  padding: 15px;
+  background: none;
+  border: none;
+  color: #aaa;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.follow-tab.active {
+  color: #fff;
+}
+
+.follow-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: #1db954;
+  border-radius: 3px 3px 0 0;
+}
+
+.follow-container {
+  padding: 20px;
+}
+
+.search-follow {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #aaa;
+}
+
+.empty-state i {
+  font-size: 48px;
+  margin-bottom: 15px;
+  opacity: 0.5;
+}
+
+
+.loading-state {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.spinner {
+  border: 3px solid #333;
+  border-top: 3px solid #1db954;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 15px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
+    </style>
+  </head>
+
+  <body>
+
+
+<header class="playlist-header profile-head">
+   <div class="header-content">
+        <button class="back-button" onclick="backLeft()">
+          <i class="fa-solid fa-circle-chevron-left"></i>
+        </button>
+        <div class="header-text-container">
+          <h1 class="header-title"><%= userProfile.name_user %></h1>
+          <p class="header-subtitle muted">User Profile</p>
+        </div>
+    </div>
+</header>
+
+
+
+    <div class="banner">
+      <div class="banner-img-wrapper banner-profile">
+        <div class="nav-icons">
+          <i onclick="backLeft()" class="fa-solid fa-circle-chevron-left"></i>
+          <i onclick="backRight()" class="fa-solid fa-circle-chevron-right"></i>
+        </div>
+
+        <div class="banner-content">
+          <div class="banner-img-container">
+            <img
+              src="<%= userProfile.profile_user || '/uploads/profile/default/default_pp.jpg' %>"
+              class="banner-img profile-img" referrerpolicy="no-referrer"
+            />
+          </div>
+          <div class="banner-text">
+            <div class="banner-text-content">
+
+                <h3><%= userProfile.name_user %></h3>
+                <p class="muted">Users Profile</p>
+
+
+
+                <p class="playlist-description">
+  <span class="followers-link" onclick="showFollowPopup('followers', '<%= userProfile.original_id %>')">
+    <span id="follower-count"><%= userProfile.user_followers || 0 %></span> 
+    <span class="follow-text">followers</span>
+  </span> 
+  | 
+  <span class="following-link" onclick="showFollowPopup('following', '<%= userProfile.original_id %>')">
+    <span id="following-count"><%= userProfile.total_following || 0 %></span> 
+    <span class="follow-text">following</span>
+  </span>
+</p>
+
+              
+            </div>
+            <div class="playlist-stats">
+              <div onclick="share()" class="stat-item">
+                <i class="fa-solid fa-share"></i>
+              </div>
+
+              <% if (isOwnProfile) { %>
+             <button id="btn-button" class="button-profile" onclick="editProfile('<%= userProfile.hashid %>')">
+                <div class="notice-content">
+                  <div class="lable-button">Edit Profile</div>
+                </div>
+              </button>
+              <% } else { %>
+          <button id="btn-follow-user" class="button-profile" 
+        onclick="toggleFollowUser(this, '<%= userProfile.original_id %>')">
+  <div class="content-avatar">
+    <div class="status-user"></div>
+    <div class="avatar">
+      <svg class="user-img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12,12.5c-3.04,0-5.5,1.73-5.5,3.5s2.46,3.5,5.5,3.5,5.5-1.73,5.5-3.5-2.46-3.5-5.5-3.5Zm0-.5c1.66,0,3-1.34,3-3s-1.34-3-3-3-3,1.34-3,3,1.34,3,3,3Z"></path></svg>
+    </div>
+  </div>
+  <div class="notice-content <%= isFollowing ? 'following' : '' %>">
+    <div class="lable-button"><%= isFollowing ? 'Following' : 'Follow' %></div>
+  </div>
+</button>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+
+
+
+
+<!-- Tambahkan section ini di profile.ejs setelah banner profile -->
+<div class="other-page">
+  <div class="carousel__wrapper">
+     <% if (userCustomPlaylists && userCustomPlaylists.length > 0) { %>
+    <div class="carousel__header">
+      <h2 class="carousel__headline">Playlist Custom</h2>
+    </div>
+     <% } %>
+    <div class="carousel__content homeContent">
+      <% if (userCustomPlaylists && userCustomPlaylists.length > 0) { %>
+        <% userCustomPlaylists.forEach((playlist) => { %>
+          <div class="card-container">
+            <div class="visual-card carousel__item" onclick="showCustomPlaylist('<%= playlist.hashid %>')">
+              <% 
+                // Logic untuk menentukan tampilan cover
+                const uniqueCovers = playlist.track_covers ? [...new Set(playlist.track_covers)] : [];
+                const showCollage = playlist.track_count > 1 && uniqueCovers.length > 1;
+                const displayCovers = uniqueCovers.slice(0, 4);
+                const effectiveCover = playlist.track_covers && playlist.track_covers.length > 0 ? 
+                                    playlist.track_covers[0] : 
+                                    playlist.cover || '/images/default-playlist.png';
+              %>
+              
+              <div class="visual-image" style="<%= showCollage ? '' : 'background-image: url(\'' + effectiveCover + '\')' %>">
+                <% if (showCollage) { %>
+                  <!-- Collage cover untuk playlist dengan multiple tracks DAN different covers -->
+                  <div class="collage-grid" style="grid-template-columns: repeat(2, 1fr); grid-template-rows: <%= displayCovers.length > 2 ? 'repeat(2, 1fr)' : '1fr' %>;">
+                    <% displayCovers.forEach((cover, index) => { %>
+                      <div 
+                        class="collage-item" 
+                        style="background-image: url('<%= cover %>'); <%= 
+                          displayCovers.length === 3 && index === 2 ? 'grid-column: span 2;' : '' 
+                        %>"
+                      ></div>
+                    <% }); %>
+                  </div>
+                <% } %>
+                <div class="text-background"></div>
+                <div class="visual-overlay"></div>
+              </div>
+              
+              <div class="svg-circle-wrapper" onclick="event.stopPropagation(); playPlaylist('<%= playlist.hashid %>', 'custom')">
+                <svg class="svg-icon playlistCover-play" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                  <path fill-rule="evenodd" d="M5 21V3c0-.79116579.87524596-1.26900738 1.54075759-.84117848L20.5407576 11.1588215c.6123232.3936364.6123232 1.2887206 0 1.682357l-14.00000001 9C5.87524596 22.2690074 5 21.7911658 5 21zm2-1.8316655L18.1507426 12 7 4.8316655v14.336669z"/>
+                </svg>
+              </div>
+            </div>
+            
+            <div class="card-text-content">
+              <div class="visual-title"><%= playlist.name %></div>
+              <div class="visual-description">
+                <%= playlist.track_count || 0 %> <%= playlist.track_count === 1 ? 'track' : 'tracks' %>
+              </div>
+            </div>
+          </div>
+        <% }); %>
+      <% } else { %>
+        <!-- Empty state jika user tidak memiliki playlist -->
+        <div class="empty-playlist-state">
+          <div class="empty-playlist-icon">
+           <i class="fa-regular fa-circle-play"></i>
+          </div>
+          <h3 class="empty-playlist-title">No Playlists Yet</h3>
+          <p class="empty-playlist-description">
+            <%= userProfile.name_user %> hasn't created any playlists yet.
+          </p>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</div>
+
+
+<div style="display: none;" class="popup editProfile bigPopup">
+  <div class="popup-overlay"></div>
+  <div class="popup-content">
+    <form id="profileForm" onsubmit="return submitEditProfile(event)" autocomplete="off" style="display: contents">
+      <div class="drag-handle">
+        <div class="drag-handle-line"></div>
+      </div>
+
+      <div class="popup-header">
+        <h3>Edit Profile</h3>
+        <i onclick="closePopup()" class="fa-solid fa-xmark"></i>
+      </div>
+
+      <div class="playlist-creator">
+        <div class="playlist-cover-container">
+          <div class="user-cover-preview" id="userCoverPreviewContainer">
+            <img id="userCoverPreview" src="/uploads/undefine.jpg" alt="Profile picture" 
+                 class="playlist-cover-image" referrerpolicy="no-referrer"
+                 onerror="this.src='/uploads/undefine.jpg'">
+            <div class="cover-upload-overlay" id="coverUploadOverlay">
+              <div class="upload-options" id="uploadOptions">
+                <div class="upload-option" onclick="handleChangePhoto()">
+                  <i class="fas fa-camera"></i>
+                  <span>Change Photo</span>
+                </div>
+                <div class="upload-option remove-photo-option" onclick="handleRemovePhoto()" style="display: flex;">
+                  <i class="fa-solid fa-circle-minus"></i>
+                  <span>Remove Photo</span>
+                </div>
+              </div>
+            </div>
+            <input type="file" id="userCoverUpload" name="cover" 
+                   accept="image/jpeg,image/png,image/jpg,image/webp" 
+                   style="display: none;">
+          </div>
+        </div>
+
+        <div class="playlist-info">
+          <div class="form-group">
+            <label for="userName">Username</label>
+            <input type="text" id="userName" name="name" maxlength="50" placeholder="Enter Username">
+            <div class="error-message" id="errorusernm"></div>
+          </div>
+          
+          <input type="hidden" id="userId" name="userId" value="">
+          <!-- Tambahkan hidden input untuk menandai remove photo -->
+          <input type="hidden" id="removePhotoFlag" name="removePhoto" value="0">
+        </div>
+      </div>
+
+      <div class="popup-actions">
+        <button type="button" onclick="closePopup()" class="btn btn-secondary">Cancel</button>
+        <button type="submit" class="btn btn-primary">
+          <span class="btn-text">Save Changes</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+
+
+
+<!-- Popup untuk followers/following -->
+<div style="display: none;" class="popup follow bigPopup">
+  <div class="popup-overlay"></div>
+  <div class="popup-content">
+    <div class="drag-handle">
+      <div class="drag-handle-line"></div>
+    </div>
+
+    <div class="popup-header">
+      <h3 id="followPopupTitle">Followers</h3>
+      <i onclick="closePopup()" class="fa-solid fa-xmark"></i>
+    </div>
+
+    <div class="follow-tabs">
+      <button class="follow-tab active" onclick="switchFollowTab('followers')">Followers</button>
+      <button class="follow-tab" onclick="switchFollowTab('following')">Following</button>
+    </div>
+
+    <div class="follow-container">
+      <div class="search-follow">
+        <input type="text" id="followSearch" placeholder="Search..." autocomplete="off">
+        <i class="fas fa-search"></i>
+      </div>
+      
+      <div class="follow-list" id="followersList">
+        <!-- Data akan diisi oleh JavaScript -->
+      </div>
+
+      <div class="follow-list" id="followingList" style="display: none;">
+        <!-- Data akan diisi oleh JavaScript -->
+      </div>
+
+      <div class="empty-state" id="emptyState" style="display: none;">
+        <i class="fas fa-users"></i>
+        <p>No data available</p>
+      </div>
+
+      <div class="loading-state" id="loadingState" style="display: none;">
+        <div class="spinner"></div>
+        <p>Loading...</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+    <footer class="row center"></footer>
+    
+  </body>
+</html>

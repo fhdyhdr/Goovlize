@@ -1,0 +1,7 @@
+# Environment variables
+.env
+node_modules/
+logs/
+*.log
+uploads/
+public/uploads/

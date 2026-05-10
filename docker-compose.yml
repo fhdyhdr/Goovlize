@@ -1,0 +1,18 @@
+services:
+
+  nodeapp:
+    build: .
+    container_name: goovlize_node
+    restart: always
+    working_dir: /app
+    volumes:
+      - .:/app
+    ports:
+    - "3307:3306"
+    command: node app.js
+    networks:
+      - universal_network
+
+networks:
+  universal_network:
+    external: true

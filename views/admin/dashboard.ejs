@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Dashboard - Admin Panel</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/admin/css/dashboard.css">
+</head>
+<body>
+    <div class="music-dashboard-container">
+          <div class="music-sidebar" id="musicSidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <div class="music-icon-container">
+                        <i class="fas fa-music"></i>
+                    </div>
+                    <span class="logo-text">Goovlize</span>
+                </div>
+                <button class="sidebar-close-btn" id="sidebarCloseBtn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="sidebar-card">
+                <div class="card-content">
+                    <div class="card-icon">
+                        <i class="fas fa-headphones-alt"></i>
+                    </div>
+                    <div class="card-text">
+                        <h3>Music Studio</h3>
+                        <p>Admin Panel</p>
+                    </div>
+                    <div class="card-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Menu Items -->
+            <div class="menu-section">
+                <div onclick="window.location.href='/admin/dashboard'" class="menu-item active">
+                    <div class="menu-icon">
+                        <i class="fas fa-tachometer-alt"></i>
+                    </div>
+                    <span class="menu-text">Dashboard</span>
+                </div>
+
+                <div onclick="window.location.href='/admin/music'" class="menu-item">
+                    <div class="menu-icon">
+                       <i class="fa-regular fa-file-audio"></i>
+                    </div>
+                    <span class="menu-text">Music</span>
+                </div>
+
+                 <div onclick="window.location.href='/admin/artist'" class="menu-item">
+                    <div class="menu-icon">
+                       <i class="fa-solid fa-user-check"></i>
+                    </div>
+                    <span class="menu-text">Artist</span>
+                </div>
+
+                <div onclick="window.location.href='/admin/playlist'" class="menu-item notification">
+                    <div class="menu-icon">
+                       <i class="fa-regular fa-circle-play"></i>
+                    </div>
+                    <span class="menu-text">Playlist</span>
+                </div>
+
+                <div onclick="window.location.href='/admin/album'" class="menu-item">
+                    <div class="menu-icon">
+                       <i class="fa-solid fa-compact-disc"></i>
+                    </div>
+                    <span class="menu-text">Album</span>
+                </div>
+
+                <div onclick="window.location.href='/admin/music-genre'" class="menu-item">
+                    <div class="menu-icon">
+                         <i class="fas fa-tags"></i>
+                    </div>
+                    <span class="menu-text">Genre</span>
+                </div>
+
+                <div onclick="window.location.href='/admin/music-playlist'" class="menu-item">
+                    <div class="menu-icon">
+                         <i class="fas fa-link"></i>
+                    </div>
+                    <span class="menu-text">Music in Playlists</span>
+                </div>
+
+                <div onclick="window.location.href='/admin/music-album'" class="menu-item">
+                    <div class="menu-icon">
+                         <i class="fas fa-link"></i>
+                    </div>
+                    <span class="menu-text">Music in Album</span>
+                </div>
+                
+
+
+            </div>
+
+            <div class="menu-section shortcuts">
+                <div class="section-title">=====================</div>
+                
+                <div onclick="window.location.href='/admin/statistics'" class="menu-item">
+                    <div class="menu-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <span class="menu-text">Analytics</span>
+                            <span class="notification-badge"></span>
+                    </div>
+
+                <div onclick="window.location.href='/admin/logout'" class="menu-item">
+                    <div class="menu-icon">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    </div>
+                    <span class="menu-text">Logout</span>
+                </div>
+            </div>
+
+            <!-- Storage Usage -->
+            <div style="background: transparent; border:none; box-shadow:none" class="storage-card">
+                <div style="display: none;" class="storage-content">
+                    <h4><i class="fas fa-database"></i> Storage Usage</h4>
+                    <p>Audio Files: 45.2 GB / 100 GB</p>
+                    <div class="storage-percentage">45%</div>
+                    <div class="storage-bar">
+                        <div class="storage-bar-bg"></div>
+                        <div class="storage-bar-fill" style="width: 45%"></div>
+                    </div>
+                    <div class="storage-details">
+                        <span>Albums: 12 GB</span>
+                        <span>Songs: 28 GB</span>
+                        <span>Other: 5.2 GB</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin Profile -->
+            <div class="admin-profile">
+                <img src="/uploads/profile/default/default_pp.jpg" alt="Admin" class="admin-avatar">
+                <div class="admin-info">
+                    <% if (typeof admin !== 'undefined' && admin) { %>
+        
+                            <span class="admin-name"><%= admin.admin_name || 'Admin' %></span>
+                     <% } %>
+
+                    <span class="admin-role">Music Admin</span>
+                </div>
+                <div style="display: none;" class="admin-options">
+                    <i class="fas fa-ellipsis-v"></i>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <div class="music-main-content">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <div class="top-left">
+                    <div class="greeting">
+                        <% if (typeof admin !== 'undefined' && admin) { %>
+                            <h1><%= admin.admin_name || 'Admin' %></h1>
+                            <small><%= admin.email_admin || '' %></small>
+                        <% } else { %>
+                            <h1>Admin Panel</h1>
+                        <% } %>
+                        <div class="pro-badge">
+                         
+                            <span>ADMIN</span>
+                        </div>
+                    </div>
+                    <div class="date-info">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span id="currentDate">Loading...</span>
+                    </div>
+                </div>
+                
+                <div class="top-right">
+                    <button style="display: none;" class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-indicator">3</span>
+                    </button>
+                    <button class="upload-btn" onclick="window.location.href='/admin/music?action=upload'">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <span>Upload</span>
+                    </button>
+                    <button class="sidebar-toggle" id="sidebarToggleBtn">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon total-songs">
+                        <i class="fas fa-music"></i>
+                    </div>
+                    <div class="stat-info">
+                        <% if (dashboard && dashboard.stats) { %>
+                            <h3><%= dashboard.stats.totalMusic.toLocaleString() %></h3>
+                        <% } else { %>
+                            <h3 class="data-loading">0</h3>
+                        <% } %>
+                        <p>Total Songs</p>
+                    </div>
+                   
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon total-albums">
+                        <i class="fas fa-compact-disc"></i>
+                    </div>
+                    <div class="stat-info">
+                        <% if (dashboard && dashboard.stats) { %>
+                            <h3><%= dashboard.stats.totalAlbums.toLocaleString() %></h3>
+                        <% } else { %>
+                            <h3 class="data-loading">0</h3>
+                        <% } %>
+                        <p>Total Albums</p>
+                    </div>
+                    
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon total-artists">
+                        <i class="fas fa-user-friends"></i>
+                    </div>
+                    <div class="stat-info">
+                        <% if (dashboard && dashboard.stats) { %>
+                            <h3><%= dashboard.stats.totalArtists.toLocaleString() %></h3>
+                        <% } else { %>
+                            <h3 class="data-loading">0</h3>
+                        <% } %>
+                        <p>Total Artists</p>
+                    </div>
+                   
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon total-plays">
+                        <i class="fas fa-play-circle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <% if (dashboard && dashboard.stats) { %>
+                            <h3><%= dashboard.stats.totalPlays.toLocaleString() %></h3>
+                        <% } else { %>
+                            <h3 class="data-loading">0</h3>
+                        <% } %>
+                        <p>Total Plays</p>
+                    </div>
+                   
+                </div>
+            </div>
+
+            <!-- Main Content Grid -->
+            <div class="music-content-grid">
+                <!-- Recent Uploads -->
+                <div class="recent-uploads-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-cloud-upload-alt"></i> Recent Uploads</h2>
+                        <button class="view-all-btn" onclick="window.location.href='/admin/music'">
+                            View All <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="uploads-list">
+                        <% if (dashboard && dashboard.recentUploads && dashboard.recentUploads.length > 0) { %>
+                            <% dashboard.recentUploads.forEach((upload, index) => { %>
+                                <div class="upload-item">
+                                    <div class="upload-cover">
+                                        <img src="<%= upload.cover %>" alt="<%= upload.title %>" 
+                                            onerror="this.src='/uploads/undefine.jpg'">
+                                    </div>
+                                    <div class="upload-details">
+                                        <h4><%= upload.title %></h4>
+                                        <p class="upload-artist"><%= upload.artists %> • <%= upload.duration %></p>
+                                        <div class="upload-meta">
+                                            <span><i class="fas fa-play"></i> <%= upload.plays.toLocaleString() %> plays</span>
+                                            <span><i class="far fa-calendar"></i> <%= upload.date %></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% }) %>
+                        <% } else { %>
+                            <div class="empty-state">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <h4>No Recent Uploads</h4>
+                                <p>No music has been uploaded yet</p>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+
+                <!-- Recent Activity (Ganti Top Artists dengan Recent Activity) -->
+                <div class="recent-activity-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-history"></i> Recent Activity</h2>
+                        <button class="view-all-btn" onclick="refreshDashboard()">
+                            View All <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="activity-list">
+                       <% if (dashboard && dashboard.recentActivity && dashboard.recentActivity.length > 0) { %>
+                            <% dashboard.recentActivity.forEach((activity, index) => { %>
+                                <div class="activity-item">
+                                    <div class="activity-icon <%= activity.status %>">
+                                        <i class="fas <%= activity.icon %>"></i>
+                                    </div>
+                                    <div class="activity-content">
+                                        <p><%= activity.description %></p>
+                                        <span class="activity-time"><%= activity.date %></span>
+                                    </div>
+                                </div>
+                            <% }) %>
+                        <% } else { %>
+                            <div class="empty-state">
+                                <i class="fas fa-history"></i>
+                                <h4>No Recent Activity</h4>
+                                <p>No activities recorded yet</p>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+
+<div class="genre-section">
+    <div class="section-header">
+        <h2><i class="fas fa-chart-pie"></i> Genre Distribution</h2>
+       
+    </div>
+    
+    <div class="genre-chart">
+        <% if (dashboard && dashboard.genreDistribution && dashboard.genreDistribution.length > 0) { %>
+            <% dashboard.genreDistribution.forEach((genre, index) => { 
+                // Gunakan warna yang sudah di-generate di server
+                const color = genre.color || '#8B5CF6'; // Fallback color
+                const gradient = genre.gradient || `linear-gradient(135deg, ${color}, ${color})`;
+            %>
+                <div class="genre-item" data-genre="<%= genre.name.toLowerCase().replace(/\s+/g, '-') %>">
+                    <div class="genre-color" style="background: <%= gradient %>"></div>
+                    <span class="genre-name"><%= genre.name %></span>
+                    <span class="genre-value"><%= genre.percentage %>% (<%= genre.count %>)</span>
+                    <div class="genre-bar-container">
+                        <div class="genre-bar" style="width: <%= genre.percentage %>%; background: <%= gradient %>"></div>
+                    </div>
+                </div>
+            <% }) %>
+        <% } else { %>
+            <div class="empty-state">
+                <i class="fas fa-tags"></i>
+                <h4>No Genre Data</h4>
+                <p>No genre statistics available</p>
+            </div>
+        <% } %>
+    </div>
+
+    <button class="genre-details-btn" onclick="window.location.href='/admin/statistics'">
+        <i class="fas fa-chart-bar"></i>
+        <span>View Detailed Analytics</span>
+        <i class="fas fa-chevron-right"></i>
+    </button>
+</div>
+
+                <!-- Top Music (Ganti Featured Playlists dengan Top Music) -->
+                <div class="top-music-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-fire"></i> Top Music</h2>
+                        <button class="view-all-btn" onclick="window.location.href='/admin/music'">
+                            View All <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="top-music-grid">
+                        <% if (dashboard && dashboard.topMusic && dashboard.topMusic.length > 0) { %>
+                            <% dashboard.topMusic.forEach((music, index) => { %>
+                                <div class="music-card">
+                                    <div class="music-rank"><%= music.rank %></div>
+                                    <div class="music-cover" style="background: <%= music.color %>">
+                                        <% if (music.cover && music.cover !== '/uploads/undefine.jpg') { %>
+                                            <img src="<%= music.cover %>" alt="<%= music.title %>"
+                                                onerror="this.style.display='none'">
+                                        <% } else { %>
+                                            <i class="fas fa-music"></i>
+                                        <% } %>
+                                    </div>
+                                    <div class="music-info">
+                                        <h4><%= music.title %></h4>
+                                        <p class="music-artist"><%= music.artists %></p>
+                                        <div class="music-stats">
+                                            <span><i class="fas fa-play"></i> <%= music.plays.toLocaleString() %> plays</span>
+                                            <% if (music.genres > 0) { %>
+                                                <span><i class="fas fa-tags"></i> <%= music.genres %> genres</span>
+                                            <% } %>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% }) %>
+                        <% } else { %>
+                            <div class="empty-state" style="grid-column: 1 / -1;">
+                                <i class="fas fa-music"></i>
+                                <h4>No Top Music</h4>
+                                <p>No music plays recorded yet</p>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-bolt"></i> Quick Actions</h2>
+                    </div>
+                    
+                    <div class="actions-grid">
+                        <button class="action-card" onclick="window.location.href='/admin/music?action=upload'">
+                            <div class="action-icon upload-action">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                            </div>
+                            <h4>Upload Music</h4>
+                            <p>Add new songs or albums</p>
+                        </button>
+
+                        <button class="action-card" onclick="window.location.href='/admin/music'">
+                            <div class="action-icon edit-action">
+                                <i class="fas fa-edit"></i>
+                            </div>
+                            <h4>Edit Metadata</h4>
+                            <p>Update song information</p>
+                        </button>
+
+                        <button class="action-card" onclick="window.location.href='/admin/statistics'">
+                            <div class="action-icon analytics-action">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <h4>View Analytics</h4>
+                            <p>Check performance stats</p>
+                        </button>
+
+                        <button class="action-card" onclick="window.location.href='/admin/artist?action=add'">
+                            <div class="action-icon user-action">
+                                <i class="fas fa-user-plus"></i>
+                            </div>
+                            <h4>Add Artist</h4>
+                            <p>Register new artists</p>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/admin/js/dashboard.js"></script>
+</body>
+</html>

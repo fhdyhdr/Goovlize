@@ -1,0 +1,2419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artist Management - Admin Panel</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/admin/css/dashboard.css">
+    <link rel="stylesheet" href="/css/popup.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="/js/main.js" defer></script>
+
+    <style>
+        /* Artist Management Styles */
+        .artist-management-container {
+            padding: 20px;
+        }
+
+        .artist-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .artist-header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .artist-header h1 i {
+            color: var(--primary-color);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 12px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 14px;
+            padding: 12px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            background: rgba(139, 92, 246, 0.05);
+        }
+
+        /* Filters */
+        .artist-filters {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+            border: 1px solid var(--border-color);
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .filter-group label {
+            display: block;
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .filter-input {
+            width: 100%;
+            padding: 10px 16px;
+            background: var(--sidebar-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+        }
+
+        .filter-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .clear-search {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+
+        .filter-loading {
+            padding: 10px;
+            text-align: center;
+            color: var(--primary-color);
+            font-size: 14px;
+            display: none;
+        }
+
+        /* Artist List Container */
+        .artist-list-container {
+            background: transparent;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .artist-list-body {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            max-height: none;
+            overflow-y: visible;
+        }
+
+        /* Artist Item */
+        .artist-item {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .artist-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            border-color: var(--primary-color);
+        }
+
+        .artist-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .artist-item:hover::before {
+            opacity: 1;
+        }
+
+        /* Artist Header */
+        .artist-header-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .artist-profile {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+            position: relative;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .artist-item:hover .artist-profile {
+            transform: scale(1.05);
+            border-color: var(--primary-color);
+        }
+
+        .artist-profile img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .artist-profile-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(139, 92, 246, 0.3), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+
+        .artist-profile:hover .artist-profile-overlay {
+            opacity: 1;
+        }
+
+        .artist-details {
+            flex: 1;
+            margin-left: 15px;
+            overflow: hidden;
+        }
+
+        .artist-details h4 {
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            margin: 0 0 5px 0;
+            line-height: 1.3;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .artist-details p {
+            color: var(--text-secondary);
+            font-size: 13px;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .artist-details p i {
+            font-size: 12px;
+        }
+
+        /* Artist Content */
+        .artist-content {
+            margin-bottom: 15px;
+            flex: 1;
+        }
+
+        .artist-stats {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 12px;
+        }
+
+        .stat-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .artist-item:hover .stat-item {
+            border-color: rgba(139, 92, 246, 0.3);
+            background: rgba(139, 92, 246, 0.1);
+        }
+
+        .stat-value {
+            color: white;
+            font-size: 20px;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        .artist-description {
+            color: var(--text-secondary);
+            font-size: 13px;
+            line-height: 1.5;
+            margin-bottom: 15px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-style: italic;
+            opacity: 0.8;
+        }
+
+        /* Artist Footer */
+        .artist-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 15px;
+            margin-top: auto;
+        }
+
+        .artist-date {
+            color: var(--text-secondary);
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        @media (min-width: 769px) {
+            .artist-date {
+                margin-right: 15px;
+                padding: 8px 12px;
+                background: rgba(255, 255, 255, 0.05);
+                border-radius: 6px;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+            }
+        }
+
+        .artist-date i {
+            font-size: 11px;
+        }
+
+        .artist-actions {
+            display: flex;
+            gap: 8px;
+            margin-left: auto;
+        }
+
+        .action-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+            background: var(--sidebar-bg);
+            color: var(--text-secondary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: currentColor;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .action-btn i {
+            position: relative;
+            z-index: 1;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .action-btn:hover::before {
+            opacity: 0.1;
+        }
+
+        .action-view:hover {
+            border-color: var(--info-color);
+            color: var(--info-color);
+        }
+
+        .action-edit:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .action-delete:hover {
+            border-color: var(--danger-color);
+            color: var(--danger-color);
+        }
+
+        .action-btn .btn-tooltip {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .action-btn:hover .btn-tooltip {
+            opacity: 1;
+            visibility: visible;
+            bottom: -25px;
+        }
+
+        /* Empty State */
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 20px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 2px dashed var(--border-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .empty-state i {
+            font-size: 64px;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .empty-state h3 {
+            color: var(--text-primary);
+            font-size: 24px;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .empty-state p {
+            color: var(--text-secondary);
+            font-size: 16px;
+            margin-bottom: 24px;
+            max-width: 400px;
+            line-height: 1.5;
+        }
+
+        /* Pagination */
+        .artist-pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .pagination-info {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .pagination-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pagination-btn {
+            padding: 8px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--sidebar-bg);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            background: rgba(139, 92, 246, 0.05);
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .page-numbers {
+            display: flex;
+            gap: 4px;
+        }
+
+        .page-number {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: var(--sidebar-bg);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .page-number:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            background: rgba(139, 92, 246, 0.05);
+        }
+
+        .page-number.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .artist-list-body {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+        }
+
+        @media (max-width: 992px) {
+            .artist-list-body {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 15px;
+                padding: 15px;
+            }
+            
+            .artist-item {
+                padding: 15px;
+            }
+            
+            .artist-stats {
+                gap: 10px;
+            }
+            
+            .stat-value {
+                font-size: 18px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .artist-header {
+                flex-direction: column;
+                text-align: center;
+                margin-bottom: 20px;
+                gap: 16px;
+            }
+            
+            .header-actions {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            .filter-group {
+                min-width: 100%;
+            }
+            
+            .artist-header-info {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            
+            .artist-profile {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .artist-details {
+                margin-left: 0;
+                width: 100%;
+            }
+            
+            .artist-stats {
+                flex-direction: row;
+                gap: 8px;
+            }
+            
+            .stat-item {
+                padding: 8px;
+            }
+            
+            .stat-value {
+                font-size: 16px;
+            }
+            
+            .stat-label {
+                font-size: 10px;
+            }
+            
+            .artist-footer {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .artist-date {
+                margin-right: 0;
+                justify-content: center;
+            }
+            
+            .artist-actions {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .artist-list-body {
+                grid-template-columns: 1fr;
+                gap: 12px;
+                padding: 12px;
+            }
+            
+            .artist-item {
+                padding: 15px;
+            }
+            
+            .empty-state {
+                padding: 40px 15px;
+                min-height: 300px;
+            }
+            
+            .empty-state i {
+                font-size: 48px;
+            }
+            
+            .empty-state h3 {
+                font-size: 20px;
+            }
+            
+            .empty-state p {
+                font-size: 14px;
+            }
+            
+            .artist-pagination {
+                flex-direction: column;
+                gap: 16px;
+                padding: 16px;
+                text-align: center;
+            }
+            
+            .pagination-info {
+                order: 2;
+                font-size: 12px;
+            }
+            
+            .pagination-controls {
+                order: 1;
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .pagination-btn {
+                padding: 8px 12px;
+                font-size: 13px;
+            }
+            
+            .page-numbers {
+                display: none;
+            }
+        }
+
+        /* Loader animation */
+        .artist-item.loading {
+            animation: loadingPulse 1.5s infinite;
+        }
+
+        @keyframes loadingPulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+
+        /* Popup Styles for Artist */
+        .artist-creator {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .artist-profile-container {
+            width: 150px;
+            flex-shrink: 0;
+        }
+
+        .artist-profile-preview {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            border: 3px dashed #444;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .artist-profile-preview:hover {
+            border-color: var(--primary-color);
+        }
+
+        .artist-profile-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-upload-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .artist-profile-preview:hover .profile-upload-overlay {
+            opacity: 1;
+        }
+
+        .profile-upload-overlay i {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .profile-upload-overlay span {
+            font-size: 12px;
+        }
+
+        .artist-info {
+            flex: 1;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #eee;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .form-group input[type="text"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #444;
+            border-radius: 6px;
+            background-color: #2a2a2a;
+            color: white;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+
+        .form-group input[type="text"]:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        .character-count {
+            text-align: right;
+            font-size: 12px;
+            color: #888;
+            margin-top: 4px;
+        }
+
+        .error-message {
+            color: #ff6b6b;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        /* Delete Confirmation Popup */
+        .delete-confirm-content {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .delete-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 25px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.2));
+            border: 2px solid rgba(239, 68, 68, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulseWarning 2s infinite;
+        }
+
+        @keyframes pulseWarning {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+            }
+        }
+
+        .delete-icon i {
+            font-size: 36px;
+            color: var(--danger-color);
+        }
+
+        .delete-confirm-content h4 {
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+
+        .delete-confirm-content p {
+            color: var(--text-secondary);
+            font-size: 15px;
+            line-height: 1.5;
+            margin-bottom: 25px;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .delete-details {
+            background: rgba(42, 42, 42, 0.5);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .delete-detail-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .delete-detail-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .delete-detail-item:first-child {
+            padding-top: 0;
+        }
+
+        .delete-detail-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--card-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .delete-detail-icon i {
+            font-size: 16px;
+            color: var(--primary-color);
+        }
+
+        .delete-detail-content {
+            flex: 1;
+            text-align: left;
+        }
+
+        .delete-detail-title {
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .delete-detail-value {
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .warning-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 25px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .warning-message i {
+            color: var(--danger-color);
+            font-size: 18px;
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        .warning-message span {
+            color: #ff8a8a;
+            font-size: 14px;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger-color), #dc2626);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 12px 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-danger:active {
+            transform: translateY(0);
+        }
+
+        .btn-danger::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(rgba(255, 255, 255, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .btn-danger:hover::before {
+            opacity: 1;
+        }
+
+        /* Responsive for mobile popups */
+        @media (max-width: 768px) {
+            .artist-creator {
+                flex-direction: column;
+                align-items: center !important;
+                text-align: center;
+                gap: 20px;
+            }
+            
+            .artist-profile-container {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+            }
+            
+            .artist-info {
+                width: 100%;
+            }
+            
+            .delete-confirm-content {
+                padding: 15px 0;
+            }
+            
+            .delete-icon {
+                width: 60px;
+                height: 60px;
+                margin-bottom: 20px;
+            }
+            
+            .delete-icon i {
+                font-size: 28px;
+            }
+            
+            .delete-confirm-content h4 {
+                font-size: 20px;
+            }
+            
+            .delete-confirm-content p {
+                font-size: 14px;
+            }
+            
+            .delete-details {
+                padding: 15px;
+            }
+            
+            .delete-detail-item {
+                gap: 12px;
+                padding: 10px 0;
+            }
+            
+            .delete-detail-icon {
+                width: 36px;
+                height: 36px;
+            }
+            
+            .delete-detail-icon i {
+                font-size: 14px;
+            }
+            
+            .delete-detail-title {
+                font-size: 12px;
+            }
+            
+            .delete-detail-value {
+                font-size: 14px;
+            }
+            
+            .warning-message {
+                padding: 12px;
+                font-size: 13px;
+            }
+            
+            .warning-message i {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="music-dashboard-container">
+
+          <div class="music-sidebar" id="musicSidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <div class="music-icon-container">
+                        <i class="fas fa-music"></i>
+                    </div>
+                    <span class="logo-text">Goovlize</span>
+                </div>
+                <button class="sidebar-close-btn" id="sidebarCloseBtn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="sidebar-card">
+                <div class="card-content">
+                    <div class="card-icon">
+                        <i class="fas fa-headphones-alt"></i>
+                    </div>
+                    <div class="card-text">
+                        <h3>Music Studio</h3>
+                        <p>Admin Panel</p>
+                    </div>
+                    <div class="card-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Menu Items -->
+            <div class="menu-section">
+                <div onclick="window.location.href='/admin/dashboard'" class="menu-item">
+                    <div class="menu-icon">
+                        <i class="fas fa-tachometer-alt"></i>
+                    </div>
+                    <span class="menu-text">Dashboard</span>
+                </div>
+
+                <div onclick="window.location.href='/admin/music'" class="menu-item">
+                    <div class="menu-icon">
+                       <i class="fa-regular fa-file-audio"></i>
+                    </div>
+                    <span class="menu-text">Music</span>
+                </div>
+
+                 <div onclick="window.location.href='/admin/artist'" class="menu-item active">
+                    <div class="menu-icon">
+                       <i class="fa-solid fa-user-check"></i>
+                    </div>
+                    <span class="menu-text">Artist</span>
+                </div>
+
+                <div onclick="window.location.href='/admin/playlist'" class="menu-item notification">
+                    <div class="menu-icon">
+                       <i class="fa-regular fa-circle-play"></i>
+                    </div>
+                    <span class="menu-text">Playlist</span>
+                </div>
+
+                <div onclick="window.location.href='/admin/album'" class="menu-item">
+                    <div class="menu-icon">
+                       <i class="fa-solid fa-compact-disc"></i>
+                    </div>
+                    <span class="menu-text">Album</span>
+                </div>
+
+                <div onclick="window.location.href='/admin/music-genre'" class="menu-item">
+                    <div class="menu-icon">
+                         <i class="fas fa-tags"></i>
+                    </div>
+                    <span class="menu-text">Genre</span>
+                </div>
+
+                <div onclick="window.location.href='/admin/music-playlist'" class="menu-item">
+                    <div class="menu-icon">
+                         <i class="fas fa-link"></i>
+                    </div>
+                    <span class="menu-text">Music in Playlists</span>
+                </div>
+
+                <div onclick="window.location.href='/admin/music-album'" class="menu-item">
+                    <div class="menu-icon">
+                         <i class="fas fa-link"></i>
+                    </div>
+                    <span class="menu-text">Music in Album</span>
+                </div>
+                
+
+
+            </div>
+
+            <div class="menu-section shortcuts">
+                <div class="section-title">=====================</div>
+                
+                <div onclick="window.location.href='/admin/statistics'" class="menu-item">
+                    <div class="menu-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <span class="menu-text">Analytics</span>
+                            <span class="notification-badge"></span>
+                    </div>
+
+                <div onclick="window.location.href='/admin/logout'" class="menu-item">
+                    <div class="menu-icon">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    </div>
+                    <span class="menu-text">Logout</span>
+                </div>
+            </div>
+
+            <!-- Storage Usage -->
+            <div style="background: transparent; border:none; box-shadow:none" class="storage-card">
+                <div style="display: none;" class="storage-content">
+                    <h4><i class="fas fa-database"></i> Storage Usage</h4>
+                    <p>Audio Files: 45.2 GB / 100 GB</p>
+                    <div class="storage-percentage">45%</div>
+                    <div class="storage-bar">
+                        <div class="storage-bar-bg"></div>
+                        <div class="storage-bar-fill" style="width: 45%"></div>
+                    </div>
+                    <div class="storage-details">
+                        <span>Albums: 12 GB</span>
+                        <span>Songs: 28 GB</span>
+                        <span>Other: 5.2 GB</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin Profile -->
+            <div class="admin-profile">
+                <img src="/uploads/profile/default/default_pp.jpg" alt="Admin" class="admin-avatar">
+                <div class="admin-info">
+                    <% if (typeof admin !== 'undefined' && admin) { %>
+        
+                            <span class="admin-name"><%= admin.admin_name || 'Admin' %></span>
+                     <% } %>
+
+                    <span class="admin-role">Music Admin</span>
+                </div>
+                <div style="display: none;" class="admin-options">
+                    <i class="fas fa-ellipsis-v"></i>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="music-main-content">
+            <!-- Top Bar (optional) -->
+            <div style="display: none;" class="top-bar">
+                <div class="top-left">
+                    <div class="greeting">
+                        <h1>Artist Management</h1>
+                        <div class="pro-badge">
+                            <i class="fas fa-crown"></i>
+                            <span>Admin</span>
+                        </div>
+                    </div>
+                    <div class="date-info">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span id="currentDate">Loading...</span>
+                    </div>
+                </div>
+                
+                <div class="top-right">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-indicator">3</span>
+                    </button>
+                    <button class="sidebar-toggle" id="sidebarToggleBtn">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Artist Management Content -->
+            <div class="artist-management-container">
+                <!-- Header dengan Actions -->
+                <div class="artist-header">
+                    <h1><i class="fas fa-user"></i> Artist Library</h1>
+                    <div class="header-actions">
+                        <button class="btn-primary" onclick="addArtist()">
+                            <i class="fas fa-plus"></i>
+                            Add Artist
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="artist-filters">
+                    <div class="filter-row">
+                        <div class="filter-group">
+                            <label><i class="fas fa-search"></i> Search Artists</label>
+                            <div class="search-container" style="position: relative;">
+                                <input type="text" class="filter-input" placeholder="Search artists..." id="quickSearch" onkeyup="applyFilters()">
+                                <button class="clear-search" onclick="clearSearch()" style="display: none;">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Loading indicator -->
+                    <div id="filterLoading" class="filter-loading" style="display: none;">
+                        <i class="fas fa-spinner fa-spin"></i> Loading...
+                    </div>
+                </div>
+
+                <!-- Artist List -->
+                <div class="artist-list-container">
+                    <!-- Body -->
+                    <div class="artist-list-body" id="artistList">
+                        <% if (artistList && artistList.length > 0) { %>
+                            <% artistList.forEach((artist, index) => { %>
+                                <div class="artist-item" data-id="<%= artist.id_artist %>">
+                                    <div class="artist-header-info">
+                                        <div class="artist-profile">
+                                            <img src="<%= artist.artist_profile || '/uploads/undefine.jpg' %>" 
+                                                 alt="<%= artist.artist_name %>"
+                                                 onerror="this.src='/uploads/undefine.jpg'">
+                                            <div class="artist-profile-overlay">
+                                                <i class="fas fa-user"></i>
+                                            </div>
+                                        </div>
+                                        <div class="artist-details">
+                                            <h4><%= artist.artist_name %></h4>
+                                            <p><i class="fas fa-calendar"></i> Joined <%= artist.formatted_date %></p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="artist-content">
+                                        <div class="artist-stats">
+                                            <div class="stat-item">
+                                                <div class="stat-value"><%= artist.total_songs %></div>
+                                                <div class="stat-label">Songs</div>
+                                            </div>
+                                            <div class="stat-item">
+                                                <div class="stat-value"><%= artist.total_playlists %></div>
+                                                <div class="stat-label">Playlists</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="artist-description">
+                                            <% if (artist.total_songs > 0) { %>
+                                                <%= artist.artist_name %> has <%= artist.total_songs %> songs in <%= artist.total_playlists %> playlists
+                                            <% } else { %>
+                                                No songs yet
+                                            <% } %>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="artist-footer">
+                                        <div class="artist-date">
+                                            <i class="fas fa-clock"></i>
+                                            <%= artist.formatted_date %>
+                                        </div>
+                                        <div class="artist-actions">
+                                            <button class="action-btn action-edit" title="Edit" onclick="editArtist('<%= artist.id_artist %>')">
+                                                <i class="fas fa-edit"></i>
+                                                <span class="btn-tooltip">Edit</span>
+                                            </button>
+                                            <button class="action-btn action-delete" title="Delete" onclick="deleteArtist('<%= artist.id_artist %>', '<%= artist.artist_name %>')">
+                                                <i class="fas fa-trash"></i>
+                                                <span class="btn-tooltip">Delete</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% }) %>
+                        <% } else { %>
+                            <div class="empty-state">
+                                <i class="fas fa-user"></i>
+                                <h3>No Artists Found</h3>
+                                <p>
+                                    <% if (currentFilters.search) { %>
+                                        No artists found for "<%= currentFilters.search %>"
+                                    <% } else { %>
+                                        Start by adding your first artist!
+                                    <% } %>
+                                </p>
+                                <button class="btn btn-primary" onclick="addArtist()">
+                                    Add Artist
+                                </button>
+                            </div>
+                        <% } %>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="artist-pagination">
+                        <div class="pagination-info">
+                            <% if (artistList && artistList.length > 0) { %>
+                                Showing <span id="startItem"><%= (currentPage - 1) * 20 + 1 %></span>-<span id="endItem"><%= Math.min(currentPage * 20, totalArtists) %></span> 
+                                of <span id="totalItems"><%= totalArtists %></span> artists
+                            <% } else { %>
+                                Showing 0-0 of 0 artists
+                            <% } %>
+                        </div>
+                        
+                        <% if (totalPages > 1) { %>
+                            <div class="pagination-controls">
+                                <!-- Previous Button -->
+                                <button class="pagination-btn <%= currentPage === 1 ? 'disabled' : '' %>" 
+                                        id="prevPage" 
+                                        onclick="<%= currentPage > 1 ? 'changePage(' + (currentPage - 1) + ')' : '' %>"
+                                        <%= currentPage === 1 ? 'disabled' : '' %>>
+                                    <i class="fas fa-chevron-left"></i> Previous
+                                </button>
+                                
+                                <!-- Page Numbers -->
+                                <div class="page-numbers" id="pageNumbers">
+                                    <% 
+                                    let startPage = Math.max(1, currentPage - 2);
+                                    let endPage = Math.min(totalPages, startPage + 4);
+                                    
+                                    if (endPage - startPage < 4) {
+                                        startPage = Math.max(1, endPage - 4);
+                                    }
+                                    
+                                    for (let i = startPage; i <= endPage; i++) { 
+                                    %>
+                                        <button class="page-number <%= i === currentPage ? 'active' : '' %>" 
+                                                onclick="changePage(<%= i %>)">
+                                            <%= i %>
+                                        </button>
+                                    <% } %>
+                                </div>
+                                
+                                <!-- Next Button -->
+                                <button class="pagination-btn <%= currentPage === totalPages ? 'disabled' : '' %>" 
+                                        id="nextPage" 
+                                        onclick="<%= currentPage < totalPages ? 'changePage(' + (currentPage + 1) + ')' : '' %>"
+                                        <%= currentPage === totalPages ? 'disabled' : '' %>>
+                                    Next <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Artist Popup -->
+    <div style="display: none;" class="popup addArtistPopup bigPopup">
+        <div class="popup-overlay"></div>
+        <div class="popup-content">
+            <form id="addArtistForm" onsubmit="return submitAddArtist(event)" autocomplete="off" style="display: contents" enctype="multipart/form-data">
+                <div class="drag-handle">
+                    <div class="drag-handle-line"></div>
+                </div>
+
+                <div class="popup-header">
+                    <h3>Add Artist</h3>
+                    <i onclick="closeAddArtistPopup()" class="fa-solid fa-xmark"></i>
+                </div>
+
+                <div class="popup-body-scroll">
+                    <div class="artist-creator">
+                        <div class="artist-profile-container">
+                            <div class="artist-profile-preview">
+                                <img id="artistProfilePreview" src="/uploads/undefine.jpg" alt="Artist profile" class="artist-profile-image">
+                                <div class="profile-upload-overlay">
+                                    <i class="fas fa-camera"></i>
+                                    <span>Add Profile</span>
+                                </div>
+                                <input type="file" id="artistProfileUpload" name="profile" accept="image/*" style="display: none;">
+                            </div>
+                        </div>
+
+                        <div class="artist-info">
+                            <div class="form-group">
+                                <label for="artistName">Artist Name</label>
+                                <input type="text" id="artistName" name="artist_name" maxlength="50" placeholder="Enter artist name" required>
+                                <div class="character-count"><span id="artistNameCounter">0</span>/50</div>
+                                <div class="error-message" id="artistNameError"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="popup-actions">
+                    <button type="button" onclick="closeAddArtistPopup()" class="btn btn-secondary">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Artist</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Artist Popup -->
+    <div style="display: none;" class="popup editArtistPopup bigPopup">
+        <div class="popup-overlay"></div>
+        <div class="popup-content">
+            <form id="editArtistForm" onsubmit="return submitEditArtist(event)" autocomplete="off" style="display: contents" enctype="multipart/form-data">
+                <div class="drag-handle">
+                    <div class="drag-handle-line"></div>
+                </div>
+
+                <div class="popup-header">
+                    <h3>Edit Artist</h3>
+                    <i onclick="closeEditArtistPopup()" class="fa-solid fa-xmark"></i>
+                </div>
+
+                <div class="popup-body-scroll">
+                    <input type="hidden" id="editArtistId" name="artist_id">
+                    
+                    <div class="artist-creator">
+                        <div class="artist-profile-container">
+                            <div class="artist-profile-preview">
+                                <img id="editArtistProfilePreview" src="/uploads/undefine.jpg" alt="Artist profile" class="artist-profile-image">
+                                <div class="profile-upload-overlay">
+                                    <i class="fas fa-camera"></i>
+                                    <span>Change Profile</span>
+                                </div>
+                                <input type="file" id="editArtistProfileUpload" name="profile" accept="image/*" style="display: none;">
+                            </div>
+                        </div>
+
+                        <div class="artist-info">
+                            <div class="form-group">
+                                <label for="editArtistName">Artist Name</label>
+                                <input type="text" id="editArtistName" name="artist_name" maxlength="50" placeholder="Enter artist name" required>
+                                <div class="character-count"><span id="editArtistNameCounter">0</span>/50</div>
+                                <div class="error-message" id="editArtistNameError"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="popup-actions">
+                    <button type="button" onclick="closeEditArtistPopup()" class="btn btn-secondary">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Update Artist</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Popup -->
+    <div style="display: none;" class="popup deleteArtistConfirmPopup bigPopup">
+        <div class="popup-overlay"></div>
+        <div class="popup-content">
+            <div class="drag-handle">
+                <div class="drag-handle-line"></div>
+            </div>
+
+            <div class="popup-header">
+                <h3>Delete Artist</h3>
+                <i onclick="closeDeleteArtistPopup()" class="fa-solid fa-xmark"></i>
+            </div>
+            
+            <div class="popup-body-scroll">
+                <div class="delete-confirm-content">
+                    <div class="delete-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <h4 id="deleteArtistConfirmTitle">Delete Artist</h4>
+                    <p id="deleteArtistConfirmMessage">Are you sure you want to delete this artist? This action cannot be undone.</p>
+                    
+                    <div class="delete-details" id="deleteArtistDetails">
+                        <!-- Details will be populated by JavaScript -->
+                    </div>
+                    
+                    <div class="warning-message">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span>This artist has <span id="artistSongCount">0</span> songs. You cannot delete an artist with existing songs.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="popup-actions">
+                <button type="button" onclick="closeDeleteArtistPopup()" class="btn btn-secondary">Cancel</button>
+                <button type="button" onclick="confirmDeleteArtist()" class="btn btn-danger" id="deleteArtistConfirmBtn" disabled>
+                    <i class="fas fa-trash"></i> Delete
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/admin/js/dashboard.js"></script>
+    <script>
+        // Global variables
+        let currentFilters = {
+            search: '',
+            page: 1
+        };
+        let filterTimeout = null;
+        let isFiltering = false;
+        let artistToDelete = null;
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeFilters();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            // Character counter for artist name
+            const artistNameInput = document.getElementById('artistName');
+            if (artistNameInput) {
+                artistNameInput.addEventListener('input', function() {
+                    document.getElementById('artistNameCounter').textContent = this.value.length;
+                });
+            }
+
+            // Edit artist name character counter
+            const editArtistNameInput = document.getElementById('editArtistName');
+            if (editArtistNameInput) {
+                editArtistNameInput.addEventListener('input', function() {
+                    document.getElementById('editArtistNameCounter').textContent = this.value.length;
+                });
+            }
+
+            // Profile image upload
+            const profileUpload = document.getElementById('artistProfileUpload');
+            const profilePreview = document.getElementById('artistProfilePreview');
+            const profileUploadOverlay = document.querySelector('.addArtistPopup .profile-upload-overlay');
+            
+            if (profileUpload && profilePreview && profileUploadOverlay) {
+                profileUploadOverlay.addEventListener('click', () => profileUpload.click());
+                
+                profileUpload.addEventListener('change', function(e) {
+                    if (e.target.files.length) {
+                        const file = e.target.files[0];
+                        if (file.type.startsWith('image/')) {
+                            const reader = new FileReader();
+                            reader.onload = function(e) {
+                                profilePreview.src = e.target.result;
+                            };
+                            reader.readAsDataURL(file);
+                        }
+                    }
+                });
+            }
+
+            // Edit profile image upload
+            const editProfileUpload = document.getElementById('editArtistProfileUpload');
+            const editProfilePreview = document.getElementById('editArtistProfilePreview');
+            const editProfileUploadOverlay = document.querySelector('.editArtistPopup .profile-upload-overlay');
+            
+            if (editProfileUpload && editProfilePreview && editProfileUploadOverlay) {
+                editProfileUploadOverlay.addEventListener('click', () => editProfileUpload.click());
+                
+                editProfileUpload.addEventListener('change', function(e) {
+                    if (e.target.files.length) {
+                        const file = e.target.files[0];
+                        if (file.type.startsWith('image/')) {
+                            const reader = new FileReader();
+                            reader.onload = function(e) {
+                                editProfilePreview.src = e.target.result;
+                            };
+                            reader.readAsDataURL(file);
+                        }
+                    }
+                });
+            }
+        }
+
+        // ============ ADD ARTIST ============ //
+        function addArtist() {
+            const popup = document.querySelector('.addArtistPopup');
+            const popupContent = popup.querySelector('.popup-content');
+            var isMobile = isTrueMobile();
+
+            // Reset form
+            resetAddArtistForm();
+            
+            if (isMobile) {
+                popup.style.display = 'block';
+                setTimeout(() => {
+                    popup.classList.add('active');
+                    if (popupContent) {
+                        popupContent.style.transform = 'translateY(0)';
+                    }
+                }, 10);
+            } else {
+                $(".addArtistPopup").show();
+                $(".addArtistPopup").addClass("active");
+                $(".addArtistPopup .popup-overlay").removeClass("fadeOut").addClass("fadeIn");
+            }
+        }
+
+        function resetAddArtistForm() {
+            document.getElementById('artistName').value = '';
+            document.getElementById('artistNameCounter').textContent = '0';
+            document.getElementById('artistNameError').textContent = '';
+            document.getElementById('artistProfilePreview').src = '/uploads/undefine.jpg';
+            document.getElementById('artistProfileUpload').value = '';
+        }
+
+        async function submitAddArtist(event) {
+            event.preventDefault();
+            
+            // Validation
+            const artistName = document.getElementById('artistName').value.trim();
+            if (!artistName) {
+                document.getElementById('artistNameError').textContent = 'Artist name is required';
+                return false;
+            }
+
+            // Prepare form data
+            const formData = new FormData();
+            formData.append('artist_name', artistName);
+            
+            // Add profile image
+            const profileFile = document.getElementById('artistProfileUpload').files[0];
+            if (profileFile) {
+                formData.append('profile', profileFile);
+            }
+
+            try {
+                const response = await fetch('/admin/artist/add', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showNotification('Artist added successfully!', 'success');
+                    closeAddArtistPopup();
+                    window.location.reload();
+                } else {
+                    showNotification(result.message || 'Failed to add artist', 'error');
+                }
+            } catch (error) {
+                console.error('Error adding artist:', error);
+                showNotification('Failed to add artist. Please try again.', 'error');
+            }
+            
+            return false;
+        }
+
+        function closeAddArtistPopup() {
+            const popup = document.querySelector('.addArtistPopup');
+            popup.classList.remove('active');
+            
+            setTimeout(() => {
+                popup.style.display = 'none';
+                resetAddArtistForm();
+            }, 300);
+        }
+
+        // ============ EDIT ARTIST ============ //
+        async function editArtist(artistId) {
+            try {
+                const popup = document.querySelector('.editArtistPopup');
+                const popupContent = popup.querySelector('.popup-content');
+                const isMobile = isTrueMobile();
+
+                // Reset form edit terlebih dahulu
+                resetEditArtistForm();
+                
+                // Set artist ID
+                document.getElementById('editArtistId').value = artistId;
+                
+                // Load artist data
+                await loadArtistDataForEdit(artistId);
+
+                // Tampilkan popup
+                if (isMobile) {
+                    popup.style.display = 'block';
+                    setTimeout(() => {
+                        popup.classList.add('active');
+                        if (popupContent) {
+                            popupContent.style.transform = 'translateY(0)';
+                        }
+                    }, 10);
+                } else {
+                    popup.style.display = 'flex';
+                    setTimeout(() => {
+                        popup.classList.add('active');
+                    }, 10);
+                }
+
+            } catch (error) {
+                console.error('Error opening edit popup:', error);
+                showNotification('Failed to load artist data for editing: ' + error.message, 'error');
+                
+                // Tutup popup jika ada error
+                const popup = document.querySelector('.editArtistPopup');
+                if (popup) {
+                    popup.style.display = 'none';
+                    popup.classList.remove('active');
+                }
+            }
+        }
+
+        async function loadArtistDataForEdit(artistId) {
+            try {
+                const response = await fetch(`/admin/artist/get/${artistId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    const artist = data.artist;
+                    
+                    // Isi form dengan data yang ada
+                    document.getElementById('editArtistName').value = artist.artist_name || '';
+                    document.getElementById('editArtistProfilePreview').src = artist.artist_profile || '/uploads/undefine.jpg';
+                    
+                    // Update character counter
+                    document.getElementById('editArtistNameCounter').textContent = artist.artist_name?.length || 0;
+                    
+                } else {
+                    throw new Error(data.message || 'Failed to load artist data');
+                }
+                
+            } catch (error) {
+                console.error('Error loading artist data:', error);
+                throw error;
+            }
+        }
+
+        function resetEditArtistForm() {
+            document.getElementById('editArtistName').value = '';
+            document.getElementById('editArtistNameCounter').textContent = '0';
+            document.getElementById('editArtistNameError').textContent = '';
+            document.getElementById('editArtistProfilePreview').src = '/uploads/undefine.jpg';
+            document.getElementById('editArtistProfileUpload').value = '';
+        }
+
+        async function submitEditArtist(event) {
+            event.preventDefault();
+            
+            // Validation
+            const artistName = document.getElementById('editArtistName').value.trim();
+            if (!artistName) {
+                document.getElementById('editArtistNameError').textContent = 'Artist name is required';
+                return false;
+            }
+
+            const artistId = document.getElementById('editArtistId').value;
+            if (!artistId) {
+                showNotification('Artist ID is missing', 'error');
+                return false;
+            }
+
+            // Prepare form data
+            const formData = new FormData();
+            formData.append('artist_id', artistId);
+            formData.append('artist_name', artistName);
+            
+            // Add profile image if changed
+            const profileFile = document.getElementById('editArtistProfileUpload').files[0];
+            if (profileFile) {
+                formData.append('profile', profileFile);
+            }
+
+            try {
+                const response = await fetch('/admin/artist/update', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showNotification('Artist updated successfully!', 'success');
+                    closeEditArtistPopup();
+                    window.location.reload();
+                } else {
+                    showNotification(result.message || 'Failed to update artist', 'error');
+                }
+            } catch (error) {
+                console.error('Error updating artist:', error);
+                showNotification('Failed to update artist. Please try again.', 'error');
+            }
+            
+            return false;
+        }
+
+        function closeEditArtistPopup() {
+            const popup = document.querySelector('.editArtistPopup');
+            popup.classList.remove('active');
+            
+            setTimeout(() => {
+                popup.style.display = 'none';
+                resetEditArtistForm();
+            }, 300);
+        }
+
+        // ============ DELETE ARTIST ============ //
+        async function deleteArtist(artistId, artistName) {
+            try {
+                // Get artist details first
+                const response = await fetch(`/admin/artist/get/${artistId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch artist details');
+                }
+                
+                const data = await response.json();
+                
+                if (!data.success) {
+                    showNotification('Failed to load artist details', 'error');
+                    return;
+                }
+                
+                const artist = data.artist;
+                
+                artistToDelete = {
+                    id: artistId,
+                    name: artistName,
+                    songs: artist.total_songs || 0,
+                    playlists: artist.total_playlists || 0
+                };
+                
+                // Update popup content
+                document.getElementById('deleteArtistConfirmTitle').textContent = `Delete "${artistName}"`;
+                document.getElementById('deleteArtistConfirmMessage').textContent = `Are you sure you want to delete "${artistName}"?`;
+                document.getElementById('artistSongCount').textContent = artist.total_songs || 0;
+                
+                // Update details section
+                const detailsContainer = document.getElementById('deleteArtistDetails');
+                detailsContainer.innerHTML = `
+                    <div class="delete-detail-item">
+                        <div class="delete-detail-icon">
+                            <i class="fas fa-music"></i>
+                        </div>
+                        <div class="delete-detail-content">
+                            <div class="delete-detail-title">Total Songs</div>
+                            <div class="delete-detail-value">${artist.total_songs || 0}</div>
+                        </div>
+                    </div>
+                    <div class="delete-detail-item">
+                        <div class="delete-detail-icon">
+                            <i class="fas fa-list-music"></i>
+                        </div>
+                        <div class="delete-detail-content">
+                            <div class="delete-detail-title">Playlists</div>
+                            <div class="delete-detail-value">${artist.total_playlists || 0}</div>
+                        </div>
+                    </div>
+                `;
+                
+                // Enable/disable delete button based on song count
+                const deleteBtn = document.getElementById('deleteArtistConfirmBtn');
+                if (artist.total_songs > 0) {
+                    deleteBtn.disabled = true;
+                    deleteBtn.innerHTML = '<i class="fas fa-exclamation-circle"></i> Cannot Delete (Has Songs)';
+                } else {
+                    deleteBtn.disabled = false;
+                    deleteBtn.innerHTML = '<i class="fas fa-trash"></i> Delete';
+                }
+                
+                // Show popup
+                openDeleteArtistPopup();
+                
+            } catch (error) {
+                console.error('Error preparing delete artist:', error);
+                showNotification('Failed to prepare artist deletion', 'error');
+            }
+        }
+
+        function openDeleteArtistPopup() {
+            const popup = document.querySelector('.deleteArtistConfirmPopup');
+            const popupContent = popup.querySelector('.popup-content');
+            var isMobile = isTrueMobile();
+            
+            if (isMobile) {
+                popup.style.display = 'block';
+                setTimeout(() => {
+                    popup.classList.add('active');
+                    if (popupContent) {
+                        popupContent.style.transform = 'translateY(0)';
+                    }
+                }, 10);
+            } else {
+                $(".deleteArtistConfirmPopup").show();
+                $(".deleteArtistConfirmPopup").addClass("active");
+                $(".deleteArtistConfirmPopup .popup-overlay").removeClass("fadeOut").addClass("fadeIn");
+            }
+        }
+
+        function closeDeleteArtistPopup() {
+            const popup = document.querySelector('.deleteArtistConfirmPopup');
+            popup.classList.remove('active');
+            
+            setTimeout(() => {
+                popup.style.display = 'none';
+                artistToDelete = null;
+            }, 300);
+        }
+
+        async function confirmDeleteArtist() {
+            if (!artistToDelete || !artistToDelete.id) return;
+            
+            try {
+                const response = await fetch(`/admin/artist/delete/${artistToDelete.id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showNotification(`"${artistToDelete.name}" has been deleted successfully`, 'success');
+                    closeDeleteArtistPopup();
+                    
+                    // Remove artist item from list
+                    const artistItem = document.querySelector(`.artist-item[data-id="${artistToDelete.id}"]`);
+                    if (artistItem) {
+                        artistItem.style.transition = 'all 0.3s ease';
+                        artistItem.style.transform = 'translateX(-100%)';
+                        artistItem.style.opacity = '0';
+                        
+                        setTimeout(() => {
+                            artistItem.remove();
+                            updateArtistCountAfterDelete();
+                        }, 300);
+                    } else {
+                        window.location.reload();
+                    }
+                } else {
+                    showNotification(result.message || 'Failed to delete artist', 'error');
+                }
+            } catch (error) {
+                console.error('Error deleting artist:', error);
+                showNotification('Failed to delete artist. Please try again.', 'error');
+            }
+        }
+
+        function updateArtistCountAfterDelete() {
+            const artistItems = document.querySelectorAll('.artist-item');
+            const totalArtists = artistItems.length;
+            
+            // Update total count
+            const totalItemsSpan = document.getElementById('totalItems');
+            if (totalItemsSpan) {
+                totalItemsSpan.textContent = totalArtists;
+            }
+            
+            // Update pagination info
+            const paginationInfo = document.querySelector('.pagination-info');
+            if (paginationInfo && totalItemsSpan) {
+                const startItem = parseInt(paginationInfo.querySelector('#startItem').textContent) || 1;
+                const endItem = Math.min(startItem + artistItems.length - 1, totalArtists);
+                
+                paginationInfo.innerHTML = `
+                    Showing <span id="startItem">${startItem}</span>-<span id="endItem">${endItem}</span> 
+                    of <span id="totalItems">${totalArtists}</span> artists
+                `;
+            }
+            
+            // Show empty state if no artists left
+            if (totalArtists === 0) {
+                const artistListBody = document.getElementById('artistList');
+                artistListBody.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-user"></i>
+                        <p>No artists found</p>
+                    </div>
+                `;
+            }
+        }
+
+        // ============ FILTERING ============ //
+        function initializeFilters() {
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            currentFilters.search = urlParams.get('search') || '';
+            currentFilters.page = parseInt(urlParams.get('page')) || 1;
+            
+            // Update UI elements
+            document.getElementById('quickSearch').value = currentFilters.search;
+            
+            // Show/hide clear search button
+            const clearSearchBtn = document.querySelector('.clear-search');
+            if (clearSearchBtn) {
+                clearSearchBtn.style.display = currentFilters.search ? 'block' : 'none';
+            }
+        }
+
+        function applyFilters() {
+            if (filterTimeout) {
+                clearTimeout(filterTimeout);
+            }
+            
+            filterTimeout = setTimeout(() => {
+                currentFilters.search = document.getElementById('quickSearch').value.trim();
+                currentFilters.page = 1;
+                
+                // Show/hide clear search button
+                const clearSearchBtn = document.querySelector('.clear-search');
+                if (clearSearchBtn) {
+                    clearSearchBtn.style.display = currentFilters.search ? 'block' : 'none';
+                }
+                
+                loadFilteredData();
+            }, 500);
+        }
+
+        function clearSearch() {
+            document.getElementById('quickSearch').value = '';
+            document.querySelector('.clear-search').style.display = 'none';
+            applyFilters();
+        }
+
+        async function loadFilteredData() {
+            if (isFiltering) return;
+            
+            isFiltering = true;
+            showLoading(true);
+            
+            try {
+                // Build query parameters
+                const params = new URLSearchParams();
+                
+                if (currentFilters.search) {
+                    params.append('search', currentFilters.search);
+                }
+                
+                if (currentFilters.page > 1) {
+                    params.append('page', currentFilters.page);
+                }
+                
+                // Show loading state
+                const artistList = document.querySelectorAll('.artist-item');
+                artistList.forEach(item => {
+                    item.classList.add('loading');
+                });
+                
+                // Send request to server
+                const response = await fetch(`/admin/artist/filter?${params.toString()}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch filtered data');
+                }
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Update URL without reloading page
+                    updateURL();
+                    
+                    // Update artist list
+                    updateArtistList(data.artistList, data.totalArtists, data.currentPage, data.totalPages);
+                } else {
+                    throw new Error(data.message || 'Failed to load filtered data');
+                }
+            } catch (error) {
+                console.error('Error loading filtered data:', error);
+            } finally {
+                isFiltering = false;
+                showLoading(false);
+                
+                // Remove loading state
+                const artistList = document.querySelectorAll('.artist-item');
+                artistList.forEach(item => {
+                    item.classList.remove('loading');
+                });
+            }
+        }
+
+        function updateURL() {
+            const params = new URLSearchParams();
+            
+            if (currentFilters.search) {
+                params.append('search', currentFilters.search);
+            }
+            
+            if (currentFilters.page > 1) {
+                params.append('page', currentFilters.page);
+            }
+            
+            const newUrl = `${window.location.pathname}${params.toString() ? '?' + params.toString() : ''}`;
+            window.history.pushState({ path: newUrl }, '', newUrl);
+        }
+
+        function updateArtistList(artistList, totalArtists, currentPage, totalPages) {
+            const artistListBody = document.getElementById('artistList');
+            const paginationInfo = document.querySelector('.pagination-info');
+            
+            // Clear existing content
+            artistListBody.innerHTML = '';
+            
+            if (artistList && artistList.length > 0) {
+                // Generate new artist items
+                artistList.forEach((artist, index) => {
+                    const artistItem = document.createElement('div');
+                    artistItem.className = 'artist-item';
+                    artistItem.dataset.id = artist.id_artist;
+                    
+                    artistItem.innerHTML = `
+                        <div class="artist-header-info">
+                            <div class="artist-profile">
+                                <img src="${artist.artist_profile || '/uploads/undefine.jpg'}" 
+                                     alt="${artist.artist_name}"
+                                     onerror="this.src='/uploads/undefine.jpg'">
+                                <div class="artist-profile-overlay">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                            </div>
+                            <div class="artist-details">
+                                <h4>${artist.artist_name}</h4>
+                                <p><i class="fas fa-calendar"></i> Joined ${artist.formatted_date}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="artist-content">
+                            <div class="artist-stats">
+                                <div class="stat-item">
+                                    <div class="stat-value">${artist.total_songs}</div>
+                                    <div class="stat-label">Songs</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value">${artist.total_playlists}</div>
+                                    <div class="stat-label">Playlists</div>
+                                </div>
+                            </div>
+                            
+                            <div class="artist-description">
+                                ${artist.total_songs > 0 ? 
+                                    `${artist.artist_name} has ${artist.total_songs} songs in ${artist.total_playlists} playlists` : 
+                                    'No songs yet'}
+                            </div>
+                        </div>
+                        
+                        <div class="artist-footer">
+                            <div class="artist-date">
+                                <i class="fas fa-clock"></i>
+                                ${artist.formatted_date}
+                            </div>
+                            <div class="artist-actions">
+                                <button class="action-btn action-edit" title="Edit" onclick="editArtist('${artist.id_artist}')">
+                                    <i class="fas fa-edit"></i>
+                                    <span class="btn-tooltip">Edit</span>
+                                </button>
+                                <button class="action-btn action-delete" title="Delete" onclick="deleteArtist('${artist.id_artist}', '${artist.artist_name}')">
+                                    <i class="fas fa-trash"></i>
+                                    <span class="btn-tooltip">Delete</span>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    artistListBody.appendChild(artistItem);
+                });
+                
+                // Update pagination info
+                const startItem = (currentPage - 1) * 20 + 1;
+                const endItem = Math.min(currentPage * 20, totalArtists);
+                
+                paginationInfo.innerHTML = `
+                    Showing <span id="startItem">${startItem}</span>-<span id="endItem">${endItem}</span> 
+                    of <span id="totalItems">${totalArtists}</span> artists
+                `;
+                
+                // Update pagination controls
+                updatePaginationControls(currentPage, totalPages);
+            } else {
+                // Show empty state
+                const searchMessage = currentFilters.search ? `No artists found for "${currentFilters.search}"` : 'Start by adding your first artist!';
+                
+                artistListBody.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-user"></i>
+                        <h3>No Artists Found</h3>
+                        <p>${searchMessage}</p>
+                        <button class="btn btn-primary" onclick="addArtist()">
+                            Add Artist
+                        </button>
+                    </div>
+                `;
+                
+                paginationInfo.innerHTML = 'Showing 0-0 of 0 artists';
+                document.querySelector('.pagination-controls').innerHTML = '';
+            }
+        }
+
+        function updatePaginationControls(currentPage, totalPages) {
+            const paginationControls = document.querySelector('.pagination-controls');
+            
+            if (totalPages <= 1) {
+                paginationControls.innerHTML = '';
+                return;
+            }
+            
+            let startPage = Math.max(1, currentPage - 2);
+            let endPage = Math.min(totalPages, startPage + 4);
+            
+            if (endPage - startPage < 4) {
+                startPage = Math.max(1, endPage - 4);
+            }
+            
+            let pageNumbersHTML = '';
+            for (let i = startPage; i <= endPage; i++) {
+                pageNumbersHTML += `
+                    <button class="page-number ${i === currentPage ? 'active' : ''}" 
+                            onclick="changePage(${i})">
+                        ${i}
+                    </button>
+                `;
+            }
+            
+            paginationControls.innerHTML = `
+                <button class="pagination-btn ${currentPage === 1 ? 'disabled' : ''}" 
+                        id="prevPage" 
+                        onclick="${currentPage > 1 ? `changePage(${currentPage - 1})` : ''}"
+                        ${currentPage === 1 ? 'disabled' : ''}>
+                    <i class="fas fa-chevron-left"></i> Previous
+                </button>
+                
+                <div class="page-numbers" id="pageNumbers">
+                    ${pageNumbersHTML}
+                </div>
+                
+                <button class="pagination-btn ${currentPage === totalPages ? 'disabled' : ''}" 
+                        id="nextPage" 
+                        onclick="${currentPage < totalPages ? `changePage(${currentPage + 1})` : ''}"
+                        ${currentPage === totalPages ? 'disabled' : ''}>
+                    Next <i class="fas fa-chevron-right"></i>
+                </button>
+            `;
+        }
+
+        function changePage(page) {
+            currentFilters.page = page;
+            loadFilteredData();
+        }
+
+        function showLoading(show) {
+            const loadingIndicator = document.getElementById('filterLoading');
+            if (loadingIndicator) {
+                loadingIndicator.style.display = show ? 'block' : 'none';
+            }
+        }
+
+        // Utility function for notifications
+        function showNotification(message, type = 'success') {
+            let notification = document.getElementById('customNotification');
+            if (!notification) {
+                notification = document.createElement('div');
+                notification.id = 'customNotification';
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    padding: 15px 20px;
+                    border-radius: 8px;
+                    color: white;
+                    font-weight: 500;
+                    z-index: 99999;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                    transform: translateX(120%);
+                    transition: transform 0.3s ease;
+                    max-width: 300px;
+                `;
+                document.body.appendChild(notification);
+            }
+            
+            const colors = {
+                success: '#4CAF50',
+                error: '#F44336',
+                info: '#2196F3',
+                warning: '#FF9800'
+            };
+            notification.style.backgroundColor = colors[type] || colors.success;
+            
+            notification.textContent = message;
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateX(120%)';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,1754 @@
+:root {
+  --add-button: #ee9ca7;
+  --add-button-shadow: rgba(238, 156, 167, 0.4);
+  --color-grey-900: #292624;
+  --color-grey-700: #302D2C;
+  --color-grey-500: #3A3737;
+  --color-purple-700: #773FC3;
+  --color-purple-500: #9C4DE6;
+  --border-radius: 4px;
+  --background-color: #ffffff;
+  --color: #000000;
+  --card-background-color: #B4C3DA;
+  --card-color: #ffffff;
+  --card-overlay-background-color: #fff;
+  --picked-card-background-color: rgb(64, 204, 137);
+  --picked-card-color: #000000;
+  --picked-card-overlay-background-color: rgba(64, 204, 137, 0.3);
+}
+
+.search-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
+}
+
+.headsearch {
+  padding: 20px 25px;
+  flex-shrink: 0;
+}
+
+.submit-task {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border: none;
+  background: var(--add-button);
+  color: #fff;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-search'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E");
+  background-size: 18px;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 12px 0 var(--add-button-shadow);
+}
+
+.add-task {
+  height: 40px;
+  font-size: 14px;
+  display: flex;
+
+}
+
+.search_result .track-details {
+  flex: 1;
+  min-width: 0; 
+  overflow: hidden;
+}
+
+.search_result .track-title {
+  font-size: clamp(0.875rem, 1.2vw, 1rem);
+  color: #fff;
+  font-weight: 500;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: clamp(150px, 30vw, 250px); 
+}
+
+.search_result .track-artist {
+  font-size: clamp(0.75rem, 1vw, 0.875rem);
+  color: #ccc;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: clamp(150px, 30vw, 250px); 
+}
+
+.task-input {
+  border-right: none;
+  width: 100%;
+  padding: 0 4px;
+  outline: none;
+  border: none;
+  border-bottom: 1px solid #fff;
+  background-color: transparent;
+  margin-right: 12px;
+  color: #fff;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+.task-input::placeholder {
+  color: #fff;
+  opacity: 0.7;
+}
+
+.task-list-item {
+  background-color: #0d0d0d;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  width: 100% !important;
+}
+
+.search_result {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 16px;
+}
+
+.search_result .album-page__track__image {
+  object-fit: cover;
+  object-position: center;
+  border-radius: 4px;
+}
+
+.task-list-item:hover {
+  background-color: #1f1f1f;
+  cursor: pointer;
+}
+
+.search-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 60px;
+}
+
+.search-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.s-button {
+  background-color: transparent;
+  border: 2px solid #fff;
+  border-radius: 20px;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.s-button.active {
+  background-color: #fff;
+  color: #000;
+}
+
+/* Content layout */
+.search-container .content-wrapper {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  overflow: hidden;
+}
+
+.left-content {
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.right-content {
+  flex: 1;
+  border-radius: 8px;
+  overflow: hidden;
+  min-height: 0;
+}
+
+
+.track-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+}
+
+.track-title {
+  font-size: 14px;
+  color: #fff;
+}
+
+.track-artist {
+  font-size: 12px;
+  color: #ccc;
+}
+
+.search-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  z-index: 2;
+  flex-wrap: nowrap;
+}
+
+.app-header {
+  flex-shrink: 0;
+  white-space: nowrap;
+  color: #fff;
+  line-height: 1;
+  margin: 0;
+}
+
+.search-buttons {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  gap: 10px;
+  scrollbar-width: none;
+}
+
+.search-buttons::-webkit-scrollbar {
+  display: none;
+}
+
+.searchcontainer .itemprofile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.profileSearch {
+  border-radius: 50%;
+  width: 12rem;  
+  height: 12rem;     
+  overflow: hidden;  
+}
+
+.profileSearch > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;  
+}
+
+.profileSearch .overlay {
+  border-radius: 50%;
+}
+
+.search-container .carousel__profile{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.profile__title {
+  font-size: 1em;
+  font-weight: 300;
+  color: #fff;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; 
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 12rem;
+}
+
+.resultBottom {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 0 auto;
+  margin-top: 20px;
+}
+
+.resultBottom .titleBottom {
+  width: 100%;
+  margin: 0 0 0.7rem 0.8rem;
+  color: white;
+}
+
+.resultBottom .card {
+  padding: 1rem;
+  width: 100%;
+  position: relative;
+  border-radius: 10px;
+  background: rgba(25, 25, 25, 0.7);
+}
+
+.resultBottom .card .card-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  z-index: 9;
+  gap: 20px;
+}
+
+/* Thumbnail styles */
+.resultBottom .thumbnail {
+  position: relative;
+}
+.resultBottom .thumbnail {
+  display: inline-flex;
+  width: fit-content;
+  height: fit-content;
+  align-self: center;
+  justify-self: center;
+}
+
+
+.resultBottom .thumbnail img {
+  display: block;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.resultBottom .thumbnail.rounded img {
+  border-radius: 50% !important;
+  aspect-ratio: 1/1;
+}
+
+.resultBottom .thumbnail span {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  color: white;
+  cursor: pointer;
+  background: rgba(3, 3, 3, 0.55);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.resultBottom .thumbnail.rounded span {
+  border-radius: 50%;
+}
+
+.resultBottom .thumbnail:hover span {
+  display: flex;
+}
+
+.resultBottom .info {
+  flex: 2;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: clamp(70px, 10vw, 110px);
+}
+
+
+
+.resultBottom .info h1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.resultBottom .info h1:hover{
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.resultBottom .info p {
+  opacity: 0.6;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Button styles */
+.resultBottom .options {
+  flex: auto;
+}
+
+.resultBottom .btn-grp {
+  display: flex;
+  gap: 20px;
+  justify-content: flex-end;
+}
+
+.resultBottom button {
+  border: none;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+  max-width: 107px;
+  width: 100%;
+  font-weight: bold;
+  padding: 5px 16px;
+  border-radius: 30px;
+  cursor: pointer;
+  background: transparent;
+}
+
+.resultBottom button.play,
+.resultBottom button.save {
+  background: none;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+:root[style*="--device: desktop"] .resultBottom button.save:hover,
+:root[style*="--device: desktop"] .resultBottom button.play:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.follow-btn {
+  background: transparent;
+  border: 1px solid #fff;
+  color: #fff;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.follow-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.top-result.profile-card .save {
+  display: none !important;
+}
+
+.fav-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.heart-icon {
+  color: white;
+  transition: all 0.2s ease;
+}
+
+.heart-icon.fa-solid {
+  color: #fff !important;
+}
+
+:root[style*="--device: desktop"] .fav-button:hover .heart-icon {
+  color: #1DB954 !important;
+  transform: scale(1.1);
+}
+
+
+.hoverText {
+  transition: text-decoration 0.2s ease;
+  position: relative;
+}
+
+.infoTitle{
+    font-size: 0.8rem;
+}
+
+.hoverText:hover {
+  color: #1db954; /* Spotify-like green */
+}
+
+.hoverText:after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 1px;
+  bottom: 0;
+  left: 0;
+  background-color: #1db954;
+  transform-origin: bottom right;
+  transition: transform 0.25s ease-out;
+}
+
+.hoverText:hover:after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+.track-duration {
+  margin-left: auto;
+  padding: 0 15px;
+  color: #b3b3b3;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.search_result {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.track-title.playingSearch,
+.track-artist.playingSearch {
+  color: #1DB954;
+}
+
+.search-container .card__info {
+  margin-top: 10px; 
+  text-align: left; 
+  min-height: 100px;
+}
+
+.search-container .carousel__profile .card__info {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+}
+
+.search-container .card__title {
+  font-size: 1em;
+  font-weight: 300;
+  color: #fff;
+  margin: 0;
+  padding: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; 
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 7px;
+}
+
+.search-container .card__title:empty {
+  display: none; /* Sembunyikan elemen jika kosong */
+}
+
+.search-container .card__description {
+  font-size: 0.8em;
+  color: #ccc;
+  margin: 0;
+  padding: 0;
+  max-width: 100%; 
+  word-wrap: break-word; 
+  overflow-wrap: break-word;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; 
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis; 
+}
+
+/* Pastikan card tetap sejajar meskipun judul atau deskripsi kosong */
+.search-container .carousel__item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 180px; 
+  flex-shrink: 0; /* Pastikan elemen tidak menyusut */
+}
+
+
+.search-container .carousel__content {
+  scroll-snap-type: x proximity;
+  scroll-padding: 10px; /* Menambahkan bantalan agar pergerakan lebih smooth */
+  overflow-x: auto;
+  display: flex;
+  gap: 15px;
+  scroll-behavior: smooth;
+  padding: 0 10px;
+}
+
+.search-container .carousel__item {
+  scroll-snap-align: start;
+  flex: 0 0 auto;
+}
+
+.search-container .carousel__item .coverImg {
+  position: relative; /* Tambahkan ini agar .overlay dan .control relatif terhadap container */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.search-container .carousel__item .coverImg > img {
+  transition: transform 0.3s;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; 
+}
+
+:root[style*="--device: desktop"] .search-container .carousel__item .coverImg:hover > img {
+  transform: scale(1.07); 
+}
+
+.search-container .carousel__item .overlay,
+.search-container .carousel__item .control {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.search-container .carousel__item .overlay {
+  opacity: 0;
+  background: black;
+  z-index: 2;
+  transition: opacity 0.2s;
+}
+
+:root[style*="--device: desktop"] .search-container .carousel__item .coverImg:hover > .overlay {
+  opacity: 0.3;
+}
+
+.search-container .carousel__item .control {
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+:root[style*="--device: desktop"] .search-container .carousel__item .coverImg:hover > .control {
+  opacity: 1;
+}
+
+.search-container .carousel__item .coverImg.playing > .control {
+  opacity: 1 !important;
+}
+
+.search-container .carousel__item .coverImg.playing > .overlay {
+  opacity: 0.3; /* agar seperti hover */
+}
+
+
+.resultBottom .thumbnail {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+
+@media screen and (min-width: 1100px) {
+  .right-content {
+    padding: 0 16px;
+  }
+}
+
+@media screen and (max-width: 1100px) {
+  .search_result {
+    padding: 3px;
+  }
+  .right-content {
+    margin-top: 35px;
+  }
+
+  .resultBottom .btn-grp {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+    height: 100%;
+    width: auto;
+  }
+
+
+}
+
+@media screen and (min-width: 1400px) {
+  .task-input,
+  .task-list-item {
+    width: 50%;
+  }
+
+  .search-buttons {
+    width: 75%;
+  }
+}
+
+
+@media screen and (max-width: 768px) {
+  .resultBottom .info {
+    flex: 1 1 auto;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .resultBottom button {
+    height: 35px;
+    width: auto;
+  }
+  /* Grup tombol utama */
+
+  .resultBottom .btn-grp:has(button.play + button.save) {
+    justify-content: space-between;
+  }
+
+  /* Jika hanya ada 1 tombol (Follow/Following) */
+  .resultBottom .btn-grp:has(button.play:only-child) {
+    justify-content: center;
+  }
+
+  /* Pastikan tombol mengisi lebar penuh */
+  .resultBottom .btn-grp button {
+    align-self: stretch;
+  }
+
+  .resultBottom .card .card-content {
+    flex-direction: row;
+    align-items: stretch;  
+    gap: 15px;
+    min-height: 70px;  
+  }
+}
+
+
+@media(max-width:768px){
+  .search-container .container {
+    max-width: 100%;
+  }
+  
+  .search-container .carousel__headline{
+    font-size: 1.3em;
+  }
+  
+  .search-container .card__info {
+    min-height: 60px; 
+  }
+
+
+  .search-container .card__description{
+    display: none;
+  }
+
+  .search-container .card__title {
+    font-size: 0.9em;
+  }
+}
+
+
+.main-content,
+#active-content,
+#content-area {
+  container-type: inline-size;
+  container-name: music-container;
+  position: relative; /* PERBAIKAN: Tambahkan positioning */
+}
+
+
+@container music-container (min-width: 0) {
+.app-header {
+  font-size: clamp(1.4rem, 3vw, 2rem);
+}
+
+.s-button {
+  padding: clamp(4px, 0.6vw, 6px) clamp(14px, 2vw, 20px);
+  font-size: clamp(0.75rem, 1.2vw, 0.875rem);
+}
+
+.search-container .profileSearch {
+  width: clamp(6rem, 18vw, 9rem) !important;
+  height: clamp(6rem, 18vw, 9rem) !important;
+}
+
+.search-container .cardSearch {
+  width: clamp(6rem, 20vw, 9rem) !important;
+  height: clamp(6rem, 20vw, 9rem) !important;
+}
+
+.search-container .carousel__item {
+  flex: 0 0 auto;
+  width: clamp(5.8rem, 20vw, 9rem);
+}
+
+.search_result .album-page__track__image {
+  width: clamp(55px, 6vw, 70px);
+  height: clamp(55px, 6vw, 70px);
+}
+
+.search-header {
+  margin-bottom: clamp(32px, 8vw, 70px);
+}
+.search-container .content-wrapper {
+  padding: 0 clamp(10px, 2.5vw, 20px) clamp(10px, 2.5vw, 20px);
+}
+
+.search-container .card__title,
+.profile__title {
+  font-size: clamp(0.75em, 1.4vw, 0.85em);
+}
+
+.search-container .carousel__item .coverImg {
+  width: clamp(6.5rem, 18vw, 9.6rem);
+  height: clamp(6.5rem, 18vw, 9.6rem);
+}
+
+.resultBottom .thumbnail span svg {
+  width: clamp(25px, 4vw, 40px);
+  height: clamp(25px, 4vw, 40px);
+}
+
+.titleBottom h1 {
+  font-size: clamp(17px, 3.2vw, 25px);
+}
+
+.resultBottom .info h1 {
+  font-size: clamp(15px, 2vw, 28px);
+  margin-bottom: clamp(0.5rem, 1.5vw, 0.8rem);
+}
+
+.resultBottom .info p {
+  font-size: clamp(12px, 1vw, 16px);
+  -webkit-line-clamp: clamp(1, 1.5vw, 2);
+}
+
+.resultBottom .thumbnail img {
+  width: clamp(48px, 6.5vw, 100px);
+  height: clamp(48px, 6.5vw, 100px);
+}
+
+.resultBottom .save i {
+  font-size: clamp(1.3em, 2vw, 1.8em);
+}
+
+.resultBottom .user-hover-icon {
+  font-size: clamp(1.3em, 3vw, 2.3em);
+}
+
+.svg-icon.play-topResult {
+  width: clamp(22px, 2vw, 30px);
+  height: clamp(22px, 2vw, 30px);
+}
+
+.resultBottom button.follow-btn {
+  padding: clamp(9px, 1vw, 15px);
+}
+
+
+
+}
+
+
+
+
+
+
+
+/*==================================== LEFT CONTENT =============================================== */
+
+
+:root {
+  --gap: 1.25rem;
+  --speed: 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --closed: 5rem;
+  --open: 30rem;
+  --accent: #ff6b35;
+  --mobile-closed-height: 60px; /* Tambahkan untuk tinggi mobile collapsed */
+}
+
+.head {
+  margin: auto;
+  padding: 70px 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 2rem;
+}
+
+.head h2 {
+  font-size: 3rem;
+  font-weight: 700;
+}
+
+.nav-btn {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.nav-btn:hover {
+  background: var(--accent);
+}
+.nav-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.slider {
+  max-width: 1400px;
+  margin: auto;
+  overflow: hidden;
+}
+
+.controls {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+.track {
+  display: flex;
+  gap: var(--gap);
+  align-items: flex-start;
+  justify-content: center;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 40px;
+}
+.track::-webkit-scrollbar {
+  display: none;
+}
+
+.project-card {
+  position: relative;
+  flex: 0 0 var(--closed);
+  border-radius: 1rem;
+  overflow: hidden;
+  cursor: pointer;
+  transition: flex-basis var(--speed), transform var(--speed);
+}
+.project-card[active] {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 55px rgba(0, 0, 0, 0.45);
+}
+.project-card__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.75) saturate(75%);
+  transition: filter 0.3s, transform var(--speed);
+}
+.project-card:hover .project-card__bg {
+  filter: brightness(0.9) saturate(100%);
+  transform: scale(1.06);
+}
+
+.project-card__content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0;
+  background: linear-gradient(transparent 40%, rgba(0, 0, 0, 0.85) 100%);
+  z-index: 2;
+}
+.project-card__title {
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.35rem;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+.project-card__thumb,
+.project-card__desc,
+.project-card__btn {
+  display: none;
+}
+
+.project-card[active] .project-card__content {
+  flex-direction: row;
+  align-items: flex-start; /* Ubah ke flex-start untuk align top */
+  padding: 1.2rem 2rem;
+  gap: 1.1rem;
+  justify-content: flex-start;
+}
+
+.project-card[active] .project-card__content > div {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex: 1;
+  min-width: 0;
+  justify-content: flex-start; 
+  gap: 0.8rem; 
+}
+
+
+
+.project-card[active] .project-card__title {
+  writing-mode: horizontal-tb;
+  transform: none;
+  font-size: 2rem; /* Sedikit lebih kecil */
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Maksimal 2 baris */
+  -webkit-box-orient: vertical;
+}
+
+.project-card[active] .project-card__thumb,
+.project-card[active] .project-card__desc,
+.project-card[active] .project-card__btn {
+  display: block;
+}
+
+.project-card__thumb {
+  width: 133px;
+  height: 200px; /* Kurangi tinggi thumbnail */
+  border-radius: 0.45rem;
+  object-fit: cover;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  flex-shrink: 0;
+}
+
+.project-card__desc {
+  color: #ddd;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin: 0;
+  flex: 0 1 auto; /* Tidak expand terlalu banyak */
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  max-height: 3.78rem; /* (0.9rem * 1.4 * 3) */
+}
+
+
+.project-card__btn {
+  padding: 0.55rem 1.3rem;
+  border: none;
+  border-radius: 9999px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  align-self: flex-start;
+  margin-top: 0.5rem; /* Kurangi margin atas */
+  white-space: nowrap;
+  transition: background-color 0.2s;
+}
+
+
+.project-card__btn:hover {
+  background: #ff824f;
+}
+
+.dots {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  padding: 20px 0;
+}
+.dot {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  cursor: pointer;
+  transition: 0.3s;
+}
+.dot.active {
+  background: var(--accent);
+  transform: scale(1.2);
+}
+
+.project-card__thumb,
+.project-card__desc,
+.project-card__btn {
+  display: none;
+}
+/* Responsive untuk tablet (768px - 1024px) */
+@media (max-width: 1024px) {
+  :root {
+    --closed: 4rem;
+    --open: 25rem;
+  }
+  
+  .head {
+    padding: 50px 20px 30px;
+  }
+  
+  .head h2 {
+    font-size: 2.5rem;
+  }
+  
+  .project-card[active] .project-card__title {
+    font-size: 1.7rem;
+  }
+  
+  .project-card__thumb {
+    width: 100px;
+    height: 160px;
+  }
+  
+  .project-card__desc {
+    font-size: 0.85rem;
+    -webkit-line-clamp: 3;
+    max-height: 3.6rem; /* (0.85rem * 1.4 * 3) */
+  }
+}
+
+
+
+
+
+/*==================================== RIGHT CONTENT =============================================== */
+
+
+:root {
+  --hue: 27;
+  --sat: 69%;
+  --white: hsl(0, 0%, 100%);
+  --primary100: hsl(var(--hue), var(--sat), 87%);
+  --primary900: hsl(var(--hue), var(--sat), 7%);
+  --trans-dur: 0.3s;
+
+}
+
+
+.right-content .icon {
+  display: block;
+  width: 1em;
+  height: auto;
+}
+
+.right-content .card {
+  height: 320px; /* Fixed height */
+  border-radius: 1.25em;
+  font-weight: 300;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  padding: 1.25em;
+  width: 100%;
+  max-width: 100%;
+  position: relative;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.right-content .card, .card__header, .card__content-wrapper {
+  display: flex;
+  position: relative;
+}
+.right-content .card__header, .card__content-wrapper {
+  color: var(--white);
+}
+.right-content .card__header {
+  gap: 0.75em;
+  justify-content: space-between;
+  margin-bottom: 0.5em;
+}
+.right-content .card__content-wrapper {
+  flex-direction: column;
+  flex: 1;
+  position: relative;
+  z-index: 2;
+  height: calc(100% - 2.5em); /* Subtract header height */
+}
+.right-content .card__content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100%;
+}
+.right-content .card__bg {
+  color: currentColor;
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.7;
+}
+.right-content .card__label {
+  font-size: 0.85em;
+  opacity: 0.9;
+}
+.right-content .card__category {
+  flex-shrink: 0;
+  position: relative;
+  height: 2em;
+  width: 2em;
+}
+.right-content .card__category-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 50%;
+  transform: translate(-50%, -50%);
+}
+.right-content .card__category .icon {
+  width: 100%;
+}
+.right-content .card__title, .card__description {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.right-content .card__title {
+  font-family: "Kaisei Tokumin", serif;
+  font-weight: 400;
+  font-size: 1.4em;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  margin: 0.5em 0;
+  min-height: 2.8em;
+  z-index: 10 !important;
+}
+.right-content .card__description {
+  font-size: 0.85em;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  line-height: 1.4;
+  margin-bottom: 1em;
+  opacity: 0.9;
+  flex: 1;
+  min-height: 3.6em;
+}
+.right-content .card__stats, .card__rating, .card__completion {
+  display: flex;
+  align-items: center;
+}
+.right-content .card__stats {
+  gap: 1em;
+  margin-top: auto;
+}
+.right-content .card__rating, .card__completion {
+  font-weight: 400;
+  gap: 0.3em;
+  font-size: 0.85em;
+}
+.right-content .card-grid {
+  display: flex;
+  gap: 1em;
+  padding: 0.75em;
+  max-width: 100%;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scroll-padding: 0.75em;
+  flex-wrap: nowrap;
+}
+
+.right-content .card-grid::-webkit-scrollbar {
+  height: 6px;
+}
+
+.right-content .card-grid::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.right-content .card-grid::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+.right-content .card-grid::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Card width based on right content width */
+.right-content .card {
+  width: calc((100% - 2em) / 3); /* 3 cards visible with gaps */
+  min-width: 250px;
+  max-width: 350px;
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+  .right-content .card-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-flow: row;
+    overflow-x: visible;
+    gap: 1em;
+  }
+
+  .right-content .card {
+    width: 100%;
+    height: 300px;
+    min-width: auto;
+    max-width: none;
+  }
+
+  .add-task {
+    margin-bottom: -15px; 
+
+  }
+
+  #searchResults .carousel{
+    margin-top: -30px !important;
+  }
+
+  #searchResults {
+    position: absolute;
+    z-index: 10;
+    background-color: #0D0D0D;
+    width: 49% !important;
+    padding: 20px;
+  }
+
+}
+/* Desktop */
+@media (min-width: 1024px) {
+  .right-content .card:nth-child(4n+1), .card:nth-child(4n+2) {
+    font-size: 0.9em;
+  }
+  .right-content .card:nth-child(3) {
+    grid-column: span 2;
+    grid-row: span 2;
+    height: 380px;
+  }
+  .right-content .card:nth-child(4) {
+    grid-column: 1/span 2;
+    grid-row: 2/span 2;
+    height: 380px;
+  }
+
+  .right-content .card-grid {
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-flow: row;
+    overflow-x: visible;
+  }
+  
+  .right-content .card {
+    height: 280px;
+  }
+}
+
+/* For very wide screens */
+@media (min-width: 780px) {
+  .right-content .card-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  
+  .right-content .card {
+    height: 260px;
+  }
+}
+
+/* For mobile */
+@media (max-width: 767px) {
+  .right-content .card {
+    height: 280px;
+    min-width: 220px;
+    width: calc((100% - 1em) / 2); /* 2 cards visible on mobile */
+  }
+  
+  .right-content .card__title {
+    font-size: 1.2em;
+  }
+  
+  .right-content .card__description {
+    font-size: 0.8em;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+  }
+}
+
+
+/* Define container elements */
+.main-content,
+#active-content,
+#content-area {
+  container-type: inline-size;
+  container-name: music-container;
+  position: relative; /* PERBAIKAN: Tambahkan positioning */
+}
+
+/* PERBAIKAN: Pastikan struktur layout benar */
+#active-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  position: relative;
+  overflow-y: auto;
+}
+
+.main-content {
+  flex: 1;
+  position: relative;
+  width: 100%;
+}
+
+
+@container music-container (min-width: 0) {
+  .project-card {
+    height: clamp(1rem, 47vw, 18rem);
+  }
+
+  .project-card {
+    flex: 1 1 clamp(3rem, 1vw, 5rem);
+
+  }
+
+
+.project-card[active] {
+  flex-basis: clamp(18rem, 21cqw, 40rem);
+}
+
+  .head h2 {
+    font: 400 clamp(1.25rem, 1vw, 2rem) / 1.2 Inter, sans-serif;
+    color: #fff;
+  }
+
+  @container music-container (max-width: 1500px) {
+
+  .task-input,
+  .task-list-item {
+    width: 100%;
+  }
+
+  .search-buttons {
+    width: 100%;
+  }
+
+  #searchResults {
+    width: 100% !important;
+  }
+
+
+
+    html, body {
+    overflow: auto;
+  }
+  
+  .search-container {
+    height: auto;
+    min-height: 100vh;
+    overflow: visible;
+  }
+  
+  .content-wrapper {
+    flex-direction: column !important;
+    overflow: visible !important;
+  }
+  
+  .left-content {
+    padding-right: 0 !important;
+    width: 100% !important;
+    flex: none !important;
+    overflow: visible;
+    height: auto;
+  }
+  
+  .right-content {
+    margin-top: 16px;
+    width: 100% !important;
+    flex: none !important;
+    overflow: visible;
+    height: auto;
+  }
+
+  .project-card {
+    height: clamp(19rem, 47vw, 20rem);
+  }
+
+  .project-card[active] {
+    flex-basis: clamp(10rem, 40vw, 40rem);
+  }
+
+  .project-card {
+    flex: 1 1 clamp(5rem, 1vw, 5rem);
+
+  }
+
+  .project-card__title {
+    font-size: clamp(0.8rem, 1.5vw, 1.2rem);
+  }
+
+
+  .project-card__thumb {
+    width: clamp(50px, 10vw, 180px);
+    height: clamp(100px, 16vw, 250px);
+  }
+
+  .project-card[active] .project-card__title {
+    font-size: clamp(1.3rem, 1.9vw, 2.5rem);
+  }
+
+
+  }
+
+  @container music-container (max-width: 800px) {
+      .project-card[active] .project-card__desc{
+        display: none;
+      }
+  }
+
+    @container music-container (max-width: 567px) {
+
+
+    :root {
+    --closed: 100%;
+    --open: 100%;
+    --gap: 0.8rem;
+  }
+
+  /* Head untuk mobile - space-between */
+  .head {
+    padding: 30px 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    gap: 1rem;
+  }
+
+  .head h2 {
+    font-size: 1.8rem;
+    margin: 0;
+    flex: 1;
+  }
+
+  .controls {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+    padding: 0;
+  }
+
+  .nav-btn {
+    width: 2.2rem;
+    height: 2.2rem;
+    font-size: 1.2rem;
+    position: static;
+    transform: none;
+  }
+
+  .slider {
+    padding: 0 15px;
+  }
+
+  /* Track untuk mobile */
+  .track {
+    flex-direction: column;
+    scroll-snap-type: y mandatory;
+    gap: 0.8rem;
+    padding-bottom: 20px;
+    align-items: stretch;
+    justify-content: flex-start;
+  }
+
+  /* Card untuk mobile - lebih pendek saat collapsed */
+  .project-card {
+    height: auto;
+    min-height: var(--mobile-closed-height); /* Gunakan variabel */
+    flex: 0 0 auto;
+    width: 100%;
+    scroll-snap-align: start;
+    transition: min-height var(--speed), transform var(--speed);
+    position: relative;
+    margin-bottom: 0.5rem;
+  }
+
+  .project-card:not([active]) {
+    pointer-events: auto;
+  }
+
+  .project-card[active] {
+    min-height: 320px; /* Lebih rendah dari sebelumnya */
+    transform: none;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    margin-bottom: 1rem;
+    transition: min-height 0.4s ease;
+  }
+
+  /* Konten card saat tidak aktif di mobile - lebih kompak */
+  .project-card__content {
+    flex-direction: row;
+    justify-content: flex-start;
+    padding: 0.8rem 1rem; /* Padding lebih kecil */
+    align-items: center;
+    gap: 0.8rem;
+    transition: all 0.3s ease;
+  }
+
+ .project-card__title {
+    writing-mode: horizontal-tb;
+    transform: none;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0;
+    flex: 1;
+    text-align: left;
+    padding: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    max-height: 2.8rem;
+    line-height: 1.2;
+  }
+
+  .project-card__thumb,
+  .project-card__desc,
+  .project-card__btn {
+    display: none;
+  }
+
+  /* Konten card saat aktif di mobile - lebih terorganisir */
+  .project-card[active] .project-card__content {
+    align-items: flex-start;
+    padding: 1.2rem; /* Padding lebih kecil */
+    flex-direction: column;
+    height: 100%;
+    transition: all 0.4s ease;
+    gap: 1rem;
+  }
+
+  .project-card[active] .project-card__title {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    margin-top: 0;
+    max-height: none;
+    -webkit-line-clamp: 2;
+    line-height: 1.2;
+  }
+ .project-card[active] .project-card__thumb {
+    width: 100%;
+    height: 140px;
+    max-height: 140px;
+    border-radius: 0.35rem;
+    margin-bottom: 0.8rem;
+    object-fit: cover;
+  }
+
+  /* Deskripsi di mobile - HANYA 1 BARIS dengan ellipsis */
+  .project-card[active] .project-card__desc {
+    font-size: 0.85rem;
+    line-height: 1.4;
+    max-width: 100%;
+    margin-bottom: 0.8rem;
+    color: #eee;
+    display: -webkit-box;
+    -webkit-line-clamp: 1; /* HANYA 1 BARIS */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-height: 1.2rem; /* (0.85rem * 1.4) */
+    flex: none;
+  }
+
+  .project-card[active] .project-card__btn {
+    align-self: stretch;
+    width: 100%;
+    text-align: center;
+    padding: 0.7rem;
+    margin-top: auto;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  /* Container untuk konten di mobile */
+  .project-card[active] .project-card__content > div {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+    gap: 0.8rem;
+  }
+
+  /* Dots disembunyikan di mobile */
+  .dots {
+    display: none;
+  }
+
+  /* Touch improvements untuk mobile */
+  .project-card {
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  /* Mencegah accidental expand saat scroll */
+  .track {
+    touch-action: pan-y;
+  }
+
+
+
+
+  }
+
+  
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

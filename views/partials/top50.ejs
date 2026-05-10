@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta charset="UTF-8">
+  <title>Top 50 Tracks</title>
+  <link rel="stylesheet" href="/css/n.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    .dropdown-container {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 100%;
+      background-color: #2a292f;
+      min-width: 180px;
+      z-index: 1;
+      border-radius: 6px;
+    }
+
+    .dropdown-content a {
+      color: #fff;
+      padding: 10px 14px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+    }
+
+    .dropdown-content i {
+      font-size: 15px;
+    }
+
+    .dropdown-content a:hover {
+      background-color: #1b1b1b;
+    }
+
+    .show {
+      display: block;
+    }
+
+    .dropdown-submenu {
+      position: relative;
+    }
+
+    .dropdown-submenu > a {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 14px;
+      color: #fff;
+      font-size: 14px;
+      gap: 10px;
+    }
+
+    .dropdown-submenu > a:hover {
+      background-color: #1b1b1b;
+    }
+
+    .arrow {
+      margin-left: auto;
+      font-size: 20px;
+      opacity: 0.7;
+    }
+
+    .submenu-content {
+      display: none;
+      position: absolute;
+      top: 0;
+      right: 100%;
+      background-color: #37353e;
+      min-width: 160px;
+      border-radius: 6px;
+      z-index: 2;
+    }
+
+    .submenu-content a {
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: #fff;
+      font-size: 14px;
+    }
+
+    .submenu-content a:hover {
+      background-color: #1b1b1b;
+    }
+
+    .dropdown-submenu:hover .submenu-content {
+      display: block;
+    }
+
+    .playlist-name {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.2em;
+      max-height: calc(1.2em * 3);
+    }
+
+    .track-album {
+      font-size: 0.875rem;
+      color: var(--text_muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-align: left;
+      position: relative;
+      display: block;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    :root[style*="--device: desktop"] .track-album:hover {
+      text-decoration: underline;
+    }
+
+    .track-album-container {
+      flex: 1;
+      display: block;
+      padding: 0 1rem;
+      text-align: left;
+      min-width: 0;
+    }
+
+    .track-number {
+      margin-right: 10px;
+      min-width: 25px;
+      text-align: center;
+      display: inline-block;
+      font-variant-numeric: tabular-nums;
+      flex-shrink: 0;
+    }
+
+    .play-count {
+      font-size: 0.875rem;
+      color: var(--text_muted);
+      margin-right: 15px;
+      min-width: 60px;
+      text-align: center;
+    }
+
+    .play-count i {
+      margin-right: 5px;
+      color: #ff4757;
+    }
+  </style>
+</head>
+<body>
+  <header class="playlist-header top50-head">
+    <div class="header-content">
+      <button class="back-button" onclick="backLeft()">
+        <i class="fa-solid fa-circle-chevron-left"></i>
+      </button>
+      <div class="header-text-container">
+        <h1 class="header-title"><%= playlist.playlist_name %></h1>
+        <p class="header-subtitle muted">Top 50 most played tracks in the last 30 days</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="banner">
+    <div class="banner-img-wrapper banner-top50track">
+      <div class="nav-icons">
+        <i onclick="backLeft()" class="fa-solid fa-circle-chevron-left"></i>
+        <i onclick="backRight()" class="fa-solid fa-circle-chevron-right"></i>
+      </div>
+
+      <div class="banner-content">
+        <div class="banner-img-container">
+          <img src="/uploads/top50track.jpeg" class="banner-img top50-img" alt="Top 50 Tracks">
+        </div>
+        <div class="banner-text">
+          <div class="banner-text-content">
+            <h3><%= playlist.playlist_name %></h3>
+            <p class="muted"><%= playlist.tag_name %></p>
+            <p class="playlist-description">
+              <%= playlist.totalTracks %> tracks • <%= playlist.formattedDuration %>
+            </p>
+            <p class="muted" style="margin-top: 10px;">
+              <i class="fas fa-chart-line"></i> Based on play counts from the last 30 days
+            </p>
+          </div>
+          <div class="playlist-stats">
+
+              <% if (playlist.tracks && playlist.tracks.length > 0) { %>
+              <div onclick="buttonTop50()" class="stat-item top50track-btn">
+                <svg class="svg-icon playlist-play" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                  <path fill-rule="evenodd" d="M5 21V3c0-.79116579.87524596-1.26900738 1.54075759-.84117848L20.5407576 11.1588215c.6123232.3936364.6123232 1.2887206 0 1.682357l-14.00000001 9C5.87524596 22.2690074 5 21.7911658 5 21zm2-1.8316655L18.1507426 12 7 4.8316655v14.336669z"/>
+                </svg>
+              </div>
+              <% } %>
+
+
+
+            <div onclick="share()" class="stat-item">
+              <i class="fa-solid fa-share"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="tracks">
+
+
+
+
+    <% playlist.tracks.forEach(function(track, index) { %>
+<div
+  class="track-container listmusic"
+  onclick="trackClicked(this)"
+  data-id="<%= track.id_music %>"
+  data-src="<%= track.audio_file %>"
+  data-lyric="<%= track.lyric %>"
+  data-line-durations="<%= track.line_durations %>"
+  data-cover="<%= track.cover_music %>"
+  data-title="<%= track.title_music %>"
+  data-artist-ids="<%= track.artist_ids || '' %>"
+  data-artist="<%= track.artist_names || 'Unknown Artist' %>"
+  data-artist-hashids="<%= track.artists.map(a => a.hashid).join(',') || '' %>"
+  data-playlist="<%= track.playlist_hashid %>"
+  data-playlist-original="<%= track.playlist_original_id %>"
+  data-album-hashid="<%= track.album_hashid || track.albums[0]?.hashid || '' %>"
+  data-track-hashid="<%= track.hashid %>"
+  data-playlist_name="Top 50 Tracks"
+  data-item="top50" 
+>
+
+
+
+      <div class="track-info">
+        <span class="track-number"><%= index + 1 %></span>
+        <div class="play-count" title="Play count">
+          <i class="fas fa-play"></i><%= track.play_count %>
+        </div>
+        <img src="<%= track.cover_music %>" class="track-image" alt="<%= track.title_music %>">
+        <div class="track-details">
+          <p class="track-title"><%= track.title_music %></p>
+          <p class="track-artist">
+            <% if (track.artists && track.artists.length > 0) { %>
+            <% track.artists.forEach(function(artist, artistIndex) { %>
+            <span class="clickable-artist" onclick="showArtist('<%= artist.hashid %>')">
+              <%= artist.name %>
+            </span><%= (artistIndex < track.artists.length - 1) ? ', ' : '' %>
+            <% }); %>
+            <% } else { %>
+            <span>Unknown Artist</span>
+            <% } %>
+          </p>
+        </div>
+      </div>
+      <div class="track-album-container">
+        <% if (track.albums && track.albums.length) { %>
+        <% track.albums.forEach(function(album) { %>
+        <% if (album.hashid && album.hashid !== 'AL0') { %>
+        <span class="track-album clickable" onclick="showAlbum('<%= album.hashid %>')">
+          <%= album.album_name %>
+        </span>
+        <% } else { %>
+        <span class="track-album">
+          <%= album.album_name %>
+        </span>
+        <% } %>
+        <% }); %>
+        <% } else { %>
+        <span class="track-album clickable" onclick="showMusic('<%= track.hashid %>')">
+          <%= track.title_music %>
+        </span>
+        <% } %>
+      </div>
+
+      <span class="track-time"><%= track.duration %></span>
+      <div class="track-actions">
+        <i
+          onclick="event.stopPropagation(); event.preventDefault(); trackHeart(this)"
+          class="<%= track.isFavorite ? 'fas' : 'far' %> fa-heart fav_playlist"
+          style="<%= track.isFavorite ? 'color:#ffff;' : '' %>"
+        ></i>
+      </div>
+
+      <div class="dropdown-container" onclick="event.stopPropagation();">
+        <i class="fa-solid fa-ellipsis track-menu" onclick="handleEllipsisClick(this)"></i>
+
+        <div class="dropdown-content">
+          <li class="favDropdown" onclick="trackHeartDropdown(this)">
+            <a href="javascript:void(0);">
+              <i class="<%= track.isFavorite ? 'fas' : 'far' %> fa-heart"
+                style="<%= track.isFavorite ? 'color:#ffff;' : '' %>"></i>
+              <span>Favorites</span>
+            </a>
+          </li>
+
+          <% if (track.albums && track.albums.length) { %>
+          <% track.albums.forEach(function(album) { %>
+          <a href="javascript:void(0);" onclick="showAlbum('<%= album.hashid %>')">
+            <i class="fa-solid fa-compact-disc"></i>Album
+          </a>
+          <% }); %>
+          <% } else { %>
+          <a href="javascript:void(0);" onclick="showMusic('<%= track.hashid %>')">
+            <i class="fa-solid fa-compact-disc"></i>Album
+          </a>
+          <% } %>
+          
+          <% if (track.artists && track.artists.length === 1) { %>
+          <a href="javascript:void(0);" onclick="showArtist('<%= track.artists[0].hashid %>')">
+            <i class="fa-solid fa-user"></i>Artist
+          </a>
+          <% } else if (track.artists && track.artists.length > 1) { %>
+          <div class="dropdown-submenu">
+            <a href="javascript:void(0);">
+              <i class="fa-solid fa-user"></i>
+              <span>Artist</span>
+              <span class="arrow">▸</span>
+            </a>
+            <div class="submenu-content">
+              <% track.artists.forEach(function(artist, index) { %>
+              <a href="javascript:void(0);" onclick="showArtist('<%= artist.hashid %>')">
+                <%= artist.name %>
+              </a>
+              <% }); %>
+            </div>
+          </div>
+          <% } else { %>
+          <a href="javascript:void(0);">
+            <i class="fa-solid fa-user"></i>Unknown Artist
+          </a>
+          <% } %>
+
+          <div class="dropdown-submenu">
+            <a href="javascript:void(0);">
+              <i class="fa-solid fa-plus"></i>
+              <span>Add To Playlist</span>
+              <span class="arrow">▸</span>
+            </a>
+            <div class="submenu-content">
+              <% if (track.custom_playlists && track.custom_playlists.length > 0) { %>
+              <% track.custom_playlists.forEach(function(pl) { %>
+              <li class="sub-addplaylist" data-playlist-id="<%= pl.id_cus %>"
+                data-music-id="<%= track.id_music %>"
+                onclick="addCusDesk('<%= pl.id_cus %>', '<%= track.id_music %>')">
+                <a href="javascript:void(0);">
+                  <% if (pl.exists) { %>
+                  <i class="fa-solid fa-circle-check" style="color: #4caf50; margin-right: 5px"></i>
+                  <% } else { %>
+                  <i class="fa-regular fa-circle-check" style="color: #b0b0b0; margin-right: 5px"></i>
+                  <% } %>
+                  <span class="playlist-name"><%= pl.playlist_name %></span>
+                </a>
+              </li>
+              <% }); %>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% }); %>
+  </div>
+
+  <footer class="row center"></footer>
+
+
+  <div style="display: none" class="popup listMo">
+  <div class="popup-overlay"></div>
+  <div class="popup-content">
+    <div class="drag-handle">
+      <div class="drag-handle-line"></div>
+    </div>
+
+    <div class="album-page__track">
+      <img id="popupimage" src="" alt="" class="__image" />
+      <div class="album-page__track__info">
+        <div id="popuptitle" class="info-name"></div>
+        <div id="popupartist" class="info-artist"></div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div onclick="popupHeartt(this)" class="grid-item" data-id="">
+        <i id="popupfavorite" class="far fa-heart"></i>
+        <span id="popupfavorite-text">Favorite</span>
+      </div>
+
+      <div onclick="toggleContent('artist')" class="grid-item">
+        <i class="fa-regular fa-address-book"></i><span>Artist</span>
+      </div>
+
+      <div onclick="toggleContent('playlist')" class="grid-item">
+        <i class="fa-regular fa-square-plus"></i><span>Add Playlist</span>
+      </div>
+
+      <!-- PERBAIKAN: Ganti getAlbumMobile dengan showAlbum -->
+      <div id="albumMobileButton" class="grid-item" data-hashid="">
+        <i class="fa-solid fa-compact-disc"></i>
+        <span>Album</span>
+      </div>
+
+      <div class="playlistCus">
+        <div class="playlist-wrapper"></div>
+      </div>
+    </div>
+
+    <i onclick="closePopup()" class="fa-solid fa-xmark"></i>
+  </div>
+</div>
+
+
+
+  
+</body>
+</html>

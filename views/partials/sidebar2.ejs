@@ -1,0 +1,417 @@
+<div id="content-navigator" class="no-transition">
+  <div id="content-navigator-search-container">
+    <div id="content-navigator-search-bar">
+      <i class="fas fa-search"></i>
+      <input type="text" id="library-search-input" placeholder="Search Library" />
+    </div>
+    <div id="content-navigator-filters-wrapper">
+      <div id="content-navigator-filters-scroll">
+        <div id="content-navigator-filters">
+          <button class="filter-button active" data-filter="all">All</button>
+          <button class="filter-button" data-filter="playlist">Playlist</button>
+          <button class="filter-button" data-filter="artist">Artist</button>
+          <button class="filter-button" data-filter="album">Album</button>
+          <button class="filter-button search-filter-button" data-filter="search" style="display: none;">
+            Search Results
+            <i class="fas fa-times" id="clear-search-btn"></i>
+          </button>
+        </div>
+      </div>
+      <div class="scroll-indicator right">
+        <i class="fas fa-chevron-right"></i>
+      </div>
+      <div class="scroll-indicator left">
+        <i class="fas fa-chevron-left"></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-navigator-section">
+    <button onclick="showCustom()" class="content-navigator-button">
+      <i class="fa-solid fa-plus"></i>
+      <p>Add</p>
+    </button>
+
+    <div id="direct-messages">
+      <% 
+        // Gabungkan semua data ke satu array
+        const allItems = [];
+        
+        if (libraryData.playlists.length > 0) {
+          libraryData.playlists.forEach(item => {
+            // PERBAIKAN: Untuk custom playlist, cek apakah ada track_covers yang valid
+            const hasTrackCovers = item.track_covers && Array.isArray(item.track_covers) && item.track_covers.length > 0;
+            const multipleCovers = hasTrackCovers && item.track_covers.length > 1;
+            const hasMultipleTracks = item.track_count > 1;
+            
+            allItems.push({
+              ...item, 
+              type: 'playlist', 
+              filterType: 'playlist', // DIUBAH DARI 'music' KE 'playlist'
+              contentType: 'custom-playlist',
+              // PERBAIKAN: Tampilkan collage hanya jika ada multiple tracks DAN multiple covers
+              showCollage: hasMultipleTracks && multipleCovers
+            });
+          });
+        }
+        
+        if (libraryData.favPlaylists.length > 0) {
+          libraryData.favPlaylists.forEach(item => {
+            // PERBAIKAN: Untuk fav playlist, cek apakah ini custom playlist dan ada track_covers
+            const isCustomFav = item.playlist_type === 'custom';
+            const hasTrackCovers = item.track_covers && Array.isArray(item.track_covers) && item.track_covers.length > 0;
+            const multipleCovers = hasTrackCovers && item.track_covers.length > 1;
+            const hasMultipleTracks = item.track_count > 1;
+            
+            allItems.push({
+              ...item, 
+              type: 'fav_playlist', 
+              filterType: 'playlist', // DIUBAH DARI 'music' KE 'playlist'
+              // PERBAIKAN: Bedakan content type berdasarkan playlist_type
+              contentType: isCustomFav ? 'custom-playlist' : 'fav-playlist',
+              // PERBAIKAN: Tampilkan collage hanya untuk custom fav playlist dengan multiple tracks & covers
+              showCollage: isCustomFav && hasMultipleTracks && multipleCovers
+            });
+          });
+        }
+        
+        if (libraryData.artists.length > 0) {
+          libraryData.artists.forEach(item => {
+            allItems.push({
+              ...item, 
+              type: 'artist', 
+              filterType: 'artist', 
+              contentType: 'artist',
+              showCollage: false // Artist tidak pakai collage
+            });
+          });
+        }
+        
+        if (libraryData.albums.length > 0) {
+          libraryData.albums.forEach(item => {
+            allItems.push({
+              ...item, 
+              type: 'album', 
+              filterType: 'album', 
+              contentType: 'album',
+              showCollage: false // Album tidak pakai collage
+            });
+          });
+        }
+        
+        // Urutkan berdasarkan waktu terbaru
+        allItems.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      %>
+
+      <!-- HEADER SELALU ADA (seperti kode sebelumnya) -->
+      <div id="direct-messages-header">
+        <h3 id="direct-messages-title">Library</h3>
+        <% if (allItems.length > 0) { %>
+          <button id="direct-messages-add-button" onclick="toggle()">
+            <i class="fa-solid fa-list"></i>
+            <div class="tooltip top"><p>Grid View</p></div>
+          </button>
+        <% } else { %>
+          <!-- Placeholder untuk tetap mempertahankan layout -->
+          <div style="width: 40px; height: 40px;"></div>
+        <% } %>
+      </div>
+
+      <div id="direct-messages-items">
+        <% if (allItems.length > 0) { %>
+          <% allItems.forEach((item) => { %>
+            <div class="direct-messages-item content-navigator-button" 
+              data-id="<%= item.id %>" 
+              data-type="<%= item.type %>"
+              data-filter-type="<%= item.filterType %>"
+              data-track-count="<%= item.track_count || 0 %>"
+              data-track-covers="<%= JSON.stringify(item.track_covers || []) %>"
+              onclick="<%= 
+                // PERBAIKAN: Handle custom playlist yang disimpan dengan showCustomPlaylist
+                item.contentType === 'fav-playlist' && item.hashid ? `showplaylist('${item.hashid}')` :
+                item.contentType === 'custom-playlist' && item.hashid ? `showCustomPlaylist('${item.hashid}')` :
+                item.contentType === 'album' && item.hashid ? `showAlbum('${item.hashid}')` :
+                item.contentType === 'artist' && item.hashid ? `showArtist('${item.hashid}')` :
+                'showItem(this.dataset.type, this.dataset.id)' 
+              %>"
+            >
+              <% if (item.showCollage) { %>
+                <!-- Collage cover untuk playlist dengan banyak lagu dan cover berbeda -->
+                <div class="user-icon collage-cover <%= item.type === 'artist' ? 'rounded-circle' : 'rounded-square' %>">
+                  <div class="collage-grid" style="grid-template-columns: repeat(2, 1fr); grid-template-rows: <%= item.track_covers.length > 2 ? 'repeat(2, 1fr)' : '1fr' %>;">
+                    <% 
+                      // PERBAIKAN: Pastikan track_covers adalah array yang valid
+                      const displayCovers = (item.track_covers && Array.isArray(item.track_covers)) ? 
+                        item.track_covers.slice(0, 4) : [];
+                    %>
+                    <% displayCovers.forEach((cover, index) => { %>
+                      <% if (cover) { %>
+                        <div 
+                          class="collage-item" 
+                          style="background-image: url('<%= cover %>'); <%= 
+                            displayCovers.length === 3 && index === 2 ? 'grid-column: span 2;' : '' 
+                          %>"
+                        ></div>
+                      <% } %>
+                    <% }); %>
+                  </div>
+                </div>
+              <% } else { %>
+                <!-- Cover tunggal -->
+                <div class="user-icon <%= item.type === 'artist' ? 'rounded-circle' : 'rounded-square' %>" 
+                     style="background-image: url('<%= 
+                       // PERBAIKAN: Prioritaskan track_covers pertama jika ada, lalu cover biasa
+                       (item.track_covers && item.track_covers.length > 0) ? item.track_covers[0] : 
+                       item.cover || 
+                       (item.type === 'artist' ? '/images/default-artist.png' : '/images/default-playlist.png')
+                     %>')">
+                </div>
+              <% } %>
+
+              <div class="direct-messages-item-user-info">
+                <p class="direct-messages-item-username"><%= item.name %></p>
+                <p class="direct-messages-item-user-activity">
+                  <%= 
+                    // PERBAIKAN: Tampilkan label yang sesuai berdasarkan content type
+                    item.contentType === 'custom-playlist' ? 'Playlist' :
+                    item.contentType === 'fav-playlist' ? 'Favorite Playlist' :
+                    item.contentType === 'artist' ? 'Artist' : 'Album'
+                  %>
+                </p>
+              </div>
+            </div>
+          <% }); %>
+        <% } else { %>
+          <!-- Empty Library Container (tanpa wrapper section agar sesuai dengan layout sebelumnya) -->
+          <div class="empty-library-container">
+            <!-- Bagian atas dengan icon musik -->
+            <div class="empty-library-header">
+              <svg class="music-icon" width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 18V6L21 4V16" stroke="#7efde3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="6" cy="18" r="3" stroke="#7efde3" stroke-width="2"/>
+                <circle cx="18" cy="16" r="3" stroke="#7efde3" stroke-width="2"/>
+              </svg>
+            </div>
+            
+            <!-- Konten utama -->
+            <div class="empty-library-content">
+              <h3 class="empty-library-title">Koleksi Kamu Masih Kosong</h3>
+              <p class="empty-library-description">
+                Belum ada musik, album, atau artis yang kamu simpan. Mulai jelajahi dan temukan musik favoritmu!
+              </p>
+            </div>
+            
+            <!-- Tombol aksi -->
+            <div class="empty-library-actions">
+              <div onclick="showCustom()" class="action-button primary">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <span>Tambah Koleksi</span>
+              </div>
+              <div onclick="goSearch()" class="action-button secondary">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>Jelajahi Musik</span>
+              </div>
+            </div>
+            
+            <!-- Tips atau saran -->
+            <div class="empty-library-tips">
+              <div class="tip-item">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M12 8V12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M12 16H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>Simpan musik favorit untuk akses cepat</span>
+              </div>
+              <div class="tip-item">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M12 8V12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M12 16H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>Buat playlist untuk mood spesifik</span>
+              </div>
+            </div>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+
+  <div id="scrollable-music-player">
+    <div id="content-navigator-music-player">
+      <img
+        class="music-player-cover current-cover"
+        src="/uploads/undefine.jpg"
+        alt="Music Cover"
+      />
+      <div class="music-player-title title"></div>
+      <div class="music-player-artist artistNames"></div>
+      <div class="music-player-progress player-progressbar">
+        <span class="progress-time start-time"></span>
+        <div class="player-bar progressBar music-player-progress-bar"></div>
+        <span class="progress-time end-time"></span>
+      </div>
+
+      <div class="music-player-controls">
+        <svg
+          class="svg-icon"
+          onclick="playPreviousMusic()"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+        >
+          <defs />
+          <path
+            fill-rule="evenodd"
+            d="M18.4 21.8l-12-9c-.53333333-.4-.53333333-1.2 0-1.6l12-9c.6592363-.49442719 1.6-.02404532 1.6.8v18c0 .8240453-.9407637 1.2944272-1.6.8zM18 5l-9.33333333 7L18 19V5zM6 22H4V2h2v20z"
+          />
+        </svg>
+        <div onclick="playPause()" class="background-play">
+          <svg
+            class="svg-icon control-play"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+          >
+            <defs />
+            <path
+              fill-rule="evenodd"
+              d="M5 21V3c0-.79116579.87524596-1.26900738 1.54075759-.84117848L20.5407576 11.1588215c.6123232.3936364.6123232 1.2887206 0 1.682357l-14.00000001 9C5.87524596 22.2690074 5 21.7911658 5 21zm2-1.8316655L18.1507426 12 7 4.8316655v14.336669z"
+            />
+          </svg>
+        </div>
+        <svg
+          class="svg-icon"
+          onclick="playNextMusic()"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+        >
+          <defs />
+          <path
+            fill-rule="evenodd"
+            d="M4 21V3c0-.82404532.94076375-1.29442719 1.6-.8l12 9c.5333333.4.5333333 1.2 0 1.6l-12 9c-.65923625.4944272-1.6.0240453-1.6-.8zm2-2l9.3333333-7L6 5v14zm14 3h-2V2h2v20z"
+          />
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <div style="display: none;" id="current-user-control">
+    <div id="current-user">
+      <button id="current-user-menu-button" onclick="toggleUserMenu()">
+        <div
+          class="user-icon"
+          style="
+            background-image: url(https://images.unsplash.com/photo-1562376552-0d160a2f238d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8d2FmZmxlc3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60);
+          "
+        >
+          <div class="user-status-icon online">
+            <i class="fa-solid fa-circle"></i>
+          </div>
+        </div>
+      </button>
+      <div id="current-user-details">
+        <label id="current-user-username">Hyperplexed</label>
+        <label id="current-user-id">#1234</label>
+      </div>
+      <div id="current-user-control-buttons">
+        <button class="current-user-control-button">
+          <i class="fa-solid fa-microphone"></i>
+          <div class="tooltip top"><p>Mute</p></div>
+        </button>
+        <button class="current-user-control-button">
+          <i class="fa-solid fa-headphones"></i>
+          <div class="tooltip top"><p>Deafen</p></div>
+        </button>
+        <button class="current-user-control-button">
+          <i class="fa-solid fa-gear"></i>
+          <div class="tooltip top"><p>User Settings</p></div>
+        </button>
+      </div>
+    </div>
+
+    <div id="current-user-control-menu" style="display: none">
+      <div class="current-user-control-menu-section">
+        <button class="current-user-control-menu-button">
+          <div class="current-user-control-menu-button-icon">
+            <div class="user-status-icon online">
+              <i class="fa-solid fa-circle"></i>
+            </div>
+          </div>
+          <div class="current-user-control-menu-button-content">
+            <p class="current-user-control-menu-button-label">Online</p>
+          </div>
+        </button>
+      </div>
+      <div class="current-user-control-menu-section">
+        <button class="current-user-control-menu-button">
+          <div class="current-user-control-menu-button-icon">
+            <div class="user-status-icon away">
+              <i class="fa-solid fa-moon"></i>
+            </div>
+          </div>
+          <div class="current-user-control-menu-button-content">
+            <p class="current-user-control-menu-button-label">Idle</p>
+          </div>
+        </button>
+        <button class="current-user-control-menu-button">
+          <div class="current-user-control-menu-button-icon">
+            <div class="user-status-icon busy">
+              <i class="fa-solid fa-do-not-enter"></i>
+            </div>
+          </div>
+          <div class="current-user-control-menu-button-content">
+            <p class="current-user-control-menu-button-label">
+              Do Not Disturb
+            </p>
+            <p class="current-user-control-menu-button-desc">
+              You will not receive any desktop notifications.
+            </p>
+          </div>
+        </button>
+        <button class="current-user-control-menu-button">
+          <div class="current-user-control-menu-button-icon">
+            <div class="user-status-icon offline">
+              <i class="fa-solid fa-circle-dot"></i>
+            </div>
+          </div>
+          <div class="current-user-control-menu-button-content">
+            <p class="current-user-control-menu-button-label">
+              Invisible
+            </p>
+            <p class="current-user-control-menu-button-desc">
+              You will appear offline
+            </p>
+          </div>
+        </button>
+      </div>
+      <div class="current-user-control-menu-section">
+        <button class="current-user-control-menu-button">
+          <div class="current-user-control-menu-button-icon">
+            <i class="fa-regular fa-face-grin"></i>
+          </div>
+          <div class="current-user-control-menu-button-content">
+            <p class="current-user-control-menu-button-label">
+              Set a custom status
+            </p>
+          </div>
+        </button>
+      </div>
+      <div class="current-user-control-menu-section">
+        <button class="current-user-control-menu-button">
+          <div class="current-user-control-menu-button-icon">
+            <i class="fa-solid fa-arrows-repeat"></i>
+          </div>
+          <div class="current-user-control-menu-button-content">
+            <p class="current-user-control-menu-button-label">
+              Switch Accounts
+            </p>
+          </div>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

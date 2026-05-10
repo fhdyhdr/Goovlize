@@ -1,0 +1,1109 @@
+:root[style*="--device: desktop"] .popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    overflow: hidden;
+    opacity: 0; 
+    visibility: hidden; /* Awalnya tidak terlihat */
+    transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out; 
+  }
+  
+  :root[style*="--device: desktop"] .popup.active {
+    opacity: 1; /* Muncul dengan opacity penuh */
+    visibility: visible; /* Menjadi terlihat */
+  }
+  
+  :root[style*="--device: desktop"] .popup .popup-content {
+    position: relative;
+    background: #141514;
+    color: #eeeeee;
+    padding: 25px;
+    border-radius: 10px;
+    width: auto;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1001;
+    transform: translateY(50px); /* Awalnya sedikit di bawah */
+    opacity: 0; /* Awalnya transparan */
+    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out; /* Transisi smooth */
+  }
+  
+  :root[style*="--device: desktop"] .popup.active .popup-content {
+    transform: translateY(0); /* Geser ke posisi normal */
+    opacity: 1; /* Muncul dengan opacity penuh */
+  }
+  
+  :root[style*="--device: desktop"] .popup .popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.728);
+    opacity: 0; /* Awalnya transparan */
+    transition: opacity 0.5s ease-in-out; /* Transisi smooth */
+    z-index: 999;
+  }
+  
+  :root[style*="--device: desktop"] .popup.active .popup-overlay {
+    opacity: 1; /* Muncul dengan opacity penuh */
+  }
+  
+  :root[style*="--device: desktop"] .popup .fa-xmark {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: transparent;
+    border: none;
+    color: #eeeeee;
+    font-size: 30px;
+    cursor: pointer;
+    z-index: 1002;
+  }
+  
+  
+  
+
+  
+    :root {
+      --vh: 1vh;
+    }
+
+    :root[style*="--device: mobile"] .popup {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: calc(var(--vh, 1vh) * 100);
+      overflow: hidden;
+      transform: translateY(100%);
+      transition: transform 0.5s ease-in-out;
+      z-index: 11300;
+    }
+        
+    :root[style*="--device: mobile"] .popup .popup-content {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: auto; /* Height of the popup content */
+      background: #141514;
+      color: #eeeeee;
+      padding: 15px;
+      padding-top: 35px;
+      border-radius: 20px 20px 0 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transform: translateY(100%);
+      transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+      z-index: 9999;
+      touch-action: none;
+    }
+    
+    :root[style*="--device: mobile"] .popup .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr); /* Dua kolom */
+      gap: 10px; /* Jarak antara item */
+      width: 100%; /* Lebar grid mengikuti popup */
+      padding: 10px; /* Padding agar tidak terlalu mepet */
+      box-sizing: border-box; /* Memastikan padding tidak mempengaruhi lebar total */
+    }
+    
+    :root[style*="--device: mobile"] .popup .grid-item {
+      background-color: #212121; /* Warna latar belakang item */
+      padding: 10px; /* Padding di dalam item */
+      border-radius: 8px; /* Sudut melengkung */
+      text-align: center;
+      width: 100%; /* Lebar item mengikuti grid */
+      box-sizing: border-box; /* Memastikan padding tidak mempengaruhi lebar total */
+    }
+  
+    :root[style*="--device: mobile"] .popup .grid-item:active{
+      background-color: #47464682;
+    }
+    
+    :root[style*="--device: mobile"] .popup .grid i {
+      margin-right: 10px;
+    }
+      
+      :root[style*="--device: mobile"] .popup.active .popup-content {
+        transform: translateY(0); /* Slide in from the bottom */
+      }
+      
+      :root[style*="--device: mobile"] .popup .popup-overlay {
+        position: fixed; /* Fix the overlay to the viewport */
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%; /* Full viewport height */
+        background: rgba(0, 0, 0, 0.528);
+        opacity: 0;
+        transition: opacity 0.4s ease-in-out; /* Transition for opacity */
+        z-index: 999; /* Ensure it's behind the content */
+      }
+      
+      :root[style*="--device: mobile"] .popup.active {
+        transform: translateY(0); /* Slide in from the bottom */
+      }
+      
+      :root[style*="--device: mobile"] .popup.active .popup-overlay {
+        opacity: 1; /* Fade in overlay */
+      }
+      
+      :root[style*="--device: mobile"] .popup .fa-xmark{
+        position: absolute;
+        background: transparent;
+        border: none;
+        color: #EEEEEE;
+        font-size: 24px;
+        z-index: 1100;
+      }
+      
+      :root[style*="--device: mobile"] .popup .fa-xmark {
+        top: 20px; /* Adjusted position */
+        right: 20px; /* Adjusted position */
+        font-size: 27px;
+      }
+    
+  .grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+/* Default grid-item (2 kolom) */
+.grid-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.1s ease;
+}
+
+.grid .playlist-wrapper .grid-item {
+  width: 100% !important;
+  justify-content: flex-start; 
+  padding-left: 10px;
+}
+.grid .playlist-wrapper {
+  grid-column: 1 / -1; 
+}
+
+.grid .playlist-icon {
+  width: 57px;
+  height: 57px;
+  object-fit: cover;
+  margin-right: 8px;
+  vertical-align: middle;
+  border-radius: 4px;
+}
+
+.playlist-wrapper .grid-item {
+  display: block;
+  padding: 8px;
+}
+
+.playlist-wrapper .playlist-content {
+  display: flex;
+  align-items: center;
+}
+
+.playlist-wrapper .playlist-name {
+  flex-grow: 1;
+  text-align: left;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-right: 20px;
+}
+
+.playlist-wrapper .check-icon {
+  margin-left: auto;
+  font-size: 25px;
+  color: rgba(255, 255, 255, 0.4); /* default icon color */
+}
+
+.playlist-wrapper .fa-solid.check-icon {
+  color: #ffffff; /* jika exists, gunakan warna putih */
+}
+
+
+
+.grid-item.loading {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.grid-item.loading i,
+.grid-item.loading span,
+.grid-item.loading::before {
+  visibility: hidden; 
+}
+
+.grid-item.loading::after {
+  content: "";
+  width: 14px;
+  height: 14px;
+  border: 2px solid white;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  position: absolute;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+
+
+
+    
+      .popup .album-page__track {
+        align-self: flex-start; 
+        display: flex;
+        align-items: center;
+        width: 100%; 
+        gap: 12px;
+      }
+      
+  
+      :root[style*="--device: mobile"] .popup .playlistCus {
+        display: contents; /* Tetap gunakan contents agar tidak mengubah grid */
+    }
+    
+    :root[style*="--device: mobile"] .popup .playlistCus .playlist-wrapper {
+      opacity: 0;
+      max-height: 0;
+      visibility: hidden;
+      overflow: hidden;
+      transition: opacity 0.4s ease, max-height 0.4s ease, visibility 0.4s;
+  }
+  
+  /* Saat aktif, tetap bisa di-scroll tetapi tanpa scrollbar */
+  :root[style*="--device: mobile"] .popup .playlistCus.active .playlist-wrapper {
+      opacity: 1;
+      max-height: 420px !important;
+      visibility: visible;
+      overflow-y: auto; /* Bisa di-scroll */
+  }
+  
+  /* Hapus WebKit Scrollbar */
+  :root[style*="--device: mobile"] .popup .playlistCus .playlist-wrapper::-webkit-scrollbar {
+      display: none;
+  }
+  
+  /* Untuk Firefox */
+  :root[style*="--device: mobile"] .popup .playlistCus .playlist-wrapper {
+      scrollbar-width: none;
+  }
+  
+  /* Tambahkan padding di dalam wrapper agar kontennya tidak terlalu mepet */
+  :root[style*="--device: mobile"] .popup .playlistCus .playlist-wrapper .grid-item {
+      padding: 8px;
+  }
+  
+    
+    
+    :root[style*="--device: mobile"] .popup .playlistCus .grid-item:first-child {
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+    :root[style*="--device: mobile"] .popup .playlistCus .grid-item {
+      margin-top: 6px;
+  }
+  
+  
+  .loginuser .popup-content{
+    background-color: #242424 !important;
+  }
+  
+  :root[style*="--device: mobile"] .loginuser .signuppopup{
+    margin:30px 0;
+  }
+  :root[style*="--device: desktop"] .loginuser .signuppopup{
+    margin-top:20px;
+    cursor: pointer;
+  }
+  :root[style*="--device: desktop"] .loginuser .popup-content{
+    padding: 50px !important;
+  }
+  
+  .loginuser .login-button {
+    padding: 12px 90px;
+  }
+  
+  .loginuser  .close-icon {
+    margin: 5px 10px;
+  }
+
+    .album-page__track {
+      display: flex;
+      align-items: center;
+      gap: 16px; 
+      padding: 18px 16px;
+    }
+
+    
+    .album-page__track__info {
+      flex-grow: 1;
+    }
+    
+    .info-name {
+      font-weight: 500;
+      color: #fff;
+    }
+    
+    .info-artist {
+      font-size: 14px;
+      color: #B3B3B3;
+      margin-top: 8px;
+    }
+    
+    .info-artist,.info-name {
+      max-width: 230px !important; 
+      white-space: nowrap; 
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  
+    .__image {
+      width: 50px; 
+      height: 50px; 
+      object-fit: cover; 
+      border-radius: 3px; 
+      flex-shrink: 0;
+    }
+    
+    .listMo i{
+      font-size: 1rem;
+    }
+    
+
+
+
+  :root[style*="--device: mobile"] .drag-handle {
+    width: 100%;
+    height: 30px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: grab;
+    z-index: 1;
+  }
+
+  :root[style*="--device: mobile"] .drag-handle-line {
+    width: 40px;
+    height: 4px;
+    background-color: white;
+    border-radius: 2px;
+    margin: 10px 0;
+  }
+
+  :root[style*="--device: mobile"] .popup-content {
+    transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
+    will-change: transform;
+  }
+/* Default alert position */
+.alertInfo {
+  display: none;
+  position: fixed;
+  right: 20px;
+  width: 300px;
+  max-width: 80%;
+  background-color: #2F3645;
+  color: #FFFFFF;
+  padding: 15px 20px;
+  z-index: 10000;
+  opacity: 0;
+  transform: translateX(120%);
+  transition: 
+    transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.1),
+    opacity 0.4s ease-out,
+    bottom 0.3s ease;
+  font-size: 0.9em;
+  text-align: left;
+  border-radius: 8px;
+  box-shadow: 
+    0 6px 16px rgba(0, 0, 0, 0.15),
+    0 2px 6px rgba(0, 0, 0, 0.1);
+  border-left: 4px solid #5865F2;
+}
+
+
+@media (max-width: 768px) {
+  .alertInfo {
+    width: calc(100% - 40px);
+    max-width: 100%;
+    right: 20px;
+    left: 20px;
+    bottom: 90px; /* Default position when player is hidden */
+    transform: translateY(20px) translateX(0);
+      padding: 10px 20px;
+  }
+  
+  /* When music player is visible, adjust alert position */
+  .music-player[style*="display: block"] + .alertInfo,
+  .music-player:not([style*="display: none"]) + .alertInfo {
+    bottom: 138px;
+  }
+
+  .alertInfo.show {
+    transform: translateY(0) translateX(0);
+  }
+}
+@media (min-width: 768px) {
+.alertInfo {
+  bottom: 20px;
+}
+
+  .music-player[style*="display: block"] + .alertInfo,
+  .music-player:not([style*="display: none"]) + .alertInfo {
+    bottom: 110px;
+}
+
+}
+
+
+.alertInfo i {
+  font-size: 18px;
+  margin-right: 10px;
+  vertical-align: middle;
+  transition: transform 0.3s ease;
+}
+
+.alertInfo.show {
+  display: block;
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.alertInfo.show i {
+  transform: scale(1.1);
+}
+
+/* Variasi warna untuk tipe notifikasi berbeda */
+.alertInfo.success {
+  border-left-color: #3BA55D;
+  background-color: #2F3645;
+}
+
+.alertInfo.warning {
+  border-left-color: #FAA81A;
+  background-color: #2F3645;
+}
+
+.alertInfo.error {
+  border-left-color: #ED4245;
+  background-color: #2F3645;
+}
+
+.alertInfo.info {
+  border-left-color: #5865F2;
+  background-color: #2F3645;
+}
+
+/* Konten notifikasi */
+.alert-content {
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.alert-message {
+  flex: 1;
+  line-height: 1.4;
+  transition: transform 0.3s ease;
+  font-size: 13px;
+}
+
+/* Tombol close */
+.alert-close {
+  margin-left: 10px;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: 
+    opacity 0.2s ease,
+    transform 0.2s ease;
+  font-size: 24px;
+}
+
+.alert-close:hover {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+/* Animasi masuk dan keluar */
+@keyframes slideInRight {
+  from {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutRight {
+  to {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  to { opacity: 0; }
+}
+
+
+
+
+@media only screen and (orientation: landscape) {
+
+
+  :root[style*="--device: mobile"] .popup-content {
+    /* Perubahan utama di sini */
+    width: 80%;
+    margin: 0 auto; /* Untuk posisi tengah horizontal */
+    left: 0;
+    right: 0;
+
+  }
+
+
+  :root[style*="--device: mobile"] .loginuser .popup-logo img {
+    width: 80px;
+    height: 80px;
+  }
+
+
+  :root[style*="--device: mobile"] .drag-handle-line {
+   display: none;
+  }
+
+}
+
+
+
+
+@media only screen and (orientation: landscape) {
+  :root[style*="--device: mobile"] .popup .playlistCus.active .playlist-wrapper {
+      max-height: calc(100vh - 200px) !important; /* Sesuaikan dengan tinggi yang diinginkan */
+      overflow-y: auto;
+  }
+  
+  :root[style*="--device: mobile"] .popup.active .popup-content {
+      max-height: 100vh;
+      overflow: hidden; /* Nonaktifkan scroll pada konten utama */
+  }
+  
+  :root[style*="--device: mobile"] .popup .playlist-wrapper {
+      -webkit-overflow-scrolling: touch; /* Untuk smooth scroll di iOS */
+      scrollbar-width: none; /* Untuk Firefox */
+  }
+  
+  :root[style*="--device: mobile"] .popup .playlist-wrapper::-webkit-scrollbar {
+      display: none; /* Untuk Chrome/Safari */
+  }
+}
+
+
+  :root[style*="--device: mobile"] .popup .playlist-wrapper {
+      -webkit-overflow-scrolling: touch; /* Untuk smooth scroll di iOS */
+      scrollbar-width: none; /* Untuk Firefox */
+  }
+
+@media only screen and (orientation: landscape) {
+  /* Style untuk alert di landscape mode */
+  :root[style*="--device: mobile"] .alertInfo {
+    width: 300px;
+    max-width: 80%;
+    right: 20px;
+    left: auto; 
+    bottom: 10px;
+    transform: translateX(120%);
+    padding: 8px 20px !important;
+  }
+
+  :root[style*="--device: mobile"] .alertInfo.show {
+    transform: translateX(0);
+  }
+}
+
+
+
+
+
+
+
+.bigPopup .popup-content {
+  padding: 25px 30px; /* Increased side padding */
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  min-height: auto;
+}
+
+.popup-header {
+  display: flex;
+  justify-content: center; /* Center the title */
+  align-items: center;
+  margin-bottom: 30px; /* Increased margin */
+  margin-top: 20px;
+  width: 100%;
+  position: relative; /* For absolute positioning of close button */
+}
+
+.popup-header h3 {
+  font-size: 20px; /* Slightly larger */
+  font-weight: 600;
+  margin: 0;
+  text-align: center; /* Ensure text is centered */
+  flex-grow: 1; /* Take available space */
+}
+
+.popup-header .fa-xmark {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-80%);
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.playlist-creator {
+  display: flex;
+  gap: 30px; /* Increased gap */
+  margin-bottom: 15px; /* Reduced to move buttons up */
+  width: 100%;
+  align-items: flex-start;
+  padding: 0 10px; /* Added side padding */
+}
+
+.playlist-cover-container {
+  width: 160px; /* Slightly larger */
+  flex-shrink: 0;
+  position: relative;
+}
+
+.playlist-cover-preview,
+.user-cover-preview {
+  position: relative;
+  width: 230px;
+  height: 230px;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: #2a2a2a;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.playlist-cover-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.cover-upload-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-size: 13px; /* Slightly larger */
+  text-align: center;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.cover-upload-overlay i{
+  font-size: 25px;
+  margin-bottom: 10px;
+}
+
+.playlist-cover-preview:hover .cover-upload-overlay,
+.user-cover-preview:hover .cover-upload-overlay {
+  opacity: 1;
+}
+
+.playlist-cover-preview:hover .playlist-cover-image,
+.user-cover-preview:hover .playlist-cover-image {
+  transform: scale(1.05);
+}
+.playlist-info {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 0 10px; /* Added side padding */
+}
+
+.form-group {
+  margin-bottom: 20px; /* Increased spacing */
+  width: 100%;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px; /* Slightly more space */
+  font-size: 15px; /* Slightly larger */
+  color: #aaa;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 12px 15px; /* More padding */
+  border: 1px solid #444;
+  border-radius: 6px; /* Slightly more rounded */
+  background-color: #2a2a2a;
+  color: white;
+  font-size: 15px; /* Slightly larger */
+  box-sizing: border-box;
+  transition: border-color 0.3s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: #1db954;
+  outline: none;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 90px; /* Slightly taller */
+}
+
+.character-count {
+  text-align: right;
+  font-size: 12px;
+  color: #666;
+  margin-top: 5px; /* Slightly more space */
+}
+
+.popup-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px; /* More space between buttons */
+  padding: 20px 10px 10px; /* More top padding, less bottom */
+  border-top: 1px solid #333;
+  width: 100%;
+  margin-top: 10px; /* Reduced to move up */
+}
+
+.btn {
+  padding: 12px 25px; /* Larger buttons */
+  border-radius: 25px; /* More rounded */
+  font-size: 15px; /* Slightly larger */
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary {
+  background-color: #333;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: #444;
+}
+
+.btn-primary {
+  background-color: #1db954;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #1ed760;
+}
+
+.btn-danger{
+  color: #000;
+}
+
+.btn-primary:disabled {
+  background-color: #1a4b2c;
+  cursor: not-allowed;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .bigPopup .popup-content {
+    padding: 20px 15px;
+  }
+  
+  .playlist-creator {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 0;
+  }
+  
+  .playlist-cover-container {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  
+.playlist-cover-preview,
+.user-cover-preview {
+  width: 140px;
+  height: 140px;
+  margin: 0 auto;
+}
+
+
+  .playlist-info {
+    width: 100%;
+    padding: 0;
+  }
+  
+  .popup-actions {
+    justify-content: center;
+    padding-top: 15px;
+  }
+  
+  .btn {
+    padding: 10px 20px;
+  }
+}
+
+
+
+@media only screen and (orientation: landscape) {
+  :root[style*="--device: mobile"] .bigPopup.popup {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  :root[style*="--device: mobile"] .bigPopup .popup-content {
+    width: 70%; /* Slightly narrower */
+    max-height: 70vh; /* Reduced height since we removed description */
+    height: auto;
+    overflow-y: hidden; /* Disable scrolling */
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    padding: 15px;
+    transform: none;
+    border-radius: 15px;
+  }
+
+  :root[style*="--device: mobile"] .bigPopup .popup-overlay {
+    opacity: 1;
+  }
+
+  :root[style*="--device: mobile"] .bigPopup .playlist-creator {
+    flex-direction: row;
+    gap: 15px;
+    margin-bottom: 10px;
+  }
+
+  :root[style*="--device: mobile"] .bigPopup .playlist-cover-container {
+    width: 110px; /* Slightly smaller */
+  }
+
+  :root[style*="--device: mobile"] .bigPopup .playlist-cover-preview,
+  :root[style*="--device: mobile"] .bigPopup .user-cover-preview {
+    width: 110px;
+    height: 110px;
+  }
+
+  :root[style*="--device: mobile"] .bigPopup .playlist-info {
+    flex: 1;
+    padding: 0;
+  }
+
+  /* Hide description field completely */
+  :root[style*="--device: mobile"] .bigPopup .form-group:nth-child(2) {
+    display: none;
+  }
+
+  :root[style*="--device: mobile"] .bigPopup .form-group {
+    margin-bottom: 12px;
+  }
+
+  :root[style*="--device: mobile"] .bigPopup .form-group input {
+    padding: 13px 12px;
+    font-size: 14px;
+  }
+
+  :root[style*="--device: mobile"] .bigPopup .popup-header {
+    margin-bottom: 15px;
+    margin-top: 5px;
+  }
+
+  :root[style*="--device: mobile"] .bigPopup .popup-header h3 {
+    font-size: 17px;
+  }
+
+  :root[style*="--device: mobile"] .bigPopup .popup-actions {
+    padding: 12px 10px 8px;
+    margin-top: 5px;
+  }
+
+  :root[style*="--device: mobile"] .bigPopup .btn {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+
+  :root[style*="--device: mobile"] .bigPopup .cover-upload-overlay i {
+    font-size: 18px;
+    margin-bottom: 6px;
+  }
+
+  :root[style*="--device: mobile"] .bigPopup .drag-handle-line {
+    display: none;
+  }
+}
+
+:root[style*="--device: desktop"] .bigPopup .playlist-cover-container {
+  width: 200px; /* Larger image for desktop */
+  flex-shrink: 0;
+  margin-right: 30px;
+}
+
+:root[style*="--device: desktop"] .bigPopup .playlist-info {
+  flex-grow: 1;
+  padding: 0;
+}
+
+
+
+:root[style*="--device: desktop"] .bigPopup .popup-content {
+  width: 700px !important; 
+  max-width: 90%;
+}
+:root[style*="--device: desktop"] .follow .popup-content {
+  width: auto !important; 
+}
+
+
+
+
+.track-divider {
+  width: 100%;
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.1);
+  margin: 0;
+  border: none;
+}
+
+.popup-action-list {
+  list-style: none;
+  width: 100%;
+  margin: 0;
+  padding: 10px 0;
+  border-radius: 0 0 20px 20px;
+}
+
+.popup-action-list li {
+  padding: 16px 16px;
+  font-size: 16px;
+  color: #eee;
+  transition: background 0.2s ease-in-out;
+}
+
+.popup-action-list li:last-child {
+  border-bottom: none;
+}
+
+.popup-action-list li:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+
+.confirmDeletePlaylist{
+  z-index: 10000 !important;
+}
+
+
+.confirmDeletePlaylist #confirmDeleteBtn{
+  background-color: #ffff;
+}
+
+
+:root[style*="--device: mobile"] .popup-body {
+  flex-grow: 1; /* Biar mengisi ruang tengah */
+  display: flex;
+  align-items: center;
+  text-align: center;
+  padding: 10px 5px;
+}
+
+.popup-content.dragging {
+  transition: none !important;
+}
+
+
+
+.popup-logo {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.popup-logo img {
+  max-width: 100px;
+  width: 100px; /* Ukuran tetap */
+  height: 100px; /* Ukuran tetap agar proporsional */
+  border-radius: 50%; /* Membuat gambar bulat */
+  object-fit: cover; /* Memastikan gambar terpotong dengan rapi */
+  object-position: center; /* Posisi gambar di tengah */
+  border: 3px solid #fff; /* Border putih opsional */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Bayangan halus */
+  transition: transform 0.3s ease; /* Animasi untuk zoom */
+}
+
+/* Efek zoom saat hover */
+.popup-logo img:hover {
+  transform: scale(1.05); /* Zoom 5% */
+}
+
+.popup-logo h3 {
+  margin-top: 15px;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+

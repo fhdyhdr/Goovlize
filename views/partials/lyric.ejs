@@ -1,0 +1,23 @@
+<div class="resizer2">
+  <section class="scroller scrollerScreen">
+    <article class="lyric-content-wrapper">
+      <div id="lyricScreen" class="lyric-container"></div>
+    </article>
+  </section>
+</div>
+
+<script>
+// Hapus script GSAP yang menyebabkan efek berlebihan
+// Simpan hanya untuk efek yang diperlukan
+document.addEventListener('DOMContentLoaded', function() {
+  // Hanya inisialisasi sederhana jika diperlukan
+  const scroller = document.querySelector('.scrollerScreen');
+  if (scroller) {
+    // Simple scroll effect tanpa GSAP
+    scroller.addEventListener('scroll', function() {
+      const opacity = 0.7 + (0.3 * (1 - Math.min(scroller.scrollTop / 100, 1)));
+      scroller.style.opacity = opacity;
+    });
+  }
+});
+</script>

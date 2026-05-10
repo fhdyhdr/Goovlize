@@ -1,0 +1,318 @@
+<% if (userId) { %>
+  <% for (const id_tag in playlistsByTag) { %>
+    <div class="carousel__wrapper">
+      <div class="carousel__header">
+        <h2 class="carousel__headline">
+          <%= tagNames[id_tag] %>
+          <% if (id_tag === Object.keys(playlistsByTag)[0]) { %>
+            <span style="font-size: 0.8em; opacity: 0.7; margin-left: 10px;">• Including Your Activity</span>
+          <% } %>
+        </h2>
+        <div class="carousel__controls">
+          <button class="carousel__arrow disabled arrow-prev"></button>
+          <button class="carousel__arrow arrow-next"></button>
+        </div>
+      </div>
+
+      <div class="carousel__content homeContent">
+        <!-- FAVORITE CARD (Hanya jika ada favorite songs) -->
+        <% if (id_tag === Object.keys(playlistsByTag)[0] && favoriteSongs && favoriteSongs.length >= 3) { %>
+          <div class="card-container activity-card favorite-card">
+            <div class="visual-card carousel__item activity-favorite-card" onclick="showLikeMusic()">
+              <div class="favorite-heart">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ff3b5c">
+                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+              </div>
+              <div class="favorite-content">
+                <div class="favorite-tracks">
+                  <% favoriteSongs.forEach((song, index) => { %>
+                  <div class="favorite-track" onclick="playFavoriteSong('<%= song.hashid %>', event)">
+                    <div class="track-rank"><%= index + 1 %></div>
+                    <div class="track-info">
+                      <div class="track-title"><%= song.title_music %></div>
+                      <div class="track-artist"><%= song.artist_name || 'Unknown Artist' %></div>
+                    </div>
+                  </div>
+                  <% }) %>
+                </div>
+              </div>
+            </div>
+            
+            <div class="card-text-content">
+              <div class="visual-title">Your Favorite</div>
+              <div class="visual-description">Most played favorites</div>
+            </div>
+          </div>
+        <% } %>
+
+        <!-- RECENT PLAYS CARD (Hanya jika ada recent plays) - BERDIRI SENDIRI -->
+        <% if (id_tag === Object.keys(playlistsByTag)[0] && recentPlays && recentPlays.length >= 4) { %>
+          <div class="card-container activity-card songs-card">
+            <div class="visual-card carousel__item activity-songs-card" onclick="showRecentPlays()">
+              <div class="songs-collage">
+                <% recentPlays.forEach((song, index) => { %>
+                  <div 
+                    class="song-item" 
+                    style="background-image: url('<%= song.cover_music || 'https://via.placeholder.com/200' %>')"
+                    onclick="showMusicMobile('<%= song.hashid %>', event)"
+                  ></div>
+                <% }) %>
+              </div>
+              
+         
+            </div>
+            
+            <div class="card-text-content">
+              <div class="visual-title">Recently Played</div>
+              <div class="visual-description">
+                <% if (recentPlays.length > 0) { %>
+                  <%= recentPlays.slice(0, 3).map(s => s.title_music).join(', ') %>
+                <% } else { %>
+                  No recent plays
+                <% } %>
+              </div>
+            </div>
+          </div>
+        <% } %>
+
+        <!-- RECENT PLAYLISTS (max 2) - BERDIRI SENDIRI -->
+        <% if (id_tag === Object.keys(playlistsByTag)[0] && recentPlaylists && recentPlaylists.length > 0) { %>
+          <% recentPlaylists.forEach(playlist => { %>
+            <% 
+              // Cek apakah playlist ini sudah ada di tag pertama
+              let shouldShowPlaylist = true;
+              if (playlistsByTag[id_tag]) {
+                // Periksa setiap playlist di tag pertama
+                playlistsByTag[id_tag].forEach(regularPlaylist => {
+                  // Jika playlist reguler memiliki hashid yang sama dengan recent playlist
+                  if (regularPlaylist.hashid === playlist.hashid) {
+                    shouldShowPlaylist = false;
+                  }
+                });
+              }
+            %>
+            <% if (shouldShowPlaylist) { %>
+              <div class="card-container">
+                <div class="visual-card carousel__item" onclick="showplaylist('<%= playlist.hashid %>')">
+                  <div class="visual-image" style="background-image: url('<%= playlist.playlist_cover || 'https://via.placeholder.com/300' %>')">
+                    <div class="text-background"></div>
+                    <div class="visual-overlay"></div>
+                  </div>
+
+                  <div
+                    class="svg-circle-wrapper"
+                    data-playlist-hashid="<%= playlist.hashid %>"
+                    onclick="playPlaylist('<%= playlist.hashid %>', this)"
+                  >
+                    <svg
+                      class="svg-icon playlistCover-play"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M5 21V3c0-.79116579.87524596-1.26900738 1.54075759-.84117848L20.5407576 11.1588215c.6123232.3936364.6123232 1.2887206 0 1.682357l-14.00000001 9C5.87524596 22.2690074 5 21.7911658 5 21zm2-1.8316655L18.1507426 12 7 4.8316655v14.336669z"
+                      />
+                    </svg>
+                  </div>
+                </div>
+                
+                <div class="card-text-content">
+                  <div class="visual-title"><%= playlist.playlist_name %></div>
+                  <div class="visual-description">Recently played</div>
+                </div>
+              </div>
+            <% } %>
+          <% }) %>
+        <% } %>
+
+        <!-- RECENT CUSTOM PLAYLISTS (max 2) - BERDIRI SENDIRI -->
+        <% if (id_tag === Object.keys(playlistsByTag)[0] && recentCustomPlaylists && recentCustomPlaylists.length > 0) { %>
+          <% recentCustomPlaylists.forEach(playlist => { %>
+            <% 
+              const hasTrackCovers = playlist.track_covers && Array.isArray(playlist.track_covers) && playlist.track_covers.length > 0;
+              const multipleCovers = hasTrackCovers && playlist.track_covers.length > 1;
+              const hasMultipleTracks = playlist.track_count > 1;
+              const showCollage = hasMultipleTracks && multipleCovers;
+            %>
+            
+            <div class="card-container">
+              <div class="visual-card carousel__item" onclick="showCustomPlaylist('<%= playlist.hashid %>')">
+                <% if (showCollage) { %>
+                  <!-- Tampilkan collage cover -->
+                  <div class="visual-image collage-cover" style="background: #1a1a1a; padding: 10px;">
+                    <div class="collage-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: <%= playlist.track_covers.length > 2 ? 'repeat(2, 1fr)' : '1fr' %>; gap: 4px; width: 100%; height: 100%;">
+                      <% 
+                        const displayCovers = playlist.track_covers.slice(0, 4);
+                      %>
+                      <% displayCovers.forEach((cover, index) => { %>
+                        <% if (cover) { %>
+                          <div 
+                            class="collage-item" 
+                            style="background-image: url('<%= cover %>'); background-size: cover; background-position: center; <%= 
+                              displayCovers.length === 3 && index === 2 ? 'grid-column: span 2;' : '' 
+                            %>"
+                          ></div>
+                        <% } %>
+                      <% }) %>
+                    </div>
+                    <div class="text-background"></div>
+                    <div class="visual-overlay"></div>
+                  </div>
+                <% } else { %>
+                  <!-- Tampilkan single cover -->
+                  <div class="visual-image" style="background-image: url('<%= 
+                    (playlist.track_covers && playlist.track_covers.length > 0) ? playlist.track_covers[0] : 
+                    playlist.playlist_cover || 'https://via.placeholder.com/300' 
+                  %>')">
+                    <div class="text-background"></div>
+                    <div class="visual-overlay"></div>
+                  </div>
+                <% } %>
+
+                <div
+                  class="svg-circle-wrapper"
+                  data-playlist-hashid="<%= playlist.hashid %>"
+                  onclick="playCustomPlaylist('<%= playlist.hashid %>', this, event)"
+                >
+                  <svg
+                    class="svg-icon playlistCover-play"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M5 21V3c0-.79116579.87524596-1.26900738 1.54075759-.84117848L20.5407576 11.1588215c.6123232.3936364.6123232 1.2887206 0 1.682357l-14.00000001 9C5.87524596 22.2690074 5 21.7911658 5 21zm2-1.8316655L18.1507426 12 7 4.8316655v14.336669z"
+                    />
+                  </svg>
+                </div>
+              </div>
+              
+              <div class="card-text-content">
+                <div class="visual-title"><%= playlist.playlist_name %></div>
+                <div class="visual-description">By <%= playlist.creator_name || 'User' %></div>
+              </div>
+            </div>
+          <% }) %>
+        <% } %>
+
+        <!-- RECENT ARTISTS (max 2) - BERDIRI SENDIRI -->
+        <% if (id_tag === Object.keys(playlistsByTag)[0] && recentArtists && recentArtists.length > 0) { %>
+          <% recentArtists.forEach(artist => { %>
+            <div class="card-container activity-card artist-card">
+              <div class="visual-card carousel__item activity-artist-card" onclick="viewArtist('<%= artist.hashid %>')">
+                <div 
+                  class="artist-image" 
+                  style="background-image: url('<%= artist.artist_profile || 'https://via.placeholder.com/400' %>')"
+                >
+                  <div class="artist-overlay">
+               
+                  </div>
+                </div>
+              </div>
+              
+              <div class="card-text-content">
+                <div class="visual-title"><%= artist.artist_name %></div>
+                <div class="visual-description">Recently listened</div>
+              </div>
+            </div>
+          <% }) %>
+        <% } %>
+
+        <!-- PLAYLISTS REGULER -->
+        <% playlistsByTag[id_tag].forEach(playlist => { %>
+        <div class="card-container">
+          <div class="visual-card carousel__item" onclick="showplaylist('<%= playlist.hashid %>')">
+            <div
+              class="visual-image"
+              style="background-image: url('<%= playlist.playlist_cover %>')"
+            >
+              <div class="text-background"></div>
+              <div class="visual-overlay">
+              </div>
+            </div>
+
+            <div
+              class="svg-circle-wrapper"
+              data-playlist-hashid="<%= playlist.hashid %>"
+              onclick="playPlaylist('<%= playlist.hashid %>', this)"
+            >
+              <svg
+                class="svg-icon playlistCover-play"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M5 21V3c0-.79116579.87524596-1.26900738 1.54075759-.84117848L20.5407576 11.1588215c.6123232.3936364.6123232 1.2887206 0 1.682357l-14.00000001 9C5.87524596 22.2690074 5 21.7911658 5 21zm2-1.8316655L18.1507426 12 7 4.8316655v14.336669z"
+                />
+              </svg>
+            </div>
+          </div>
+          
+          <div class="card-text-content">
+            <div class="visual-title"><%= playlist.playlist_name %></div>
+            <div class="visual-description"><%= playlist.description || "" %></div>
+          </div>
+        </div>
+        <% }) %>
+      </div>
+    </div>
+  <% } %>
+<% } else { %>
+  <!-- Jika user tidak login -->
+  <% for (const id_tag in playlistsByTag) { %>
+    <div class="carousel__wrapper">
+      <div class="carousel__header">
+        <h2 class="carousel__headline"><%= tagNames[id_tag] %></h2>
+        <div class="carousel__controls">
+          <button class="carousel__arrow disabled arrow-prev"></button>
+          <button class="carousel__arrow arrow-next"></button>
+        </div>
+      </div>
+
+      <div class="carousel__content homeContent">
+        <% playlistsByTag[id_tag].forEach(playlist => { %>
+        <div class="card-container">
+          <div
+            class="visual-card carousel__item"
+            onclick="showplaylist('<%= playlist.hashid %>')"
+          >
+            <div
+              class="visual-image"
+              style="background-image: url('<%= playlist.playlist_cover %>')"
+            >
+              <div class="text-background"></div>
+              <div class="visual-overlay">
+              </div>
+            </div>
+
+            <div
+              class="svg-circle-wrapper"
+              data-playlist-hashid="<%= playlist.hashid %>"
+              onclick="playPlaylist('<%= playlist.hashid %>', this)"
+            >
+              <svg
+                class="svg-icon playlistCover-play"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M5 21V3c0-.79116579.87524596-1.26900738 1.54075759-.84117848L20.5407576 11.1588215c.6123232.3936364.6123232 1.2887206 0 1.682357l-14.00000001 9C5.87524596 22.2690074 5 21.7911658 5 21zm2-1.8316655L18.1507426 12 7 4.8316655v14.336669z"
+                />
+              </svg>
+            </div>
+          </div>
+          
+          <div class="card-text-content">
+            <div class="visual-title"><%= playlist.playlist_name %></div>
+            <div class="visual-description"><%= playlist.description || "" %></div>
+          </div>
+        </div>
+        <% }) %>
+      </div>
+    </div>
+  <% } %>
+<% } %>

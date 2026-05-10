@@ -1,0 +1,267 @@
+ <div id="navbar-wrapper">
+        <div id="navbar">
+          <div class="navbar-section">
+        
+
+              <button
+                class="navbar-item home active"
+                onclick="setActiveContent('Home'); goHome()"
+              >
+                <div class="navbar-item-content">
+                  <!-- Image sebagai icon -->
+                  <img 
+                    src="/uploads/goovlize.jpeg" 
+                    alt="Goovlize" 
+                    class="navbar-icon"
+                  >
+                </div>
+                <span class="navbar-item-text">Goovlize</span>
+                <div class="tooltip right"><p>Goovlize</p></div>
+              </button>
+
+      
+
+            <button
+              class="navbar-item default"
+              onclick="setActiveContent('Explore'); goSearch()"
+            >
+              <div class="navbar-item-content">
+                <i class="fa-brands fa-sistrix"></i>
+              </div>
+              <span class="navbar-item-text">Search</span>
+              <div class="tooltip right"><p>Search</p></div>
+            </button>
+
+            <button style="display: none;"
+              class="navbar-item default collection-btn"
+              onclick="setActiveContent('Collection'); goLibrary()"
+            >
+              <div class="navbar-item-content">
+               <i class="fa-regular fa-bookmark"></i>
+              </div>
+              <span class="navbar-item-text">Library</span>
+              <div class="tooltip right"><p>Library</p></div>
+            </button>
+
+            <button
+              class="navbar-item default add-playlist"
+              onclick="setActiveContent('Add Server'); showCustom()"
+            >
+              <div class="navbar-item-content">
+                <i class="fa-solid fa-plus"></i>
+              </div>
+              <span class="navbar-item-text">Add Custom Playlist</span>
+              <div class="tooltip right"><p>Add Custom Playlist</p></div>
+            </button>
+
+            <button
+              class="navbar-item default"
+              onclick="setActiveContent('Favorite'); showLikeMusic()"
+            >
+              <div class="navbar-item-content">
+                <i class="fa-solid fa-heart"></i>
+              </div>
+              <span class="navbar-item-text">Like Music</span>
+              <div class="tooltip right"><p>Like Music</p></div>
+            </button>
+
+          <button
+            class="navbar-item default"
+            onclick="openLicense(); setActiveContent('License');"
+          >
+            <div class="navbar-item-content">
+              <i class="fa-solid fa-file-contract"></i> <!-- Icon lisensi -->
+            </div>
+            <span class="navbar-item-text">License</span>
+            <div class="tooltip right"><p>License</p></div>
+          </button>
+
+
+
+
+          </div>
+
+
+<div class="navbar-section">
+  <% 
+    const allItems = [];
+
+    if (libraryData.playlists.length > 0) {
+      libraryData.playlists.forEach(item => {
+        // PERBAIKAN: Untuk custom playlist, cek apakah ada track_covers yang valid
+        const hasTrackCovers = item.track_covers && Array.isArray(item.track_covers) && item.track_covers.length > 0;
+        const multipleCovers = hasTrackCovers && item.track_covers.length > 1;
+        const hasMultipleTracks = item.track_count > 1;
+        
+        allItems.push({
+          ...item, 
+          type: 'custom', 
+          contentType: 'custom-playlist',
+          // PERBAIKAN: Tampilkan collage hanya jika ada multiple tracks DAN multiple covers
+          showCollage: hasMultipleTracks && multipleCovers
+        });
+      });
+    }
+
+    if (libraryData.albums.length > 0) {
+      libraryData.albums.forEach(item => {
+        allItems.push({
+          ...item, 
+          type: 'album', 
+          contentType: 'album',
+          showCollage: false // Album tidak pakai collage
+        });
+      });
+    }
+
+    if (libraryData.artists.length > 0) {
+      libraryData.artists.forEach(item => {
+        allItems.push({
+          ...item, 
+          type: 'artist', 
+          contentType: 'artist',
+          showCollage: false // Artist tidak pakai collage
+        });
+      });
+    }
+
+    if (libraryData.favPlaylists.length > 0) {
+      libraryData.favPlaylists.forEach(item => {
+        // PERBAIKAN: Untuk fav playlist, cek apakah ini custom playlist dan ada track_covers
+        const isCustomFav = item.playlist_type === 'custom';
+        const hasTrackCovers = item.track_covers && Array.isArray(item.track_covers) && item.track_covers.length > 0;
+        const multipleCovers = hasTrackCovers && item.track_covers.length > 1;
+        const hasMultipleTracks = item.track_count > 1;
+        
+        allItems.push({
+          ...item, 
+          type: 'custom', 
+          contentType: isCustomFav ? 'custom-playlist' : 'fav-playlist', // PERBAIKAN: Bedakan content type
+          // PERBAIKAN: Tampilkan collage hanya untuk custom fav playlist dengan multiple tracks & covers
+          showCollage: isCustomFav && hasMultipleTracks && multipleCovers
+        });
+      });
+    }
+
+    allItems.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+  %>
+
+  <% if (allItems.length > 0) { %>
+    <% allItems.forEach((item) => { %>
+      <button
+        class="navbar-item <%= item.type %> library-item"
+        data-id="<%= item.id %>"
+        data-type="<%= item.contentType %>"
+        data-track-count="<%= item.track_count || 0 %>"
+        data-track-covers="<%= JSON.stringify(item.track_covers || []) %>"
+        onclick="<%= 
+          // PERBAIKAN: Handle custom playlist yang disimpan dengan showCustomPlaylist
+          item.contentType === 'fav-playlist' && item.hashid ? `showplaylist('${item.hashid}')` : 
+          item.contentType === 'custom-playlist' && item.hashid ? `showCustomPlaylist('${item.hashid}')` : 
+          item.contentType === 'album' && item.hashid ? `showAlbumMobile('${item.hashid}')` : 
+          item.contentType === 'artist' && item.hashid ? `viewArtist('${item.hashid}')` : 
+          'setActiveContentByData(this)' 
+        %>"
+      >
+        <% if (item.showCollage) { %>
+          <!-- Collage cover untuk playlist dengan banyak lagu DAN cover berbeda -->
+          <div class="navbar-item-content collage-cover">
+            <div class="collage-grid" style="grid-template-columns: repeat(2, 1fr); grid-template-rows: <%= item.track_covers.length > 2 ? 'repeat(2, 1fr)' : '1fr' %>;">
+              <% 
+                // PERBAIKAN: Pastikan track_covers adalah array yang valid
+                const displayCovers = (item.track_covers && Array.isArray(item.track_covers)) ? 
+                  item.track_covers.slice(0, 4) : [];
+              %>
+              <% displayCovers.forEach((cover, index) => { %>
+                <% if (cover) { %>
+                  <div 
+                    class="collage-item" 
+                    style="background-image: url('<%= cover %>'); <%= 
+                      displayCovers.length === 3 && index === 2 ? 'grid-column: span 2;' : '' 
+                    %>"
+                  ></div>
+                <% } %>
+              <% }); %>
+            </div>
+          </div>
+        <% } else { %>
+          <!-- Cover normal untuk single track atau playlist dengan cover sama -->
+          <div
+            class="navbar-item-content <%= item.type === 'artist' ? 'rounded-circle' : 'rounded-square' %>"
+            style="background-image: url('<%= 
+              // PERBAIKAN: Prioritaskan track_covers pertama jika ada, lalu cover biasa
+              (item.track_covers && item.track_covers.length > 0) ? item.track_covers[0] : 
+              item.cover || '/images/default-playlist.png' 
+            %>');"
+          ></div>
+        <% } %>
+        <span class="navbar-item-text"><%= item.name %></span>
+        <div class="tooltip right">
+          <p><%= item.name %></p>
+          <small>Added: <%= new Date(item.created_at).toLocaleDateString() %></small>
+        </div>
+      </button>
+    <% }) %>
+  <% } else { %>
+   <section class="empty-library-section">
+  <div class="empty-library-container upload-version">
+    <h2 class="empty-library-title">Tambah Koleksi Musik Kamu</h2>
+    <p class="upload-text">Seret dan letakkan file musik ke dalam library</p>
+    <div class="empty-library-form" onclick="showCustom()">
+      <input type="file" id="music-file-input" name="music-files" class="empty-library-input" multiple accept="audio/*" disabled>
+      <svg class="empty-library-icon" width="50" height="50" viewBox="0 0 24 24" fill="none">
+        <path d="M9 17V5l12-2v12" stroke="#7efde3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="6" cy="18" r="3" stroke="#7efde3" stroke-width="2"/>
+        <circle cx="18" cy="16" r="3" stroke="#7efde3" stroke-width="2"/>
+      </svg>
+      <span class="empty-library-subtext">Tambahkan Music Library</span>
+    </div>
+  </div>
+</section>
+  <% } %>
+</div>
+
+
+
+
+          <div id="navbar-bottom-controls">
+            <button class="sidebar-toggle" onclick="toggleSidebar()">
+              <i class="fas fa-bars"></i
+              ><span class="tooltip right">Toggle Sidebar</span>
+            </button>
+            <button class="library-toggle" onclick="toggleContentNav()">
+              <svg
+                class="library-icon"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M4 19.5C4 18.837 4.26339 18.2011 4.73223 17.7322C5.20107 17.2634 5.83696 17 6.5 17H20"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M6.5 2H20V22H6.5C5.83696 22 5.20107 21.7366 4.73223 21.2678C4.26339 20.7989 4 20.163 4 19.5V4.5C4 3.83696 4.26339 3.20107 4.73223 2.73223C5.20107 2.26339 5.83696 2 6.5 2V2Z"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              <span class="tooltip right">Toggle Chat</span>
+            </button>
+
+
+      <button id="toggleLoaderBtn">
+        <i class="fa-solid fa-spinner"></i>
+      </button>
+
+          </div>
+          
+        </div>
+      </div>

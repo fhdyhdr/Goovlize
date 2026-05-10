@@ -1,0 +1,1051 @@
+@import url("https://fonts.googleapis.com/css?family=Outfit:700|Poppins:400");
+
+:root {
+  --text: hsl(0, 0%, 89%);
+  --text_muted: hsla(0, 0%, 89%, 0.5);
+  --border: hsla(0, 0%, 89%, 0.2);
+  --background: hsl(0, 0%, 6%);
+  --primary: hsl(243, 86%, 83%);
+  --primary_dim: hsla(243, 86%, 83%, 1);
+  --secondary: hsla(240, 6%, 15%, 0.5);
+  --accent: hsl(198, 100%, 84%);
+  --accent_dim: hsla(198, 100%, 84%, 1);
+}
+
+.banner .nav-icons {
+  position: absolute;
+  top: 0.7rem; /* atur jarak dari atas */
+  left: 0; /* atur jarak dari kiri */
+}
+
+.banner {
+  position: relative;
+  height: auto !important;
+  width: 100%;
+  /* overflow: hidden; */
+}
+
+.banner-img-wrapper {
+  width: 100%;
+  height: auto !important;
+    background: linear-gradient(
+    0deg,
+    #101010 0%,
+    #101010 3%,
+    90%,
+    var(--color-playlist) 115%
+  );
+  display: flex;
+  align-items: left;
+  justify-content: left;
+  padding: 5rem 3.5rem;
+  position: relative;
+}
+
+.banner-artist{
+
+    background: linear-gradient(
+    0deg,
+    #101010 0%,
+    #101010 3%,
+    90%,
+    var(--color-artist) 115%
+  );
+}
+
+.banner-album{
+
+    background: linear-gradient(
+    0deg,
+    #101010 0%,
+    #101010 3%,
+    90%,
+    var(--color-album) 115%
+  );
+}
+
+.banner-fav-music{
+    background: linear-gradient(
+    0deg,
+    #101010 0%,
+    #101010 3%,
+    90%,
+    var(--color-fav) 115%
+  );
+}
+
+.banner-music{
+  background: linear-gradient(
+    0deg,
+    #101010 0%,
+    #101010 3%,
+    90%,
+    var(--color-music) 115%
+  );
+}
+
+.banner-profile{
+  background: linear-gradient(
+    0deg,
+    #101010 0%,
+    #101010 3%,
+    90%,
+    var(--color-profile) 115%
+  );
+}
+
+.banner-top50track{
+  background: linear-gradient(
+    0deg,
+    #101010 0%,
+    #101010 3%,
+    90%,
+    var(--color-toptrack) 115%
+  );
+}
+
+.banner-mostplayed{
+  background: linear-gradient(
+    0deg,
+    #101010 0%,
+    #101010 3%,
+    90%,
+    var(--color-mostplayed) 115%
+  );
+}
+
+
+
+
+
+
+.banner-content {
+  display: flex;
+  width: 100%;
+  max-width: 1200px;
+  gap: 3rem;
+  align-items: center;
+}
+
+.playlist-head{
+  background-color: var(--color-playlist);
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
+}
+
+.mostplayed-head{
+  background-color: var(--color-mostplayed);
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
+}
+.top50-head{
+  background-color: var(--color-toptrack);
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
+}
+
+.profile-head{
+  background-color: var(--color-profile);
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
+}
+.customplaylist-head{
+  background-color: var(--color-playlist);
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
+}
+
+.artist-head{
+  background-color: var(--color-artist);
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
+}
+.fav-head{
+  background-color: var(--color-fav);
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
+}
+
+
+.banner-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 100%;
+}
+
+.banner-text h3 {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+.playlist-description {
+  line-height: 1.6;
+  max-width: 600px;
+  color: var(--text_muted);
+  margin-top: 10px;
+}
+
+.playlist-stats {
+  display: flex;
+  gap: 1.3rem;
+  margin-top: 1rem;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-item.playlist-btn {
+  background-color: var(--color-playlist);
+  border: none;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
+}
+
+.stat-item.artist-btn {
+  background-color: var(--color-artist);
+  border: none;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
+}
+
+.stat-item.album-btn {
+  background-color: var(--color-album);
+  border: none;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
+}
+
+.stat-item.fav-btn {
+  background-color: var(--color-fav);
+  border: none;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
+}
+
+.stat-item.musicinfo-btn{
+  background-color: var(--color-music);
+  border: none;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
+}
+
+.stat-item.top50track-btn{
+  background-color: var(--color-toptrack);
+  border: none;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
+}
+
+.stat-item.mostPlayed-btn{
+  background-color: var(--color-mostplayed);
+  border: none;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
+}
+
+
+
+.stat-number {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--primary);
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: var(--text_muted);
+}
+
+/* PERBAIKAN: Header styles untuk semua device - SOLUSI BOLONG */
+.playlist-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 0.5rem 5vw;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.6));
+  z-index: 100;
+  opacity: 0;
+  transform: translateY(-100%);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.playlist-header.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* PERBAIKAN: Header content dengan back button */
+.playlist-header .header-content {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+/* Back button styles */
+.back-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+
+.back-button i {
+  color: var(--text);
+}
+
+/* Header text container */
+.header-text-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 4px;
+  min-width: 0;
+  flex: 1;
+}
+
+.playlist-header .header-subtitle {
+  font-size: 0.9rem;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px; 
+}
+
+footer {
+  margin-top: 2rem;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.center {
+  align-items: center;
+  align-self: center;
+}
+
+.muted {
+  color: var(--text_muted);
+}
+
+/* New track styles */
+.tracks {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.track-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s ease;
+  gap: 2rem;
+}
+
+:root[style*="--device: desktop"] .track-container:hover {
+  background-color: hsla(240, 6%, 15%, 0.8);
+  cursor: pointer;
+}
+
+.track-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 2;
+  min-width: 0;
+}
+
+.track-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 4px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.track-details {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.track-title {
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 6px;
+}
+
+.track-artist {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--text_muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* PERBAIKAN: Track album styles */
+.track-album {
+  font-size: 0.875rem;
+  color: var(--text_muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 0 1 auto;
+  text-align: left;
+  position: relative;
+  display: inline-block;
+  max-width: fit-content;
+  cursor: pointer;
+}
+
+/* PERBAIKAN: Container untuk track-album agar rata kiri */
+.track-album-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 1rem;
+}
+
+.track-time {
+  font-size: 0.875rem;
+  color: var(--text_muted);
+  min-width: 40px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.track-actions {
+  display: flex;
+  gap: 3.5rem;
+  flex-shrink: 0;
+  justify-content: flex-end;
+  flex: 0.5;
+}
+
+.track-actions i {
+  font-size: 20px;
+}
+
+.fav_playlist,
+.track-menu {
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobile {
+  display: none;
+}
+
+.stat-item {
+  width: 60px;
+  height: 60px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 2px solid #b3b3b3;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+:root[style*="--device: desktop"] .stat-item:hover {
+  border-color: #fff;
+}
+
+.stat-item i {
+  font-size: 22px;
+}
+
+.userOwner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+}
+
+.userOwner img {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.userOwner span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
+.userOwner span:hover {
+  text-decoration: underline;
+  background-color: rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+}
+
+/* PERBAIKAN: Track number dengan width tetap untuk alignment */
+.track-number {
+  margin-right: 10px;
+  min-width: 25px;
+  text-align: center;
+  display: inline-block;
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+:root[style*="--device: mobile"] .track-number {
+  display: none;
+}
+
+/* Define container elements */
+.main-content,
+#active-content,
+#content-area {
+  container-type: inline-size;
+  container-name: music-container;
+  position: relative; /* PERBAIKAN: Tambahkan positioning */
+}
+
+/* PERBAIKAN: Pastikan struktur layout benar */
+#active-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  position: relative;
+  overflow-y: auto;
+}
+
+.main-content {
+  flex: 1;
+  position: relative;
+  width: 100%;
+}
+
+/* Container Query Styles */
+@container music-container (min-width: 0) {
+  .nav-icons {
+    margin-left: clamp(1rem, 3vw, 4rem) !important;
+  }
+
+  .banner-img-wrapper {
+    padding: clamp(4rem, 5vw, 5rem) clamp(1rem, 3vw, 3.5rem);
+  }
+  
+  /* Header styles */
+  .header-title {
+    font-size: clamp(1.2rem, 3cqi, 1.7rem);
+    margin: 0;
+  }
+
+  .header-subtitle {
+    font-size: clamp(0.7rem, 1.5cqi, 0.9rem);
+    margin: 0;
+    color: var(--text_muted);
+  }
+
+  /* PERBAIKAN: Playlist header responsive dengan container queries */
+  :root[style*="--device: desktop"] .playlist-header {
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    margin-top: clamp(-70px, -8cqi, -80px) !important;
+    height: clamp(60px, 8cqi, 80px);
+    z-index: 100;
+    padding: clamp(0.3rem, 0.5cqi, 0.5rem) clamp(1rem, 3vw, 3rem);
+  }
+
+  /* Back button dalam container query */
+  .back-button {
+    width: clamp(48px, 4cqi, 55px);
+    height: clamp(48px, 4cqi, 55px);
+  }
+
+  .back-button i {
+    font-size: clamp(1.7rem, 2cqi, 1.9rem);
+  }
+
+  .playlist-header .header-content {
+    gap: clamp(1rem, 1.6cqi, 7rem);
+  }
+
+  .header-text-container {
+    gap: clamp(2px, 0.5cqi, 4px);
+  }
+
+  .banner-text {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(0.5rem, 1cqi, 1rem);
+    min-width: 0;
+  }
+
+  /* Text content container */
+  .banner-text-content {
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .playlist-stats {
+    display: flex;
+    gap: clamp(0.8rem, 1.5cqi, 1.3rem);
+    margin-top: clamp(1rem, 1cqi, 1rem);
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    width: auto;
+    flex-shrink: 0;
+    align-items: center;
+  }
+
+  .banner-text h3 {
+    font-size: clamp(1.8rem, 5cqi, 4rem);
+    margin-bottom: clamp(0.4rem, 0.5cqi, 0.5rem);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .banner-text p:not(.playlist-description) {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: clamp(0.8rem, 1.2cqi, 1rem);
+  }
+
+  .playlist-description {
+    font-size: clamp(0.8rem, 1.2cqi, 1rem);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.4;
+  }
+
+  .playlist-stats {
+    gap: clamp(0.8rem, 1.5cqi, 1.3rem);
+    margin-top: clamp(1rem, 1cqi, 1rem);
+  }
+
+  /* Stat items */
+  .stat-item {
+    width: clamp(40px, 5cqi, 50px);
+    height: clamp(40px, 5cqi, 50px);
+  }
+
+  .stat-item.playlist-btn,
+  .stat-item.artist-btn,
+  .stat-item.album-btn,
+  .stat-item.fav-btn,
+  .musicinfo-btn {
+    width: clamp(50px, 5cqi, 60px);
+    height: clamp(50px, 5cqi, 60px);
+  }
+
+  .stat-item i {
+    font-size: clamp(1rem, 1.5cqi, 1.25rem);
+  }
+
+  .stat-item svg {
+    width: clamp(1.7rem, 2.5cqi, 2.1rem);
+    height: clamp(1.7rem, 2.5cqi, 2.1rem);
+  }
+
+  /* Track items */
+  .track-container {
+    padding: clamp(0.6rem, 1cqi, 0.2rem);
+    gap: clamp(1rem, 2cqi, 2rem);
+    margin: 0 clamp(0.5rem, 3cqi, 4rem);
+  }
+
+  .track-info {
+    gap: clamp(0.9rem, 1cqi, 1rem);
+  }
+
+  .track-image {
+    width: clamp(45px, 5cqi, 50px);
+    height: clamp(45px, 5cqi, 50px);
+  }
+
+  .track-title {
+    font-size: clamp(0.8rem, 1cqi, 0.95rem);
+    margin-bottom: clamp(0.2rem, 0.5cqi, 0.4rem);
+  }
+
+  .track-artist {
+    font-size: clamp(0.75rem, 1cqi, 0.84rem);
+  }
+
+  /* PERBAIKAN: Track album container query dengan justify-content: flex-start */
+  .track-album-container {
+    padding: 0 clamp(0.5rem, 1cqi, 1rem);
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .track-album {
+    font-size: clamp(0.75rem, 1cqi, 0.9rem);
+    display: inline-block;
+  }
+
+  .track-time {
+    font-size: clamp(0.75rem, 1cqi, 0.875rem);
+    min-width: clamp(30px, 4cqi, 40px);
+    display: block;
+  }
+
+  .track-actions {
+    gap: clamp(1.5rem, 3cqi, 3.5rem);
+  }
+
+  .track-actions i {
+    font-size: clamp(1.2rem, 1.5cqi, 1.3rem);
+  }
+
+  .fav_playlist,
+  .track-menu {
+    padding: clamp(0.8rem, 0.5cqi, 1rem);
+  }
+
+  .banner-img-container {
+    position: relative;
+    width: clamp(160px, 20cqi, 250px);
+    height: clamp(160px, 20cqi, 250px);
+    transition: all 0.4s ease-out;
+    will-change: transform, opacity;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
+    overflow: hidden;
+    flex-shrink: 0;
+    aspect-ratio: 1/1;
+  }
+
+  .banner-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 4px;
+    object-fit: cover;
+    object-position: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    transition: inherit;
+    display: block;
+  }
+
+  .banner-text-content {
+    min-width: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(0.2rem, 0.7cqi, 1rem);
+  }
+
+  @container music-container (max-width: 500px) {
+    .banner-content {
+      flex-direction: column;
+      text-align: center;
+      gap: 2rem;
+    }
+
+    .playlist-stats {
+      justify-content: center;
+      width: 100%;
+    }
+
+    .track-album-container,
+    .track-time {
+      display: none !important;
+    }
+    .userOwner {
+      justify-content: center;
+    }
+    
+    /* Mobile header adjustments */
+    :root[style*="--device: desktop"] .playlist-header {
+      margin-top: clamp(-60px, -7cqi, -70px) !important;
+      height: clamp(50px, 7cqi, 60px);
+      padding: clamp(0.2rem, 0.3cqi, 0.3rem) clamp(0.8rem, 2vw, 2rem);
+    }
+
+
+  }
+}
+
+@supports not (container-type: inline-size) {
+  .banner-img-container {
+    width: 20vw;
+    height: 20vw;
+    min-width: 150px;
+    min-height: 150px;
+    max-width: 250px;
+    max-height: 250px;
+  }
+  
+  /* Fallback untuk browser yang tidak support container queries */
+  :root[style*="--device: desktop"] .playlist-header {
+    margin-top: -70px !important;
+    height: 70px;
+  }
+  
+  
+  @media (max-width: 1200px) {
+    :root[style*="--device: desktop"] .playlist-header {
+      margin-top: -65px !important;
+      height: 65px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    :root[style*="--device: desktop"] .playlist-header {
+      margin-top: -60px !important;
+      height: 60px;
+    }
+    
+  }
+}
+
+@media screen and (max-width: 768px) {
+  :root[style*="--device: mobile"] .tracks {
+    gap: 0.2rem;
+  }
+
+  :root[style*="--device: mobile"] .banner-img-wrapper {
+    height: auto;
+    padding: 2rem;
+  }
+
+  :root[style*="--device: mobile"] .track-container {
+    margin: 0 9px;
+  }
+
+  /* PERBAIKAN: Pastikan header mobile visible */
+  :root[style*="--device: mobile"] .playlist-header {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    z-index: 1000 !important;
+  }
+
+  :root[style*="--device: mobile"] .playlist-header.visible {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+  }
+
+}
+
+@media only screen and (orientation: landscape) {
+  :root[style*="--device: mobile"] .banner-img-wrapper {
+    padding: 2rem 2rem 3rem 2rem ;
+  }
+
+
+  :root[style*="--device: mobile"] .track-container {
+    margin: 0 clamp(1.5rem, 2cqi, 3rem);
+  }
+}
+
+:root[style*="--device: desktop"] .clickable-artist:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* PERBAIKAN: Hover hanya pada teks track-album */
+:root[style*="--device: desktop"] .track-album:hover {
+  text-decoration: underline;
+}
+
+.listmusic.playing {
+  background-color: hsla(240, 6%, 15%, 0.8);
+}
+.listmusic.playing .track-title,
+.listmusic.playing .track-artist {
+  color: #ffcc00;
+}
+
+/* PERBAIKAN: Dropdown styles */
+.dropdown-container {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background-color: #2a292f;
+  min-width: 180px;
+  z-index: 1;
+  border-radius: 6px;
+}
+
+.dropdown-content a {
+  color: #fff;
+  padding: 10px 14px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+}
+
+.dropdown-content i{
+  font-size: 15px;
+}
+
+.dropdown-content a:hover {
+  background-color: #1b1b1b;
+}
+
+.show {
+  display: block;
+}
+
+/* Submenu */
+.dropdown-submenu {
+  position: relative;
+}
+
+.dropdown-submenu > a {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  color: #fff;
+  font-size: 14px;
+  gap: 10px;
+}
+
+.dropdown-submenu > a:hover {
+  background-color: #1b1b1b;
+}
+
+.arrow {
+  margin-left: auto;
+  font-size: 20px;
+  opacity: 0.7;
+}
+
+.submenu-content {
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 100%;
+  background-color: #37353E;
+  min-width: 160px;
+  border-radius: 6px;
+  z-index: 2;
+}
+
+.submenu-content a {
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: #fff;
+  font-size: 14px;
+}
+
+.submenu-content a:hover {
+  background-color: #1b1b1b;
+}
+
+/* Hover submenu */
+.dropdown-submenu:hover .submenu-content {
+  display: block;
+}
+
+.playlist-name {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2em;
+  max-height: calc(1.2em * 3);
+}
+
+/* PERBAIKAN: Tambahan untuk memastikan header full width dalam container */
+.main-content > .playlist-header,
+#active-content > .playlist-header {
+  width: 100%;
+  left: 0;
+  right: 0;
+}
+
+/* PERBAIKAN: JavaScript scroll detection untuk mobile */
+@media (max-width: 768px) {
+  :root[style*="--device: mobile"] .playlist-header {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    z-index: 1000 !important;
+    opacity: 0;
+    transform: translateY(-100%);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+  }
+
+  :root[style*="--device: mobile"] .playlist-header.visible {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    pointer-events: auto !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .playlist-header {
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    margin-top: -70px !important;
+    z-index: 100;
+    opacity: 0;
+    transform: translateY(-100%);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    height: auto;
+    padding: 0.5rem 3vw;
+  }
+
+  .playlist-header .header-content {
+    justify-content: flex-start;
+  }
+}
+
+/* PERBAIKAN: Desktop playlist header dengan clamp */
+:root[style*="--device: desktop"] .playlist-header {
+  margin-top: clamp(-70px, -8cqi, -80px) !important;
+  height: clamp(60px, 15cqi, 70px);
+  padding: clamp(0.3rem, 0.5cqi, 0.5rem) clamp(1rem, 3vw, 3rem);
+}
+
+
+
+.error-message {
+  color: #E52020 !important;
+  font-size: 12px;
+  font-family: Roboto Medium;
+}
+
+
+.form-group input.invalid{
+  border: 1.5px solid #D84040 !important;
+}

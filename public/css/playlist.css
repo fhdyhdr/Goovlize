@@ -1,0 +1,1288 @@
+
+.top-scroll-bg {
+  width: 100%;
+  min-width: 638px;
+  height: 60px;
+  position: fixed;
+  top: 0;
+  z-index: 1;
+}
+
+
+
+.summary2.on {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  max-width: 100%;
+  height: 65px;
+  padding: 10px 30px;
+  background-color: var(--color-playlist);
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
+  background-blend-mode: multiply;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  margin: 0 auto;
+}
+
+
+.summary2.on .summary__box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+/* Title in Sticky Header */
+.summary2.on .summary__text {
+  flex: 1;
+  min-width: 0; /* Crucial for text overflow */
+  animation: fadeInDown 0.5s ease-out;
+}
+.summary2.on i{
+    animation: fadeInDown 0.5s ease-out;
+}
+
+.summary2.on .summary__text--title {
+  font-size: 2em;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+  line-height: 1.3;
+  max-width: 600px; /* Adjust based on your layout */
+  display: inline-block; /* Required for text-overflow */
+  vertical-align: middle;
+}
+
+/* Buttons Container */
+.summary2.on .button {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 30px;
+}
+
+/* Individual Buttons */
+.summary2.on .button__list {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: transparent;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.2s ease;
+  animation: fadeInDown 0.5s ease-out;
+}
+
+ :root[style*="--device: desktop"] .summary2.on .button__list:hover {
+  transform: scale(1.05);
+  border-color: white;
+}
+
+
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .summary2.on {
+    padding: 0 15px; /* Beri padding kiri-kanan */
+    height: 55px;
+  }
+
+  .summary2.on .summary__box {
+    justify-content: flex-start; /* Utamakan konten ke kiri */
+    gap: 10px; /* Jarak antara elemen */
+  }
+
+  .summary2.on .summary__text {
+    flex: 0 1 auto; /* Tidak perlu mengambil semua space */
+    min-width: 0; /* Penting untuk text overflow */
+    margin-right: auto; /* Dorong elemen setelahnya ke kanan */
+  }
+
+  .summary2.on .summary__text--title {
+    font-size: 1.3em;
+    white-space: nowrap; /* Mencegah text wrapping */
+    overflow: hidden; /* Menyembunyikan teks yang overflow */
+    text-overflow: ellipsis; /* Menampilkan ... */
+    max-width: 200px; /* Sesuaikan nilai ini */
+    display: block; /* Pastikan sebagai block element */
+    line-height: 1.4;
+  }
+
+
+  .summary2.on .button {
+    margin-left: auto; /* Dorong button ke kanan */
+    gap: 8px;
+  }
+
+  .summary2.on .item {
+    display: none;
+  }
+
+  
+}
+
+
+
+
+
+
+
+
+
+
+body {
+  width: 100%;
+  height: 100%;
+  color: #b3b3b3;
+  letter-spacing: 0.4px;
+  cursor: default;
+  overflow-x: hidden;
+  background-color: #141414;
+}
+
+/* ===== LAYOUT STRUCTURE ===== */
+.wrap {
+  width: 100%;
+  min-width: 740px;
+}
+
+.list-area {
+  width: 100%;
+  height: calc(100vh - 86px);
+  display: flex;
+}
+
+.main {
+  width: 100%;
+  min-width: 638px;
+  height: 100%;
+  overflow-y: scroll;
+}
+
+.main__wrap {
+  box-sizing: border-box;
+  padding: 0 50px;
+}
+
+
+.top-bar {
+  position: fixed;
+  width: calc(100% - 248px);
+  height: 40px;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  color: #ddd;
+  line-height: 24px;
+  z-index: 20;
+}
+
+
+
+.top-bar__icon {
+  font-size: 18px;
+}
+
+/* ===== SUMMARY SECTION ===== */
+.summary {
+  position: relative;
+  height: 430px;
+  display: flex;
+  padding-top: 70px;
+  background: linear-gradient(0deg, #141414 0%, #14141450 0%, 65%, var(--color-playlist) 100%);
+}
+
+
+
+.summary__img {
+  width: 280px;
+  height: 280px;
+  min-width: 150px;
+  min-height: 150px;
+  flex-shrink: 0;
+  display: flex; /* Untuk centering gambar */
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; /* Pastikan gambar tidak keluar container */
+  border-radius: 4px; /* Optional: jika ingin sudut melengkung */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
+}
+
+.summary__img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Mirip dengan background-size: cover */
+  object-position: center; /* Mirip dengan background-position */
+}
+
+
+.summary__box {
+  margin-left: 60px;
+  line-height: 3;
+  display: flex;
+  flex-direction: column;
+  height: 80%; 
+}
+
+
+.summary__text--for-me {
+  font-size: 18px;
+  letter-spacing: 1.8px;
+  color: #fff;
+}
+
+.summary__text--title {
+  color: #fff;
+  font-size: 40px;
+  font-weight: 700;
+  font-size: 4em;
+}
+
+.summary__button {
+  margin-top: 20px;
+}
+
+.button {
+  display: flex;
+  gap: 15px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.button__icon{
+  font-size: 20px;
+}
+
+
+
+.button__list {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 2px solid #B3B3B3;
+  transition: all 0.2s ease;
+  margin-top: 14px;
+}
+
+
+ :root[style*="--device: desktop"] .button__list:hover {
+  border-color: #fff;
+  transform: scale(1.05);
+}
+
+
+/* ===== PLAYLIST TABLE ===== */
+.playlist {
+  width: 100%;
+  color: #fff;
+  border-collapse: collapse;
+  table-layout: auto;
+}
+
+.playlist__th {
+  padding: 6px 0 6px 10px;
+  color: #b3b3b3;
+  font-size: 12px;
+  letter-spacing: 1.4px;
+  text-align: left;
+}
+
+.headerlist {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.playlist__td {
+  padding: 12px 15px;
+  vertical-align: middle;
+}
+
+/* Track info styles */
+.track-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.track-info img {
+  width: 52px;
+  height: 52px;
+  object-fit: cover;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.track-details {
+  max-width: 260px;
+  overflow: hidden;
+}
+
+.track-title {
+  font-weight: 500;
+  color: white;
+  font-size: 1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.track-artist {
+  font-size: 0.875rem;
+  color: #b3b3b3;
+  margin-top: 9px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Actions column */
+.playlist__td--actions {
+  text-align: right;
+}
+
+.playlist__td--actions i {
+  font-size: 21px;
+  margin: 0 20px;
+  color: #b3b3b3;
+  transition: color 0.2s ease;
+}
+
+:root[style*="--device: desktop"] .playlist__td--actions i:hover {
+  color: #fff;
+}
+
+
+:root[style*="--device: desktop"] .listmusic:hover {
+  background-color: #333;
+}
+
+.will-hidden {
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Batasi hingga 2 baris */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.5; /* Sesuaikan dengan kebutuhan */
+  max-height: calc(2 * 1.5em); /* 2 baris x line-height */
+}
+
+
+.will-hidden {
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.summary__text--title{
+  display: -webkit-box;
+  -webkit-line-clamp: 1; /* Batasi hingga 2 baris */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.5; /* Sesuaikan dengan kebutuhan */
+  max-height: calc(1 * 1.5em); /* 2 baris x line-height */
+}
+
+
+
+@media screen and (max-width: 768px) {
+  .wrap, .main, .top-scroll-bg {
+    min-width: 100%;
+  }
+  
+  .will-hidden, .top-bar, .playlist__td--album, .playlist__td--hour, thead {
+    display: none;
+  }
+
+  .main__wrap {
+    padding: 0;
+    padding-top: 30px;
+  }
+
+  .summary {
+    flex-direction: column;
+    height: auto;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .summary__img {
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 20px;
+  }
+
+  .summary__box {
+    height: auto;
+    margin-left: 0;
+    line-height: 1.5;
+  }
+  
+  .summary__text--title {
+    font-size: 28px;
+  }
+  
+
+  .summary__button {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+
+  .playlist__tr td {
+    padding: 7px 10px;
+  }
+
+  .track-info img {
+    width: 47px;
+    height: 47px;
+  }
+
+  .track-details {
+    max-width: 135px;
+  }
+
+  .playlist__td--actions i {
+    font-size: 20px;
+    margin: 0 25px;
+  }
+}
+
+
+
+
+
+
+
+.playlist {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+
+.playlist__td--track {
+  width: 40%; /* Sesuaikan sesuai kebutuhan */
+}
+
+.track-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.track-title {
+  font-weight: 500;
+  color: white;
+  font-size: 0.9rem;
+}
+
+.track-artist {
+  font-size: 0.8rem;
+  color: #b3b3b3;
+  margin-top: 7px;
+}
+
+ 
+
+.playlist__td--album {
+  width: 30%;
+  color: #b3b3b3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 15px;
+}
+
+.album-text {
+  display: inline-block;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.album-text:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+
+:root[style*="--device: desktop"] .clickable-artist:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+
+.container {
+  margin-left: 260px; /* Default ketika sidebar penuh */
+  max-width: 100%;
+}
+
+.sidebar.collapsed + main .container {
+    margin-left: 85px; /* Ketika sidebar dalam keadaan collapsed */
+}
+
+
+
+
+
+
+
+
+
+@media screen and (max-width: 768px) {
+  .summary__img{
+    width: 190px;
+    height: 190px;
+  }
+  
+  .summary__img >img {
+    width: 160px;
+    height: 160px;
+  }
+  
+
+}
+
+
+
+
+
+
+
+
+.svg-icon-wrapper {
+  width: 63px; 
+  height: 63px; 
+  border-radius: 50%; 
+  background-color: var(--color-playlist); 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s ease;
+  cursor: pointer;
+}
+
+:root[style*="--device: desktop"] .svg-icon-wrapper {
+  transition: background-color 1s ease, background-image 1s ease;
+}
+
+:root[style*="--device: desktop"] .svg-icon-wrapper:hover {
+  background-color: var(--color-playlist); 
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
+}
+
+.svg-icon-wrapper .svg-icon {
+  width: 35px;
+  height: 35px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.svg-icon path {
+  fill: #fff;
+}
+
+
+
+
+.summary2.on .svg-icon{
+  width: 30px;
+  height: 30px;
+}
+
+
+
+
+
+
+.summary2.on i {
+  top: 5px; 
+  left:5px; 
+  font-size: 22px; 
+  cursor: pointer; 
+  z-index: 10; 
+  display: inline-block; 
+  padding: 15px; 
+  cursor: pointer; 
+  color: #B3B3B3;
+
+}
+
+:root[style*="--device: desktop"] .summary2.on i{
+  top: 20px; 
+  left: 20px; 
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 50%; 
+}
+
+
+:root[style*="--device: desktop"] .summary2.on i:hover {
+background-color: rgba(0, 0, 0, 0.365);
+}
+
+
+
+.summary .nav-icons{
+  position: absolute;
+  top: 11px;
+  left: 0;
+  z-index: 100;
+}
+
+
+.mobile-ellipsis{
+  display: none !important;
+}
+
+.desktop-ellipsis{
+  display: none !important;
+}
+
+:root[style*="--device: mobile"] .mobile-ellipsis{
+  display: inline-block!important;
+}
+
+
+:root[style*="--device: desktop"] .desktop-ellipsis{
+  display: inline-block !important;
+}
+
+
+
+@media (max-width: 768px) {
+  .svg-icon-wrapper {
+    width: 50px; 
+    height: 50px; 
+  }
+
+  .svg-icon-wrapper .svg-icon {
+    width: 27px;
+    height: 27px;
+  }
+
+  
+.button__list:first-of-type {
+  margin-left: 10px;
+}
+
+.button__list {
+  margin-top: 5px;
+}
+
+.summary2.on .button {
+  margin-bottom: 24px;
+}
+
+
+.summary2.on .button__list {
+  width: 45px;
+  height: 45px;
+}
+.summary2.on .svg-icon{
+  width: 26px;
+  height: 26px;
+}
+
+
+.summary2.on i{
+  display: none;
+}
+
+
+
+
+
+.desktop-ellipsis{
+  display: none  !important;
+}
+
+
+}
+
+
+
+
+
+
+
+
+
+.dropdown {
+  position: relative;
+  display: flex;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  z-index: 5 !important;
+}
+
+.dropdown ul {
+  position: absolute;
+  background: #222222;
+  height: auto;
+  width: 220px;
+  right: 30px;
+  top: 0;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.4s ease;
+  padding: 5px; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  border-radius: 5px; 
+}
+
+
+
+.dropdown ul li{
+  padding: 5px;
+  list-style: none;
+  margin: 0; 
+  text-align: left;
+  border-radius: 5px;
+}
+
+
+.dropmenu:hover{
+background-color:#474747;
+border-radius: 5px;
+} 
+
+
+.dropdown ul li a {
+  text-decoration: none;
+  color: #fff;
+  font-size: 1.03em;
+  padding: 3px 0; 
+  display: block;
+}
+
+.dropdown.is-active ul {
+  opacity: 1;
+  pointer-events: all;
+}
+
+
+
+  
+.has-submenu {
+  position: relative;
+}
+.has-submenu .submenu {
+  position: fixed;
+  right: 230px; 
+  top: 30px; 
+  background: #222222;
+  visibility: hidden;
+  opacity: 0;
+  width: 230px; 
+  z-index: 200;
+  max-height: 235px;
+  overflow-y: auto;
+  padding: 3px;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+
+.has-submenu:hover .submenu,
+.has-submenu .submenu:hover {
+    visibility: visible;
+    opacity: 1;
+}
+  
+
+
+.has-sub-submenu {
+    margin: 12px;
+}
+
+.sub-addplaylist a {
+    font-size: 1.05em !important;
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis;
+    display: block;
+  
+    padding: 6px !important;
+}
+
+.sub-addplaylist a:hover{
+  background-color: #474747;
+  border-radius: 8px;
+}
+
+.has-submenu:hover .submenu {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Jika hover pindah ke li yang berbeda, langsung hilangkan tanpa transisi */
+.has-submenu:hover ~ .has-submenu .submenu {
+    visibility: hidden;
+    opacity: 0;
+    transition: none;
+}
+
+.has-submenu:not(:hover) .submenu {
+    visibility: hidden;
+    opacity: 0;
+
+}
+
+
+.has-submenu .submenu::-webkit-scrollbar {
+  width: 3px;  
+  background: transparent; 
+}
+
+.has-submenu .submenu::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2); 
+  border-radius: 10px; 
+}
+
+.has-submenu .submenu::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.4); 
+}
+
+/* Untuk Firefox */
+.has-submenu .submenu {
+  scrollbar-width: thin;  
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+
+
+
+
+.listmusic.playing {
+  background-color: #212020;
+}
+.listmusic.playing .track-title,
+.listmusic.playing .track-artist{
+ color: #ffcc00;
+}
+
+
+
+
+@media only screen and (orientation: landscape) {
+  :root[style*="--device: mobile"] {
+
+  .list-area {
+    height: calc(100vh - 0px);
+  }
+  
+  .summary {
+    height: 200px;
+    padding-top: 40px;
+    flex-direction: row;
+    align-items: center;
+  }
+  
+  .summary__img {
+    width: 180px;
+    height: 180px;
+    margin-right: 30px;
+  }
+  
+  .summary__box {
+    height: auto;
+    margin-left: 0;
+  }
+  
+  .summary__text--title {
+    font-size: 2.5em;
+    -webkit-line-clamp: 2;
+    max-height: calc(2 * 1.5em);
+  }
+  
+  .will-hidden {
+    display: none;
+  }
+  
+  /* Track list adjustments */
+  .playlist {
+    width: 100%;
+    overflow-x: hidden;
+  }
+  
+  .playlist__container {
+    padding: 4px;
+  }
+  
+  .playlist__td--hour,
+  .playlist__td--album,
+  .headerlist {
+    display: none !important; /* Sembunyikan kolom duration */
+  }
+
+  
+  .track-info img {
+    width: 45px;
+    height: 45px;
+  }
+  
+  .track-title {
+    font-size: 0.9em;
+  }
+  
+  .track-artist {
+    font-size: 0.75em;
+  }
+  
+  /* Adjust column widths after hiding duration */
+  .playlist__td--track {
+    width: 55%;
+    padding-right: 15px;
+  }
+  
+  .playlist__td--album {
+    width: 35%;
+    padding-right: 15px;
+  }
+  
+  .playlist__td--actions {
+    width: 10%;
+    padding-right: 5px;
+  }
+  
+  /* Sticky header */
+  .summary2.on {
+    height: 49px;
+    padding: 0 20px;
+  }
+  
+  .summary2.on .summary__text--title {
+    font-size: 1.5em !important;
+    max-width: 300px;
+  }
+  
+  .summary2.on .button__list {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .summary2.on .svg-icon {
+    width: 22px;
+    height: 22px;
+  }
+  
+  
+  /* Player controls */
+  .music-player {
+    bottom: 0;
+    height: 60px;
+    left: 72px;
+    width: calc(100% - 72px);
+  }
+  
+  /* Hide elements not needed in landscape */
+  .top-scroll-bg,
+  .summary__text--by-spotify {
+    display: none;
+  }
+  
+  /* Dropdown adjustments */
+  .dropdown ul {
+    width: 180px;
+  }
+  
+  .has-submenu .submenu {
+    right: 180px;
+    width: 180px;
+  }
+
+  .svg-icon-wrapper {
+    width: 48px; 
+    height: 48px; 
+  }
+
+  .svg-icon-wrapper .svg-icon {
+    width: 25px;
+    height: 25px;
+  }
+    
+    .summary__img {
+      width: 120px;
+      height: 120px;
+    }
+    
+    .summary__text--title {
+      font-size: 2em;
+    }
+    
+    .track-info {
+      gap: 10px;
+    }
+    
+    .playlist__td {
+      padding: 8px 10px;
+    }
+  
+
+
+  .playlist__td--actions {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Jarak antara ikon */
+    justify-content: flex-end;
+  }
+
+  .fav_playlist, 
+  .desktop-ellipsis, 
+  .mobile-ellipsis {
+    margin: 0 !important;
+    font-size: 18px;
+    position: static; /* Pastikan tidak ada positioning yang mengganggu */
+    transform: none;
+  }
+
+  .wrap, .main {
+    min-width: 100% !important;
+    max-width: 100%;
+  }
+
+  .playlist__td--actions {
+    width: 100%;
+  }
+
+  .playlist__tr {
+      display: flex;
+      align-items: center; 
+  }
+
+  .main__wrap {
+    box-sizing: border-box;
+    padding: 20px;
+  }
+
+  .summary{
+    padding: 0 50px !important;
+  }
+
+  .summary .summary__button{
+    margin-top: 20px;
+  }
+
+  .summary .button__list {
+      margin-top: 10px;
+      width: 38px;
+      height: 38px;
+  }
+
+  .summary .button__list i{
+    font-size: 17px;
+  }
+
+  .summary .summary__text--for-me{
+    font-size: 15px;
+  }
+
+
+.summary__text--title {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
+    max-height: 2.4em; 
+    line-height: 1.2em;
+  }
+
+
+
+
+}
+}
+
+
+:root[style*="--device: mobile"] .dropdown{
+  display: none;
+}
+
+
+
+
+@media screen and (min-width: 768px) {
+
+.summary__button {
+  margin-top: auto; 
+  align-self: flex-start;
+}
+
+.summary__button .svg-icon-wrapper{
+  margin-right: 30px;
+}
+
+
+}
+
+
+.summary__text--by-spotify{
+  margin-top:10px;
+}
+
+
+
+
+
+.owner-profile {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+
+.playlist-info p {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  font-size: 16px;
+}
+
+.summary__text--white {
+  color: white;
+  font-weight: 600;
+}
+
+
+.playlist-header-inner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 100%;
+}
+
+
+
+
+@media (max-width: 768px) {
+  .playlist-header-inner {
+    gap: 8px;
+    padding: 0 10px; /* Beri padding agar tidak menempel ke edge */
+  }
+  
+  .owner-profile {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .playlist-info p {
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-wrap: nowrap; /* Pastikan tetap satu baris */
+  }
+  
+  .playlist-header-container {
+    width: 100%;
+    display: flex;
+    justify-content: center; /* Pusatkan horizontal */
+  }
+
+  .playlist-info p {
+    line-height: 32px;
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.error-message {
+  color: #E52020 !important;
+  font-size: 12px;
+  font-family: Roboto Medium;
+}
+
+
+.form-group input.invalid{
+  border: 1.5px solid #D84040 !important;
+}
+
+
+
+.summary__img.custom_img {
+  position: relative;
+  width: 280px;
+  height: 280px;
+  min-width: 150px;
+  min-height: 150px;
+  flex-shrink: 0;
+  display: flex; /* Untuk centering gambar */
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px; /* Optional: jika ingin sudut melengkung */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
+}
+
+.playlist-collage {
+  width: 100%;
+  height: 100%;
+}
+
+.playlist-collage .collage-grid {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  gap: 0;
+}
+
+.playlist-collage .collage-item {
+  background-size: cover;
+  background-position: center;
+  width: 100%;
+  height: 100%;
+}
+
+/* For single track or no collage */
+.summary__img.custom_img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

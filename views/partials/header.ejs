@@ -1,0 +1,110 @@
+<div class="sticky-header" id="header">
+  <div class="header-content" id="header-content">
+    <div class="nav-icons">
+      <i onclick="backLeft()" class="fa-solid fa-circle-chevron-left"></i>
+      <i onclick="backRight()" class="fa-solid fa-circle-chevron-right"></i>
+    </div>
+    <img
+      style="display: none"
+      src="/uploads/goovlize.jpeg"
+      alt="Logo"
+      class="logo"
+    />
+
+<% if (profileImage) { %>
+<div class="profile-dropdown-container">
+  <img 
+    src="<%= profileImage.profileImage || '/uploads/profile/default_pp.jpg' %>" 
+    referrerpolicy="no-referrer" 
+    class="profile" 
+    id="profileDropdownTrigger"
+    data-user-hashid="<%= userProfile ? userProfile.hashid : '' %>"
+  />
+  <div class="profile-dropdown__menu-box">
+    <ul class="profile-dropdown__menu">
+      <li class="profile-dropdown__item" data-user-hashid="<%= userProfile ? userProfile.hashid : '' %>">Your Profile</li>
+    
+      <li onclick="window.location.href='/logout'" class="profile-dropdown__item">Logout</li>
+    </ul>
+  </div>
+</div>
+<% } else { %>
+  <button onclick="window.location.href='/login'" class="login-button">Login</button>
+<% } %>
+
+
+  </div>
+</div>
+
+
+
+
+<script>
+function isTrueMobile() {
+  const userAgent = navigator.userAgent.toLowerCase();
+  const platform = navigator.platform.toLowerCase();
+  
+  // Jika ini desktop platform, langsung return false
+  if (platform.indexOf('mac') > -1 || platform.indexOf('win') > -1) {
+    return false;
+  }
+  
+  // Jika Linux, pastikan bukan Android
+  if (platform.indexOf('linux') > -1 && !/android/.test(userAgent)) {
+    return false;
+  }
+  
+  const isMobileUA = /iphone|ipod|android/.test(userAgent);
+  const isTablet = /ipad|android(?=.*mobile)/i.test(userAgent);
+  
+  if (!isMobileUA && !isTablet) return false;
+  
+  const hasTouch = 'ontouchstart' in window;
+  const viewportRatio = window.innerHeight / window.innerWidth;
+  const isMobileRatio = viewportRatio > 1.5 || viewportRatio < 0.6;
+  
+  return hasTouch && isMobileRatio;
+}
+
+// Fungsi untuk menampilkan profil
+function showProfile(userHashid) {
+  if (userHashid) {
+    window.location.href = '/profile/' + userHashid;
+  }
+}
+
+$(document).ready(function(){
+  var isMobile = isTrueMobile();
+  
+  // Original dropdown
+  $('#dropDown').click(function(){
+    $('.drop-down').toggleClass('drop-down--active');
+  });
+  
+  // Profile dropdown - FIXED
+  $('#profileDropdownTrigger').click(function(e){
+    e.stopPropagation();
+    
+    // Ambil hashid dari data attribute
+    const userHashid = $(this).data('user-hashid');
+    
+
+    $('.profile-dropdown-container').toggleClass('active');
+    
+  });
+  
+  // Profile dropdown menu item click
+  $('.profile-dropdown__item[data-user-hashid]').click(function(e) {
+    const userHashid = $(this).data('user-hashid');
+    if (userHashid) {
+      showProfile(userHashid);
+    }
+  });
+  
+  // Close dropdown when clicking outside
+  $(document).click(function(){
+    $('.profile-dropdown-container').removeClass('active');
+    $('.drop-down').removeClass('drop-down--active');
+  });
+});
+</script>

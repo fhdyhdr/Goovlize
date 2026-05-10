@@ -1,0 +1,1300 @@
+  .music-player {
+    --primary-color: #ddd;
+    --secondary-color: #999;
+    --green-color: #2d5;
+    --padding: 1em;
+    background-color: var(--color-7);
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.828));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 5.2rem;
+    color: var(--primary-color);
+    z-index: 10020 !important;
+    transition: all 0.7s ease;
+  }
+
+  .music-player .fa-heart {
+    font-size: 20px;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .artist {
+    font-size: 0.9em;
+  }
+
+  .song-bar {
+    position: absolute;
+    left: var(--padding);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1.5rem;
+    width: 25%;
+    transition: opacity 0.5s ease;
+  }
+
+  .song-infos {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .song-description {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .icons {
+    margin-left: auto; /* Menempatkan ikon ke posisi kanan */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1em;
+  }
+
+  .image-container {
+    --size: 3.5em;
+    flex-shrink: 0;
+    width: var(--size);
+    height: var(--size);
+  }
+
+  .image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 3px;
+  }
+
+  .song-description p {
+    margin: 0.2em;
+  }
+
+  .title,
+  .artist {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+  }
+
+  .artist {
+    color: var(--secondary-color);
+  }
+
+  .control-buttons {
+    display: flex;
+    align-items: center;
+    gap: 2em;
+  }
+
+  .progress-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 1002;
+  }
+
+  .other-features {
+    position: absolute;
+    right: var(--padding);
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+  }
+
+  /* MOBILE */
+
+  :root[style*="--device: mobile"] .volume-container {
+    display: none !important;
+  }
+
+  @keyframes contentOut {
+    from {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(70px) scale(0.9); /* Scale down ke 90% */
+    }
+  }
+
+  .background-play .control-play path {
+    fill: #000000; /* Warna SVG akan berubah */
+  }
+
+  .background-play {
+    background-color: #fff;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .control-buttons .svg-icon {
+    width: 24px;
+    height: 24px;
+    fill: #fff;
+    cursor: pointer;
+  }
+
+  .control-buttons i {
+    font-size: 19px;
+  }
+
+  .svg-background {
+    background-color: var(--color-7);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .svg-background .svg-icon {
+    width: 27px;
+    height: 27px;
+    fill: #fff;
+  }
+
+  .mobile-play {
+    fill: #fff;
+  }
+
+  @media screen and (max-width: 768px) {
+
+    .image-container {
+      --size: 2.5em;
+      width: var(--size);
+      height: var(--size);
+    }
+
+    .progress-player {
+      display: block; /* digunakan untuk tampilkan progress di area player */
+      transition: all 0.4s ease;
+      transform: translateY(-40px);
+      opacity: 0;
+    }
+
+    .wrapper .progress-container {
+      position: relative;
+      visibility: hidden;
+    }
+
+    .wrapper .bottomContent.expand .progress-container {
+      visibility: visible;
+      transition: all 0.4s 0.2s ease;
+      transform: translateY(-10px);
+      opacity: 1;
+    }
+
+    .wrapper .settings i:last-child {
+      font-size: 19px;
+    }
+
+    .wrapper .bottomContent.expand .progress-container .progress-time {
+      display: inline-block;
+    }
+
+    .bottomContent.expand .btnPlay .svg-icon {
+      width: 30px;
+      height: 30px;
+    }
+
+    .bottomContent.expand .prevplayscreen {
+      width: 27px;
+      height: 27px;
+    }
+
+    .bottomContent.expand .nextplayscreen {
+      width: 27px;
+      height: 27px;
+    }
+
+    .bottomContent.expand #randomBtnDesk i {
+      font-size: 22px;
+    }
+
+    .bottomContent.expand #repeatBtn i {
+      font-size: 22px;
+    }
+
+    .bottomContent .btnPlay .svg-icon {
+      width: 27px;
+      height: 27px;
+    }
+
+    .bottomContent .prevplayscreen {
+      width: 25px;
+      height: 25px;
+    }
+
+    .bottomContent .nextplayscreen {
+      width: 25px;
+      height: 25px;
+    }
+
+    .bottomContent #randomBtnDesk i {
+      font-size: 20px;
+    }
+
+    .bottomContent #repeatBtn i {
+      font-size: 20px;
+    }
+
+    .bottomContent .progress-container {
+      flex-direction: column;
+      align-items: stretch;
+      width: 110%;
+    }
+
+    .bottomContent .progress-container .time-container {
+      display: flex;
+      justify-content: space-between;
+      position: absolute;
+      width: 100%; /* <== penting */
+      left: 0;
+      bottom: -10px; /* atau atur sesuai posisi yang diinginkan */
+    }
+
+    .bottomContent .progress-container .progress-time {
+      position: static; /* hilangkan absolute */
+      display: inline-block;
+      background-color: transparent;
+      font-size: 12px;
+      padding: 0;
+      color: var(--primary-color);
+    }
+
+    .player i {
+      font-size: 20px;
+    }
+
+     :root[style*="--device: desktop"] #repeatBtnDesk{
+      display: none;
+    }
+
+    :root[style*="--device: desktop"] #randomBtnDesk{
+      display: none;
+    }
+    .music-player.expanded .mobile-play {
+      margin-right: 0;
+    }
+
+
+
+
+  }
+
+
+
+  @media screen and (max-width: 580px) {
+   .desktop-control {
+      display: none !important;
+    }
+
+    .control-buttons{
+      display: none;
+    }
+
+    .volume-container {
+        display: none !important;
+      }
+
+    :root[style*="--device: desktop"] .smalldesk {
+      display: inline-block !important;
+      width: 22px;
+      height: 22px;
+      margin-right: 10px;
+      cursor: pointer;
+    }
+
+    :root[style*="--device: desktop"] .mobile-play{
+      display: inline-block !important;
+      width: 22px;
+      height: 22px;
+      margin-right: 10px;
+      cursor: pointer;
+    }
+    
+    .song-bar {
+      width: 100%;
+      gap: 0.5rem;
+    }
+
+    .song-infos {
+      flex-grow: 1;
+    }
+    .song-description {
+      max-width: 160px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    :root[style*="--device: desktop"] .favFoot {
+      margin-right: 190px;
+      flex-shrink: 0;
+      padding-right: 10px;
+    }
+
+    
+    :root[style*="--device: mobile"] .favFoot {
+      margin-right: 140px;
+      flex-shrink: 0;
+      padding-right: 10px;
+    }
+    .artist {
+      font-size: 0.75em;
+    }
+  }
+
+  .progress-time {
+    position: absolute;
+    top: -25px; /* Atur agar muncul di atas progress bar */
+    color: var(--primary-color); /* Sesuai tema */
+    font-size: 12px;
+    background-color: rgba(0, 0, 0, 0.7); /* Latar belakang semi-transparan */
+    padding: 2px 5px;
+    border-radius: 4px;
+    display: none; /* Sembunyikan secara default */
+  }
+
+  :root[style*="--device: desktop"] .start-time {
+    left: 0; /* Posisi di awal */
+  }
+
+  :root[style*="--device: desktop"] .end-time {
+    right: 0; /* Posisi di akhir */
+  }
+
+  /* Munculkan saat progress bar di-hover */
+  :root[style*="--device: desktop"] .progress-container:hover .progress-time {
+    display: block;
+  }
+
+  .player-progressbar {
+    position: relative;
+    width: 100%;
+    height: 4px;
+    border-radius: 10px;
+    background-color: rgb(82, 82, 82);
+    margin: 0 auto 20px auto;
+    position: relative;
+    cursor: pointer;
+  }
+
+  .player-bar {
+    height: 100%;
+    width: 0;
+    background: #50b498;
+    border-radius: 10px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    transition: width 0.7s ease-out;
+  }
+
+  .time-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px; /* Jarak antara progress bar dan waktu */
+    font-size: 12px; /* Ukuran font */
+    color: #fff; /* Warna teks */
+  }
+
+  /* Container volume */
+  .volume-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 150px; /* Atur lebar default */
+    max-width: 150px; /* Pastikan tidak berubah */
+    overflow: hidden; /* Hindari perubahan ukuran */
+  }
+
+  .volume-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px; /* Pastikan ukuran tetap */
+  }
+
+  /* Ikon volume */
+  .volume-icon i {
+    font-size: 15px;
+    cursor: pointer;
+    color: #fff;
+    transition: color 0.3s ease;
+  }
+
+  /* Progress bar container */
+  .volume-bar-container {
+    flex: 1;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+  }
+
+  /* Progress bar isi */
+  .volume-bar {
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+
+  .volume-fill {
+    height: 100%;
+    width: 80%; /* Default volume */
+    background: linear-gradient(to right, #4caf50, #00bcd4);
+    border-radius: 10px;
+  }
+
+  .wrapper {
+    display: none;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    letter-spacing: 0.8px;
+    position: fixed;
+    z-index: 10040 !important;
+    height: 100dvh !important;
+    overflow-y: auto;
+  }
+
+  .wrapper {
+    transform: translateY(0);
+    transition: transform 0.3s ease;
+  }
+
+
+
+  .wrapper .content {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    box-shadow: 0px 30px 80px rgba(0, 0, 0, 0.3);
+  }
+
+  .wrapper .heartFoot {
+    font-size: 24px;
+    transition: transform 0.3s ease;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .fave {
+    color: #ffff;
+    animation: fave 0.4s ease;
+  }
+
+  @keyframes fave {
+    50% {
+      transform: scale(1.4);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  .wrapper .content .topContent {
+    width: 100%;
+    max-height: 60px;
+    background-color: var(--color-7);
+    background-image: linear-gradient(rgba(0, 0, 0, 0.186));
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0;
+    box-sizing: border-box;
+  }
+
+  .menuBar {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    box-sizing: border-box;
+    flex: 2;
+    text-align: center;
+  }
+
+  .menuBar .scroll-wrapper {
+    overflow: hidden;
+    white-space: nowrap;
+    display: block;
+    width: 100%;
+    margin: 0 60px;
+  }
+
+  .menuBar .appName {
+    display: inline-block;
+    padding-left: 100%;
+    animation: marquee 13s linear infinite;
+    white-space: nowrap;
+  }
+
+  @keyframes marquee {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+
+  .wrapper .content .topContent .musicGroups {
+    width: 100%;
+    height: 80px;
+    margin-top: 25px;
+    opacity: 0;
+    transform: translateX(100px);
+    transition: all 0.4s ease;
+    visibility: hidden;
+    cursor: grab;
+  }
+  .wrapper .content .topContent .musicGroups:active {
+    cursor: grabbing;
+  }
+  .wrapper .content .topContent .musicGroups .swiper-slide {
+    width: 150px;
+    height: 80px;
+  }
+  .wrapper .content .topContent .musicGroups .swiper-slide:first-child {
+    margin-left: 20px;
+  }
+  .wrapper .content .topContent .musicGroups .swiper-slide:last-child {
+    margin-right: 20px;
+  }
+
+  .wrapper .content .topContent .musicGroups .group {
+    position: relative;
+    border-radius: 4px;
+    cursor: pointer;
+    overflow: hidden;
+  }
+  .wrapper .content .topContent .musicGroups .group:before {
+    position: absolute;
+    content: "";
+    width: 100%;
+    height: 30px;
+    bottom: 0;
+    z-index: 2;
+  }
+  .wrapper .content .topContent .musicGroups .group figure {
+    margin: 0;
+    height: 100%;
+    width: 100%;
+  }
+  .wrapper .content .topContent .musicGroups .group figure img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(0.2);
+  }
+  .wrapper .content .topContent .musicGroups .group figure:before {
+    position: absolute;
+    content: "";
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(0deg, #000000 10%, transparent 100%);
+    top: 0;
+    left: 0;
+    z-index: 1;
+  }
+  .wrapper .content .topContent .musicGroups .group .titleGroup {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align: left;
+  z-index: 3;
+  height: 20px;
+  display: flex;
+  align-items: flex-start; /* icon di atas */
+  justify-content: flex-start;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  padding: 0 8px;
+  line-height: 1.2em;
+  box-sizing: border-box;
+}
+
+.titleGroup i {
+  flex-shrink: 0;
+  margin-top: 2px; /* agar rata atas dengan teks */
+}
+
+.titleText {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: calc(1.2em * 1); /* jaga agar 1 baris tetap selevel dg baris ke-2 */
+  line-height: 1.2em;
+}
+
+
+
+
+  .wrapper .content .topContent.expand {
+    max-height: 190px;
+    transition: all 0.4s ease;
+  }
+  .wrapper .content .topContent.expand .topExpand {
+    transform: rotate(180deg);
+  }
+  .wrapper .content .topContent.expand .musicGroups {
+    opacity: 1;
+    transform: translateX(0px);
+    transition: all 0.4s 0.2s ease;
+    height: 100%;
+    visibility: visible;
+  }
+  .wrapper .content .middleContent {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+
+  .topcollage-grid {
+    width: 100%;
+    height: 100%;
+  }
+
+  .topplaylist-icon {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .topcollage-item {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+  }
+
+  .wrapper .content .middleContent .albumContent {
+    margin: 40px 0 20px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .wrapper .content .middleContent .albumContent.small {
+    width: 200px;
+  }
+  .wrapper .content .middleContent .albumContent.small .albumCover {
+    width: 200px;
+    height: 200px;
+    transition: all 0.4s ease;
+  }
+  @media screen and (max-height: 600px) {
+    .wrapper .content .middleContent .albumContent {
+      width: 200px;
+    }
+    .wrapper .content .middleContent .albumContent .albumCover {
+      width: 200px;
+      height: 200px;
+      transition: all 0.4s ease;
+    }
+  }
+  .wrapper .content .middleContent .albumCover {
+    width: 300px;
+    height: 300px;
+    overflow: hidden;
+    box-shadow: 0px 30px 40px rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    position: relative;
+    transition: all 0.4s 0.2s ease;
+    z-index: -1;
+  }
+
+  .wrapper .content .middleContent .albumCover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+  }
+  .wrapper .content .middleContent .artistName,
+  .wrapper .content .middleContent .songName {
+    text-align: center;
+    font-weight: 400;
+    font-size: 1em;
+    line-height: 20px;
+    text-align: center;
+    letter-spacing: 0.04em;
+    z-index: 2;
+  }
+  .wrapper .content .middleContent .artistName {
+    text-transform: uppercase;
+    margin: 30px 0 20px 0;
+    font-size: 1.5em;
+    font-weight: 600;
+  }
+  .wrapper .content .middleContent .settings {
+    width: 100%;
+    height: 40px;
+    position: absolute;
+    top: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 20px 0 20px;
+    box-sizing: border-box;
+    position: fixed;
+    transition: all 0s ease;
+    transform: translateY(-100px);
+    opacity: 0;
+  }
+  .wrapper .content .middleContent .playlist .playlistBg:before {
+    position: absolute;
+    content: "";
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background: linear-gradient(145deg, rgba(0, 0, 0, 0.8) -20%, transparent 50%);
+  }
+  .wrapper .content .middleContent .playlist.selected .checkbox:before {
+    width: 20px;
+    height: 20px;
+    opacity: 1;
+  }
+
+  .wrapper .content .middleContent .swiper-container {
+    height: 100%;
+  }
+  .wrapper .content .middleContent .swiper-slide {
+    width: 280px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .wrapper .content .middleContent .swiper-slide.open {
+    transform: translateY(0);
+  }
+  .wrapper .content .middleContent .swiper-slide-active .settings {
+    transition: all 0.4s 0.4s ease;
+    opacity: 1;
+    transform: translateY(0px);
+  }
+
+  .wrapper .content .bottomContent {
+    width: 100%;
+    min-height: 140px;
+    max-height: 140px;
+    background-color: #2a2b2f39;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+
+    transition: all 0.4s 0.2s ease;
+    padding: 5px 30px 20px 30px;
+    box-sizing: border-box;
+  }
+
+  .wrapper .content .bottomContent .player {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s 0.2s ease;
+    margin-bottom: 20px;
+  }
+  .wrapper .content .bottomContent .player .btnPlay {
+    background-color: var(--color-7);
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.2s ease;
+  }
+
+  .wrapper .content .bottomContent.expand {
+    transition: all 0.4s ease;
+    min-height: 200px;
+    max-height: 200px;
+    padding: 10px 30px 20px 30px;
+  }
+  .wrapper .content .bottomContent.expand .bottomExpand {
+    transform: rotate(0deg);
+    opacity: 1;
+  }
+
+  .wrapper .content .bottomContent.expand .player .btnPlay {
+    width: 60px;
+    height: 60px;
+  }
+  .wrapper .content .bottomContent.expand .player .btnPlay .icon:before {
+    width: 32px;
+    height: 32px;
+  }
+  .wrapper .content .bottomContent.expand .player .btnPlay .icon:active:before {
+    width: 38px;
+    height: 38px;
+  }
+
+  .swiper-button-prev,
+  .swiper-button-next {
+    all: unset;
+  }
+
+  .albumBg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    z-index: -1;
+    background-image: linear-gradient(to top, black, transparent),
+      linear-gradient(to bottom, var(--color-7), var(--color-7), black),
+      linear-gradient(to bottom, var(--color-7), black);
+  }
+
+  @keyframes slideUpSmooth {
+    0% {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideDownSmooth {
+    0% {
+      transform: translateY(0);
+    }
+    100% {
+      transform: translateY(130%);
+    }
+  }
+
+  /* Tambahkan ke CSS kamu */
+  .current-cover.animate-left {
+    animation: slideOutLeft 0.3s forwards;
+  }
+  .current-cover.animate-right {
+    animation: slideOutRight 0.3s forwards;
+  }
+
+  @keyframes slideOutLeft {
+    0% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    100% {
+      opacity: 0;
+      transform: translateX(-100px);
+    }
+  }
+  @keyframes slideOutRight {
+    0% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    100% {
+      opacity: 0;
+      transform: translateX(100px);
+    }
+  }
+
+  .current-cover.fade-in {
+    animation: fadeIn 0.3s forwards;
+  }
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+      transform: scale(1.1);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .downbottom.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .downbottom {
+    transition: transform 0.3s ease;
+    transform: rotate(0deg);
+  }
+
+  .downbottom.rotate-up {
+    transform: rotate(180deg);
+  }
+
+  .current-cover.animate-left {
+    animation: slideOutLeft 0.3s forwards;
+  }
+  .current-cover.animate-right {
+    animation: slideOutRight 0.3s forwards;
+  }
+
+  @keyframes slideOutLeft {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+  @keyframes slideOutRight {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+
+  .current-cover.fade-in {
+    animation: fadeIn 0.3s forwards;
+  }
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+      transform: scale(1.1);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .fade-out-left {
+    animation: fadeOutLeft 0.3s forwards;
+  }
+  .fade-out-right {
+    animation: fadeOutRight 0.3s forwards;
+  }
+
+  @keyframes fadeOutLeft {
+    0% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    100% {
+      opacity: 0;
+      transform: translateX(-50px);
+    }
+  }
+
+  @keyframes fadeOutRight {
+    0% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    100% {
+      opacity: 0;
+      transform: translateX(50px);
+    }
+  }
+
+  .fade-in {
+    animation: fadeIn 0.3s forwards;
+  }
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+      transform: scale(1.1);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  :root[style*="--device: desktop"] .artist-item:hover {
+    text-decoration: underline;
+  }
+
+  .svg-icon {
+    color: #fff;
+    fill: #fff;
+  }
+
+  /* PROFILE SIDEBAR */
+
+
+  .table_center {
+    display: table-cell;
+    vertical-align: middle;
+  }
+
+
+  .drop-down {
+    display: inline-block;
+    position: relative;
+  }
+
+  /* Profile dropdown styles */
+  .profile-dropdown-container {
+    position: relative;
+    display: inline-block;
+    margin-right: 20px;
+  }
+
+  .profile {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+  }
+
+  .profile-dropdown__menu-box {
+    position: absolute;
+    width: 200px; /* Lebar dropdown diperbesar */
+    right: 0; /* Agar dropdown muncul di sebelah kanan profile */
+    background-color: #1e1e1e;
+    border-radius: 8px;
+    box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s;
+    visibility: hidden;
+    opacity: 0;
+    margin-top: 10px;
+    z-index: 100;
+  }
+
+  .profile-dropdown__menu-box:before {
+    content: "";
+    background-color: transparent;
+    border-right: 8px solid transparent;
+    position: absolute;
+    border-left: 8px solid transparent;
+    border-bottom: 8px solid #fff;
+    border-top: 8px solid transparent;
+    top: -15px;
+    right: 15px;
+  }
+
+  .profile-dropdown__menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .profile-dropdown__item {
+    font-size: 14px;
+    padding: 15px 20px;
+    text-align: left;
+    font-weight: 500;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.25s ease, color 0.25s ease;
+    position: relative;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .profile-dropdown__item:hover {
+    color: #3d6def;
+  }
+
+  .profile-dropdown__item:last-of-type {
+    border-bottom: none;
+  }
+
+  .profile-dropdown__item:before {
+    content: "";
+    position: absolute;
+    width: 3px;
+    height: 28px;
+    background-color: #3d6def;
+    left: -13px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: none;
+  }
+
+  .profile-dropdown__item:hover:before {
+    display: block;
+  }
+
+  /* Active state */
+  .profile-dropdown-container.active .profile-dropdown__menu-box {
+    visibility: visible;
+    opacity: 1;
+    margin-top: 15px;
+  }
+
+  .profile-dropdown__item:hover {
+    background-color: rgba(61, 109, 239, 0.1); /* transparan biru */
+    color: #3d6def;
+  }
+
+
+
+
+
+    .bottom-navbar {
+        position: fixed;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        width: 100%;
+        padding: 7px 0;
+        background: #0e0f0ced;
+        box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.05);
+        z-index: 10010 !important;
+        height: 80px;
+      }
+
+      .bottom-navbar button {
+        cursor: pointer;
+        width: 60px;
+        height: 50px;
+        border-radius: 20px;
+        background: transparent;
+        transition: all 0.25s ease;
+        color: #fff;
+        margin-top: 20px;
+        border: none;
+      }
+
+      .bottom-navbar button.active {
+        color: #e84c4f;
+      }
+
+      .bottom-navbar button i {
+        font-size: 1.2rem;
+        pointer-events: none;
+      }
+
+      .bottom-navbar .effect {
+        position: absolute;
+        width: 60px;
+        height: 50px;
+        border-radius: 18px;
+        background: #e84c4f26;
+        opacity: 0;
+        margin-top: 20px;
+      }
+
+
+
+       @media only screen and (orientation: landscape) {
+
+        :root[style*="--device: mobile"] .music-player {
+          display: none !important;
+        }
+        
+        :root[style*="--device: mobile"] .bottom-navbar {
+          display: none !important;
+        }
+
+       }
+
+
+
+    :root[style*="--device: mobile"] .music-player {
+      bottom: 64px;
+      height: 4rem;
+      border-radius: 20px;
+    }
+
+    :root[style*="--device: mobile"] .music-player .progress-container {
+      display: none;
+    }
+
+
+    
+    :root[style*="--device: mobile"] .mobile-play {
+      display: inline-block !important;
+      margin-right: 20px;
+      width: 24px;
+      height: 24px;
+    }
+
+
+
+
+
+
+#toggleLoaderBtn {
+
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.7);
+  color: #ccc;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+#toggleLoaderBtn:hover {
+  background: rgba(0, 0, 0, 0.9);
+  transform: scale(1.1);
+}
+
+#toggleLoaderBtn.active {
+  color: #4CAF50; /* Hijau saat aktif */
+}
+
+#toggleLoaderBtn.inactive {
+  color: #bf6868; /* Abu-abu saat tidak aktif */
+}
+
+
+

@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta charset="UTF-8" />
+    <title>Album - <%= album.album_name %></title>
+    <link rel="stylesheet" href="/css/n.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+      /* Styles sama seperti playlist */
+      .dropdown-container { position: relative; display: inline-block; }
+      .dropdown-content { display: none; position: absolute; right: 0; top: 100%; background-color: #2a292f; min-width: 180px; z-index: 1; border-radius: 6px; }
+      .dropdown-content a { color: #fff; padding: 10px 14px; text-decoration: none; display: flex; align-items: center; gap: 10px; font-size: 14px; }
+      .dropdown-content i { font-size: 15px; }
+      .dropdown-content a:hover { background-color: #1b1b1b; }
+      .show { display: block; }
+      .dropdown-submenu { position: relative; }
+      .dropdown-submenu > a { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; color: #fff; font-size: 14px; gap: 10px; }
+      .dropdown-submenu > a:hover { background-color: #1b1b1b; }
+      .arrow { margin-left: auto; font-size: 20px; opacity: 0.7; }
+      .submenu-content { display: none; position: absolute; top: 0; right: 100%; background-color: #37353E; min-width: 160px; border-radius: 6px; z-index: 2; }
+      .submenu-content a { padding: 10px 14px; display: flex; align-items: center; gap: 8px; text-decoration: none; color: #fff; font-size: 14px; }
+      .submenu-content a:hover { background-color: #1b1b1b; }
+      .dropdown-submenu:hover .submenu-content { display: block; }
+      .playlist-name { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; text-overflow: ellipsis; line-height: 1.2em; max-height: calc(1.2em * 3); }
+
+      /* PERBAIKAN: Track album hover area */
+      .track-album {
+        font-size: 0.875rem;
+        color: var(--text_muted);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: left;
+        position: relative;
+        display: block;
+        cursor: pointer;
+        width: 100%;
+      }
+
+      /* Hover hanya pada teks, bukan seluruh area */
+      :root[style*="--device: desktop"] .track-album:hover {
+        text-decoration: underline;
+      }
+
+      /* PERBAIKAN: Container untuk track-album agar benar-benar rata kiri */
+      .track-album-container {
+        flex: 1;
+        display: block;
+        padding: 0 1rem;
+        text-align: left;
+        min-width: 0;
+      }
+
+      /* PERBAIKAN: Track number dengan width tetap untuk alignment */
+      .track-number {
+        margin-right: 10px;
+        min-width: 25px;
+        text-align: center;
+        display: inline-block;
+        font-variant-numeric: tabular-nums;
+        flex-shrink: 0;
+      }
+      
+      /* STYLE TAMBAHAN KHUSUS ALBUM */
+      .album-artist-info {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 8px;
+      }
+      
+      .album-artist-avatar {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+      
+      .album-artist-name {
+        font-size: 0.9rem;
+        color: var(--text);
+        cursor: pointer;
+      }
+      
+      .album-artist-name:hover {
+        text-decoration: underline;
+      }
+      
+      .album-release-year {
+        font-size: 0.9rem;
+        color: var(--text_muted);
+        margin-top: 4px;
+      }
+      
+      .album-badge {
+        background-color: var(--color-album);
+        color: white;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        margin-left: 8px;
+      }
+      
+      .album-tracks-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 3rem;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 1rem;
+      }
+      
+      .album-tracks-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+      }
+      
+      .album-tracks-count {
+        font-size: 0.9rem;
+        color: var(--text_muted);
+      }
+      
+      /* Efek visual khusus untuk album */
+      .album-cover-glow {
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+      }
+      
+      /* Animasi untuk album cover */
+      @keyframes album-cover-rotate {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      
+      .album-cover-playing {
+        animation: album-cover-rotate 20s linear infinite;
+      }
+      
+      /* STYLE BARU UNTUK VINYL RECORD EFFECT YANG DIPERBAIKI */
+      .banner-img-container {
+        position: relative;
+        display: inline-block;
+      }
+      
+      .vinyl-record {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        width: 40%;
+        height: 40%;
+        border-radius: 50%;
+        background: 
+          radial-gradient(
+            circle at center, 
+            #000 0%, 
+            #000 25%, 
+            #1a1a1a 26%, 
+            #1a1a1a 35%,
+            #000 36%,
+            #000 45%,
+            #1a1a1a 46%,
+            #1a1a1a 100%
+          );
+        box-shadow: 
+          0 4px 20px rgba(0, 0, 0, 0.8),
+          0 0 0 1px rgba(255, 255, 255, 0.1),
+          inset 0 0 20px rgba(0, 0, 0, 0.5);
+        z-index: 2;
+        overflow: hidden;
+        transform: rotate(15deg);
+        transition: transform 0.3s ease;
+      }
+      
+      .vinyl-record::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 25%;
+        height: 25%;
+        background: 
+          radial-gradient(circle at center, #000 0%, #000 70%, #333 71%, #333 100%);
+        border-radius: 50%;
+        z-index: 3;
+        box-shadow: 0 0 8px rgba(255, 255, 255, 0.1);
+      }
+      
+      .vinyl-record::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 6%;
+        height: 6%;
+        background: #fff;
+        border-radius: 50%;
+        z-index: 4;
+        box-shadow: 0 0 4px rgba(255, 255, 255, 0.3);
+      }
+      
+      .vinyl-record-image {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 50%;
+        height: 50%;
+        border-radius: 50%;
+        object-fit: cover;
+        z-index: 2;
+        opacity: 0.85;
+        filter: contrast(1.1) brightness(0.7);
+        box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+      }
+      
+      /* Efek groove pada vinyl */
+      .vinyl-record .grooves {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: 
+          repeating-radial-gradient(
+            circle at center,
+            transparent 0%,
+            transparent 2%,
+            rgba(40, 40, 40, 0.3) 2%,
+            rgba(40, 40, 40, 0.3) 3%
+          );
+        z-index: 1;
+      }
+      
+      .banner-img-container:hover .vinyl-record {
+        transform: rotate(45deg);
+        cursor: pointer;
+      }
+      
+      /* Responsive adjustments */
+      @container music-container (max-width: 500px) {
+        .vinyl-record {
+          width: 50%;
+          height: 50%;
+          bottom: 5px;
+          right: 5px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="playlist-header">
+      <div class="header-content">
+        <div class="back-button" onclick="history.back()">
+          <i class="fa-solid fa-chevron-left"></i>
+        </div>
+        <div class="header-text-container">
+          <h1 class="header-title"><%= album.album_name %></h1>
+          <p class="header-subtitle muted">
+            <%= album.totalTracks || 0 %> tracks • 
+            <% if (album.artists && album.artists.length > 0) { %>
+              <%= album.artists.map(a => a.name).join(', ') %>
+            <% } else { %>
+              Various Artists
+            <% } %>
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <div class="banner">
+      <div class="banner-img-wrapper banner-album">
+        <div class="nav-icons">
+          <i onclick="backLeft()" class="fa-solid fa-circle-chevron-left"></i>
+          <i onclick="backRight()" class="fa-solid fa-circle-chevron-right"></i>
+        </div>
+
+        <div class="banner-content">
+          <div class="banner-img-container">
+            <img src="<%= album.album_cover || '/images/default-album.png' %>" class="banner-img album-img album-cover-glow" />
+            <!-- VINYL RECORD EFFECT YANG DIPERBAIKI -->
+            <div class="vinyl-record">
+              <div class="grooves"></div>
+              <img src="<%= album.album_cover || '/images/default-album.png' %>" class="vinyl-record-image" />
+            </div>
+          </div>
+          <div class="banner-text">
+            <div class="banner-text-content">
+              <div style="display: flex; align-items: center;">
+                <h3><%= album.album_name %></h3>
+                <span class="album-badge">ALBUM</span>
+              </div>
+              <p class="muted">
+                <% if (album.release_year) { %>
+                  Released in <%= album.release_year %>
+                <% } else { %>
+                  Album
+                <% } %>
+              </p>
+              
+              <% if (album.artists && album.artists.length > 0) { %>
+                <div class="album-artist-info">
+                  <% if (album.artists.length === 1 && album.artists[0].avatar) { %>
+                    <img src="<%= album.artists[0].avatar %>" class="album-artist-avatar" />
+                  <% } %>
+                  <span class="album-artist-name" onclick="showArtist('<%= album.artists[0].hashid %>')">
+                    <%= album.artists.map(a => a.name).join(', ') %>
+                  </span>
+                </div>
+              <% } %>
+              
+              <p class="playlist-description">
+                <%= album.formattedDuration || '0 min' %> • <%= album.totalTracks || 0 %> tracks • 
+                <% if (album.genre) { %>
+                  <%= album.genre %>
+                <% } else { %>
+                  Various genres
+                <% } %>
+              </p>
+            </div>
+            <div class="playlist-stats">
+              <% if (album.tracks && album.tracks.length > 0) { %>
+              <div onclick="buttonAlbum()" class="stat-item album-btn">
+                <svg class="svg-icon playlist-play" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                  <path fill-rule="evenodd" d="M5 21V3c0-.79116579.87524596-1.26900738 1.54075759-.84117848L20.5407576 11.1588215c.6123232.3936364.6123232 1.2887206 0 1.682357l-14.00000001 9C5.87524596 22.2690074 5 21.7911658 5 21zm2-1.8316655L18.1507426 12 7 4.8316655v14.336669z"/>
+                </svg>
+              </div>
+              <% } %>
+              <div onclick="albumFav(this)" class="stat-item" data-id="<%= album.id_al %>">
+                <i
+                  class="button__icon <%= isAlbumFavorite ? 'fas' : 'far' %> fa-bookmark"
+                  style="<%= isAlbumFavorite ? 'color:#fff' : '' %>"
+                ></i>
+              </div>
+              <div onclick="share()" class="stat-item">
+                <i class="fa-solid fa-share"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Header khusus untuk daftar lagu album -->
+    <div class="album-tracks-header">
+      <div class="album-tracks-title">Tracks</div>
+      <div class="album-tracks-count"><%= album.totalTracks || 0 %> songs</div>
+    </div>
+
+    <div class="tracks">
+    <% album.tracks.forEach(function(track, index) { %>
+<div class="track-container listmusic"
+    onclick="trackClicked(this)"
+    data-id="<%= track.id_music %>"
+    data-src="<%= track.audio_file %>"
+    data-lyric="<%= track.lyric %>"
+    data-line-durations="<%= track.line_durations %>"
+    data-cover="<%= track.cover_music %>"
+    data-title="<%= track.title_music %>"
+    data-artist-ids="<%= track.artist_ids || '' %>"
+    data-artist-hashids="<%= track.artists.map(a => a.hashid).join(',') || '' %>"
+    data-artist="<%= track.artist_names || 'Unknown Artist' %>"
+    data-playlist="<%= track.playlist_hashid || album.hashid %>"
+    data-playlist-original="<%= track.playlist_original_id %>"
+    data-album-id="<%= album.id_al %>"
+    data-album-hashid="<%= track.album_hashid || album.hashid %>"
+    data-track-hashid="<%= track.hashid %>"
+    data-playlist_name="<%= album.album_name %>"
+    data-item="album"
+>
+        <div class="track-info">
+          <span class="track-number"><%= index + 1 %></span>
+          <img src="<%= track.cover_music %>" class="track-image" />
+          <div class="track-details">
+            <p class="track-title"><%= track.title_music %></p>
+            <p class="track-artist">
+              <% if (track.artists && track.artists.length > 0) { %>
+                <% track.artists.forEach(function(artist, idx) { %>
+                  <span class="clickable-artist" onclick="showArtist('<%= artist.hashid %>')">
+                    <%= artist.name %>
+                  </span><%= (idx < track.artists.length - 1) ? ', ' : '' %>
+                <% }); %>
+              <% } else { %>
+                <span>Unknown Artist</span>
+              <% } %>
+            </p>
+          </div>
+        </div>
+
+  
+
+        <span class="track-time"><%= track.duration %></span>
+        <div class="track-actions">
+          <i onclick="event.stopPropagation(); event.preventDefault(); trackHeart(this)"
+             class="<%= track.isFavorite ? 'fas' : 'far' %> fa-heart fav_playlist"
+             style="<%= track.isFavorite ? 'color:#ffff;' : '' %>"></i>
+
+          <div class="dropdown-container" onclick="event.stopPropagation();">
+            <i class="fa-solid fa-ellipsis track-menu" onclick="handleEllipsisClick(this)"></i>
+            <div class="dropdown-content">
+              <li class="favDropdown" onclick="trackHeartDropdown(this)">
+                <a href="javascript:void(0);">
+                  <i class="<%= track.isFavorite ? 'fas' : 'far' %> fa-heart" style="<%= track.isFavorite ? 'color:#ffff;' : '' %>"></i>
+                  <span>Favorites</span>
+                </a>
+              </li>
+
+              <!-- PERBAIKAN: Menu Artist dengan struktur yang sama seperti playlist -->
+              <% if (track.artists && track.artists.length === 1) { %>
+                <a href="javascript:void(0);" onclick="showArtist('<%= track.artists[0].hashid %>')">
+                    <i class="fa-solid fa-user"></i>Artist
+                </a>
+              <% } else if (track.artists && track.artists.length > 1) { %>
+                <div class="dropdown-submenu">
+                    <a href="javascript:void(0);">
+                        <i class="fa-solid fa-user"></i>
+                        <span>Artist</span>
+                        <span class="arrow">▸</span>
+                    </a>
+                    <div class="submenu-content">
+                        <% track.artists.forEach(function(artist, index) { %>
+                        <a href="javascript:void(0);" onclick="showArtist('<%= artist.hashid %>')">
+                            <%= artist.name %>
+                        </a>
+                        <% }); %>
+                    </div>
+                </div>
+              <% } else { %>
+                <a href="javascript:void(0);">
+                    <i class="fa-solid fa-user"></i>Unknown Artist
+                </a>
+              <% } %>
+
+              <div class="dropdown-submenu">
+                <a href="javascript:void(0);">
+                  <i class="fa-solid fa-plus"></i>
+                  <span>Add To Playlist</span>
+                  <span class="arrow">▸</span>
+                </a>
+                <div class="submenu-content">
+                  <% if (track.custom_playlists && track.custom_playlists.length > 0) { %> 
+                    <% track.custom_playlists.forEach(function(pl) { %>
+                      <li class="sub-addplaylist" data-playlist-id="<%= pl.id_cus %>" data-music-id="<%= track.id_music %>" onclick="addCusDesk('<%= pl.id_cus %>', '<%= track.id_music %>')">
+                        <a href="javascript:void(0);">
+                          <% if (pl.exists) { %>
+                            <i class="fa-solid fa-circle-check" style="color: #4caf50; margin-right: 5px"></i>
+                          <% } else { %>
+                            <i class="fa-regular fa-circle-check" style="color: #b0b0b0; margin-right: 5px"></i>
+                          <% } %>
+                          <span class="playlist-name"><%= pl.playlist_name %></span>
+                        </a>
+                      </li>
+                    <% }); %> 
+                  <% } %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <% }); %>
+    </div>
+
+    <footer class="row center"></footer>
+  </body>
+</html>
+
+<div style="display: none;" class="popup listMo">
+  <div class="popup-overlay"></div>
+  <div class="popup-content">
+
+    <div class="drag-handle">
+          <div class="drag-handle-line"></div>
+    </div>
+
+    <div class="album-page__track">
+      <img id="popupimage"
+        src=""
+        alt=""
+        class="__image" 
+      />
+      <div class="album-page__track__info">
+        <div id="popuptitle" class="info-name"></div>
+        <div id="popupartist" class="info-artist"></div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div onclick="popupHeartt(this)" class="grid-item" data-id="">
+        <i id="popupfavorite" class="far fa-heart"></i>
+        <span id="popupfavorite-text">Favorite</span>
+      </div>
+
+      <div onclick="toggleContent('artist')" class="grid-item">
+        <i class="fa-regular fa-address-book"></i><span>Artist</span>
+      </div>
+      
+      <div onclick="toggleContent('playlist')" class="grid-item">
+        <i class="fa-regular fa-square-plus"></i><span>Add Playlist</span>
+      </div>
+
+      <!-- PERBAIKAN: Button album/music yang dinamis -->
+      <div id="albumMobileButton" class="grid-item" data-hashid="">
+        <i class="fa-solid fa-compact-disc"></i>
+        <span>Album</span>
+      </div>
+
+      <div class="playlistCus">
+        <div class="playlist-wrapper"></div>
+      </div>
+    </div>
+
+    <i onclick="closePopup()" class="fa-solid fa-xmark"></i>
+  </div>
+</div>

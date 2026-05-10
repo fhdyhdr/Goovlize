@@ -1,0 +1,3012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music-Album Management - Admin Panel</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/admin/css/dashboard.css">
+    <link rel="stylesheet" href="/css/popup.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="/js/main.js" defer></script>
+
+    <style>
+        /* Main container styles */
+        .music-album-container {
+            padding: 20px;
+        }
+
+        .music-album-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .music-album-header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .music-album-header h1 i {
+            color: var(--primary-color);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 12px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 14px;
+            padding: 12px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            background: rgba(139, 92, 246, 0.05);
+        }
+
+        /* Stats cards */
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary-color);
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .stat-icon.music {
+            background: linear-gradient(135deg, #8B5CF6, #7C3AED);
+        }
+
+        .stat-icon.album {
+            background: linear-gradient(135deg, #3B82F6, #2563EB);
+        }
+
+        .stat-icon.relation {
+            background: linear-gradient(135deg, #10B981, #059669);
+        }
+
+        .stat-content {
+            flex: 1;
+        }
+
+        .stat-value {
+            font-size: 22px;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 3px;
+            line-height: 1;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        /* Filters */
+        .music-album-filters {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border-color);
+        }
+
+        .filter-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .filter-group {
+            flex: 1;
+        }
+
+        .filter-group label {
+            display: block;
+            color: var(--text-secondary);
+            font-size: 12px;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .filter-input {
+            width: 100%;
+            padding: 8px 12px;
+            background: var(--sidebar-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: white;
+            font-size: 13px;
+        }
+
+        .filter-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .search-container {
+            position: relative;
+        }
+
+        .clear-search {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 50%;
+            transition: all 0.2s;
+            font-size: 12px;
+        }
+
+        .clear-search:hover {
+            color: var(--primary-color);
+            background: rgba(139, 92, 246, 0.1);
+        }
+
+        /* Tabel */
+        .relations-table-container {
+            background: var(--card-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .compact-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .compact-table thead {
+            background: rgba(139, 92, 246, 0.1);
+        }
+
+        .compact-table th {
+            padding: 12px 10px;
+            text-align: left;
+            color: var(--text-primary);
+            font-size: 12px;
+            font-weight: 600;
+            border-bottom: 1px solid var(--border-color);
+            white-space: nowrap;
+        }
+
+        .compact-table td {
+            padding: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 12px;
+            vertical-align: middle;
+        }
+
+        .compact-table tbody tr {
+            transition: all 0.3s ease;
+        }
+
+        .compact-table tbody tr:hover {
+            background: rgba(139, 92, 246, 0.05);
+        }
+
+        .compact-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Kolom-kolom tabel */
+        .col-check {
+            width: 40px;
+            text-align: center;
+        }
+
+        .col-music {
+            min-width: 200px;
+        }
+
+        .col-album {
+            min-width: 180px;
+        }
+
+        .col-music-artist {
+            min-width: 150px;
+        }
+
+        .col-album-artist {
+            min-width: 150px;
+        }
+
+        .col-date {
+            min-width: 120px;
+        }
+
+        .col-actions {
+            width: 80px;
+            text-align: center;
+        }
+
+        /* Item styles dalam tabel */
+        .table-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .item-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            overflow: hidden;
+            flex-shrink: 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .item-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .item-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .item-title {
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 2px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .item-subtitle {
+            color: var(--text-secondary);
+            font-size: 10px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Album artist badge */
+        .album-artist-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 700;
+            background: rgba(59, 130, 246, 0.2);
+            color: #3B82F6;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .album-artist-badge i {
+            font-size: 8px;
+        }
+
+        /* Artist info */
+        .artist-info {
+            color: var(--text-secondary);
+            font-size: 11px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .artist-info img {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        /* Date info */
+        .date-info {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--text-secondary);
+            font-size: 11px;
+        }
+
+        .date-info i {
+            font-size: 10px;
+        }
+
+        /* Action buttons */
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .action-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+            background: var(--sidebar-bg);
+            color: var(--text-secondary);
+            position: relative;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .action-delete:hover {
+            border-color: var(--danger-color);
+            color: var(--danger-color);
+        }
+
+        .action-btn i {
+            font-size: 11px;
+        }
+
+        .action-btn .btn-tooltip {
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 3px 6px;
+            border-radius: 3px;
+            font-size: 9px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .action-btn:hover .btn-tooltip {
+            opacity: 1;
+            visibility: visible;
+            bottom: -15px;
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            background: var(--card-bg);
+            border-radius: 10px;
+            border: 2px dashed var(--border-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 200px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .empty-state i {
+            font-size: 36px;
+            color: var(--border-color);
+            margin-bottom: 15px;
+            opacity: 0.5;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .empty-state h3 {
+            color: var(--text-primary);
+            font-size: 18px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .empty-state p {
+            color: var(--text-secondary);
+            font-size: 13px;
+            margin-bottom: 20px;
+            max-width: 250px;
+            line-height: 1.4;
+        }
+
+        /* Pagination */
+        .relations-pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-top: 1px solid var(--border-color);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .pagination-info {
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+
+        .pagination-controls {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .pagination-btn {
+            padding: 6px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--sidebar-bg);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            background: rgba(139, 92, 246, 0.05);
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .page-numbers {
+            display: flex;
+            gap: 3px;
+        }
+
+        .page-number {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: var(--sidebar-bg);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 12px;
+        }
+
+        .page-number:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            background: rgba(139, 92, 246, 0.05);
+        }
+
+        .page-number.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* Loading indicator */
+        .filter-loading {
+            padding: 8px;
+            text-align: center;
+            color: var(--primary-color);
+            font-size: 12px;
+            display: none;
+        }
+
+        .filter-loading i {
+            margin-right: 6px;
+            font-size: 11px;
+        }
+
+        /* Bulk selection */
+        .bulk-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            padding: 12px 15px;
+            background: var(--card-bg);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            display: none;
+        }
+
+        .bulk-actions.active {
+            display: flex;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .bulk-selection-count {
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .bulk-select-all {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-secondary);
+            font-size: 12px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .bulk-select-all:hover {
+            color: var(--primary-color);
+        }
+
+        /* Checkbox styling */
+        .table-checkbox {
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
+            border: 2px solid var(--border-color);
+            background: var(--card-bg);
+            cursor: pointer;
+            display: none;
+        }
+
+        .bulk-mode .table-checkbox {
+            display: block;
+        }
+
+        .table-checkbox:checked {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .table-checkbox:checked::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 9px;
+            font-weight: bold;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger-color), #dc2626);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            font-size: 12px;
+            padding: 8px 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
+        }
+
+        /* Scrollable table container */
+        .table-scroll-container {
+            overflow-x: auto;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        /* Popup styling improvements */
+        .bigPopup .popup-content {
+            width: 95%;
+            max-width: 700px;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .popup-body-scroll {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            max-height: calc(90vh - 120px);
+            width: 100%;
+        }
+
+        .popup-actions {
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        /* Custom Select Styles for Add Popup */
+        .custom-select-container {
+            position: relative;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .select-search-wrapper {
+            position: relative;
+            margin-bottom: 8px;
+        }
+
+        .select-search-input {
+            width: 100%;
+            padding: 12px 40px 12px 15px;
+            border: 1px solid #444;
+            border-radius: 6px;
+            background-color: #2a2a2a;
+            color: white;
+            font-size: 14px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        .select-search-input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        .select-search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+            pointer-events: none;
+        }
+
+        .select-options {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            max-height: 250px;
+            overflow-y: auto;
+            background-color: #1a1a1a;
+            border: 1px solid #444;
+            border-radius: 6px;
+            z-index: 1000;
+            display: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .select-options.active {
+            display: block;
+        }
+
+        .select-option {
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            color: #eee;
+            font-size: 13px;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .select-option:last-child {
+            border-bottom: none;
+        }
+
+        .select-option:hover {
+            background-color: #2a2a2a;
+        }
+
+        .select-option.selected {
+            background-color: rgba(139, 92, 246, 0.2);
+            color: var(--primary-color);
+        }
+
+        .select-option .option-check {
+            margin-right: 8px;
+            display: none;
+            font-size: 11px;
+        }
+
+        .select-option.selected .option-check {
+            display: inline-block;
+        }
+
+        .selected-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 8px;
+            max-height: 100px;
+            overflow-y: auto;
+            padding: 5px;
+        }
+
+        .selected-tag {
+            background-color: #2a2a2a;
+            border: 1px solid #444;
+            border-radius: 15px;
+            padding: 6px 10px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .tag-remove {
+            cursor: pointer;
+            color: #888;
+            font-size: 11px;
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+
+        .tag-remove:hover {
+            color: #fff;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Loading, error, and empty states for dropdowns */
+        .select-option.loading-option,
+        .select-option.error-option,
+        .select-option.no-data {
+            color: #888;
+            text-align: center;
+            padding: 15px;
+            cursor: default;
+        }
+
+        .select-option.loading-option i,
+        .select-option.error-option i {
+            margin-right: 8px;
+        }
+
+        .select-option.error-option {
+            color: #ff6b6b;
+        }
+
+        .select-option.no-data {
+            font-style: italic;
+        }
+
+        /* Form groups in popups */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #eee;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .form-group h4 {
+            color: white;
+            font-size: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-group h4 i {
+            color: var(--primary-color);
+        }
+
+        .selection-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+
+        .selection-count {
+            background: var(--primary-color);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 8px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        /* Delete confirmation popup specific */
+        .deleteConfirmPopup .drag-handle-line {
+            background: linear-gradient(90deg, var(--danger-color), transparent);
+        }
+
+        .delete-confirm-content {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .delete-icon {
+            font-size: 48px;
+            color: var(--danger-color);
+            margin-bottom: 20px;
+        }
+
+        .delete-confirm-content h4 {
+            color: white;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+
+        .delete-confirm-content p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .warning-message {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 8px;
+            color: var(--danger-color);
+            font-size: 13px;
+            margin-top: 20px;
+        }
+
+        /* Message containers */
+        .album-message {
+            display: flex;
+            align-items: center;
+            padding: 10px 12px;
+            border-radius: 6px;
+            margin-top: 8px;
+            font-size: 13px;
+            animation: slideDown 0.3s ease;
+            display: none;
+        }
+
+        .album-message.error {
+            background-color: rgba(244, 67, 54, 0.1);
+            border: 1px solid rgba(244, 67, 54, 0.3);
+            color: #f44336;
+        }
+
+        .album-message.info {
+            background-color: rgba(33, 150, 243, 0.1);
+            border: 1px solid rgba(33, 150, 243, 0.3);
+            color: #2196f3;
+        }
+
+        .album-message.success {
+            background-color: rgba(76, 175, 80, 0.1);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+            color: #4CAF50;
+        }
+
+        .album-message i {
+            margin-right: 8px;
+            font-size: 14px;
+        }
+
+        /* Responsive design untuk tabel */
+        @media (max-width: 1200px) {
+            .compact-table th,
+            .compact-table td {
+                padding: 10px 8px;
+            }
+            
+            .col-music { min-width: 180px; }
+            .col-album { min-width: 160px; }
+            .col-music-artist { min-width: 130px; }
+            .col-album-artist { min-width: 130px; }
+            .col-date { min-width: 100px; }
+        }
+
+        @media (max-width: 992px) {
+            .table-scroll-container {
+                max-height: 400px;
+            }
+            
+            .compact-table th,
+            .compact-table td {
+                padding: 8px 6px;
+                font-size: 11px;
+            }
+            
+            .col-music { min-width: 150px; }
+            .col-album { min-width: 140px; }
+            .col-music-artist { min-width: 120px; }
+            .col-album-artist { min-width: 120px; }
+            .col-date { min-width: 90px; }
+            .col-actions { width: 70px; }
+            
+            .item-avatar {
+                width: 28px;
+                height: 28px;
+            }
+            
+            .item-title {
+                font-size: 11px;
+            }
+            
+            .item-subtitle {
+                font-size: 9px;
+            }
+            
+            .album-artist-badge {
+                font-size: 9px;
+                padding: 3px 6px;
+            }
+            
+            .date-info {
+                font-size: 10px;
+            }
+            
+            .artist-info {
+                font-size: 10px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .col-check {
+                width: 0;
+                text-align: center;
+            }
+            
+            .music-album-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            
+            .header-actions {
+                width: 100%;
+                flex-wrap: wrap;
+            }
+            
+            .bulk-actions {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
+            }
+            
+            .bulk-select-all {
+                margin-left: 0;
+                justify-content: center;
+            }
+            
+            .relations-pagination {
+                flex-direction: column;
+                gap: 12px;
+                padding: 12px;
+                text-align: center;
+            }
+            
+            .pagination-info {
+                order: 2;
+                font-size: 11px;
+            }
+            
+            .pagination-controls {
+                order: 1;
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .page-numbers {
+                display: none;
+            }
+            
+            /* Hide some columns on mobile */
+            .col-music-artist,
+            .col-album-artist {
+                display: none;
+            }
+            
+            .col-music { min-width: 120px; }
+            .col-album { min-width: 100px; }
+            .col-date { min-width: 80px; }
+            .col-actions { width: 60px; }
+        }
+
+        @media (max-width: 480px) {
+            .empty-state {
+                padding: 30px 15px;
+                min-height: 180px;
+            }
+            
+            .empty-state i {
+                font-size: 28px;
+            }
+            
+            .empty-state h3 {
+                font-size: 16px;
+            }
+            
+            .empty-state p {
+                font-size: 12px;
+            }
+            
+            .bigPopup .popup-content {
+                width: 100%;
+                height: 100%;
+                max-height: 100vh;
+                border-radius: 0;
+            }
+            
+            .popup-body-scroll {
+                max-height: calc(100vh - 120px);
+            }
+            
+            /* Hide more columns on very small screens */
+            .col-date {
+                display: none;
+            }
+            
+            .col-music { min-width: 100px; }
+            .col-album { min-width: 80px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="music-dashboard-container">
+
+          <div class="music-sidebar" id="musicSidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <div class="music-icon-container">
+                        <i class="fas fa-music"></i>
+                    </div>
+                    <span class="logo-text">Goovlize</span>
+                </div>
+                <button class="sidebar-close-btn" id="sidebarCloseBtn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="sidebar-card">
+                <div class="card-content">
+                    <div class="card-icon">
+                        <i class="fas fa-headphones-alt"></i>
+                    </div>
+                    <div class="card-text">
+                        <h3>Music Studio</h3>
+                        <p>Admin Panel</p>
+                    </div>
+                    <div class="card-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Menu Items -->
+            <div class="menu-section">
+                <div onclick="window.location.href='/admin/dashboard'" class="menu-item">
+                    <div class="menu-icon">
+                        <i class="fas fa-tachometer-alt"></i>
+                    </div>
+                    <span class="menu-text">Dashboard</span>
+                </div>
+
+                <div onclick="window.location.href='/admin/music'" class="menu-item">
+                    <div class="menu-icon">
+                       <i class="fa-regular fa-file-audio"></i>
+                    </div>
+                    <span class="menu-text">Music</span>
+                </div>
+
+                 <div onclick="window.location.href='/admin/artist'" class="menu-item">
+                    <div class="menu-icon">
+                       <i class="fa-solid fa-user-check"></i>
+                    </div>
+                    <span class="menu-text">Artist</span>
+                </div>
+
+                <div onclick="window.location.href='/admin/playlist'" class="menu-item notification">
+                    <div class="menu-icon">
+                       <i class="fa-regular fa-circle-play"></i>
+                    </div>
+                    <span class="menu-text">Playlist</span>
+                </div>
+
+                <div onclick="window.location.href='/admin/album'" class="menu-item">
+                    <div class="menu-icon">
+                       <i class="fa-solid fa-compact-disc"></i>
+                    </div>
+                    <span class="menu-text">Album</span>
+                </div>
+
+                <div onclick="window.location.href='/admin/music-genre'" class="menu-item">
+                    <div class="menu-icon">
+                         <i class="fas fa-tags"></i>
+                    </div>
+                    <span class="menu-text">Genre</span>
+                </div>
+
+                <div onclick="window.location.href='/admin/music-playlist'" class="menu-item">
+                    <div class="menu-icon">
+                         <i class="fas fa-link"></i>
+                    </div>
+                    <span class="menu-text">Music in Playlists</span>
+                </div>
+
+                <div onclick="window.location.href='/admin/music-album'" class="menu-item active">
+                    <div class="menu-icon">
+                         <i class="fas fa-link"></i>
+                    </div>
+                    <span class="menu-text">Music in Album</span>
+                </div>
+                
+
+
+            </div>
+
+            <div class="menu-section shortcuts">
+                <div class="section-title">=====================</div>
+                
+                <div onclick="window.location.href='/admin/statistics'" class="menu-item">
+                    <div class="menu-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <span class="menu-text">Analytics</span>
+                            <span class="notification-badge"></span>
+                    </div>
+
+                <div onclick="window.location.href='/admin/logout'" class="menu-item">
+                    <div class="menu-icon">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    </div>
+                    <span class="menu-text">Logout</span>
+                </div>
+            </div>
+
+            <!-- Storage Usage -->
+            <div style="background: transparent; border:none; box-shadow:none" class="storage-card">
+                <div style="display: none;" class="storage-content">
+                    <h4><i class="fas fa-database"></i> Storage Usage</h4>
+                    <p>Audio Files: 45.2 GB / 100 GB</p>
+                    <div class="storage-percentage">45%</div>
+                    <div class="storage-bar">
+                        <div class="storage-bar-bg"></div>
+                        <div class="storage-bar-fill" style="width: 45%"></div>
+                    </div>
+                    <div class="storage-details">
+                        <span>Albums: 12 GB</span>
+                        <span>Songs: 28 GB</span>
+                        <span>Other: 5.2 GB</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin Profile -->
+            <div class="admin-profile">
+                <img src="/uploads/profile/default/default_pp.jpg" alt="Admin" class="admin-avatar">
+                <div class="admin-info">
+                    <% if (typeof admin !== 'undefined' && admin) { %>
+        
+                            <span class="admin-name"><%= admin.admin_name || 'Admin' %></span>
+                     <% } %>
+
+                    <span class="admin-role">Music Admin</span>
+                </div>
+                <div style="display: none;" class="admin-options">
+                    <i class="fas fa-ellipsis-v"></i>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <div class="music-main-content">
+            <!-- Top Bar -->
+            <div style="display: none;" class="top-bar">
+                <div class="top-left">
+                    <div class="greeting">
+                        <h1>Music-Album Relations</h1>
+                        <div class="pro-badge">
+                            <i class="fas fa-crown"></i>
+                            <span>Admin</span>
+                        </div>
+                    </div>
+                    <div class="date-info">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span id="currentDate">Loading...</span>
+                    </div>
+                </div>
+                
+                <div class="top-right">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-indicator">3</span>
+                    </button>
+                    <button class="sidebar-toggle" id="sidebarToggleBtn">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Music-Album Management Content -->
+            <div class="music-album-container">
+                <!-- Header dengan Actions -->
+                <div class="music-album-header">
+                    <h1><i class="fas fa-compact-disc"></i> Music in Albums</h1>
+                    <div class="header-actions">
+                        <button class="btn-primary" onclick="addRelation()">
+                            <i class="fas fa-plus"></i>
+                            Add Relation
+                        </button>
+                        <button class="btn-secondary" id="bulkSelectBtn" onclick="toggleBulkSelection()">
+                            <i class="fas fa-check-square"></i>
+                            Bulk Select
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="stats-cards">
+                    <div class="stat-card">
+                        <div class="stat-icon music">
+                            <i class="fas fa-music"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="totalMusic"><%= musicList ? musicList.length : 0 %></div>
+                            <div class="stat-label">Total Songs</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon album">
+                            <i class="fas fa-compact-disc"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="totalAlbums"><%= albumList ? albumList.length : 0 %></div>
+                            <div class="stat-label">Total Albums</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon relation">
+                            <i class="fas fa-link"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="totalRelations"><%= totalRelations %></div>
+                            <div class="stat-label">Total Relations</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bulk Actions Bar -->
+                <div class="bulk-actions" id="bulkActions">
+                    <div class="bulk-selection-count" id="bulkSelectionCount">0 items selected</div>
+                    <div class="bulk-select-all" onclick="toggleSelectAll()">
+                        <i class="fas fa-check-double"></i>
+                        Select All
+                    </div>
+                    <button class="btn-danger" onclick="deleteSelectedRelations()">
+                        <i class="fas fa-trash"></i>
+                        Delete Selected
+                    </button>
+                </div>
+
+                <!-- Filters -->
+                <div class="music-album-filters">
+                    <div class="filter-row">
+                        <div class="filter-group">
+                            <label><i class="fas fa-search"></i> Search Music</label>
+                            <div class="search-container">
+                                <input type="text" class="filter-input" placeholder="Search by music title..." id="searchMusic" onkeyup="applyFilters()">
+                                <button class="clear-search" onclick="clearMusicSearch()" style="display: none;">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="filter-group">
+                            <label><i class="fas fa-search"></i> Search Album</label>
+                            <div class="search-container">
+                                <input type="text" class="filter-input" placeholder="Search by album name..." id="searchAlbum" onkeyup="applyFilters()">
+                                <button class="clear-search" onclick="clearAlbumSearch()" style="display: none;">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Loading indicator -->
+                    <div id="filterLoading" class="filter-loading" style="display: none;">
+                        <i class="fas fa-spinner fa-spin"></i> Loading...
+                    </div>
+                </div>
+
+                <!-- Relations Table -->
+                <div class="relations-table-container">
+                    <div class="table-scroll-container">
+                        <table class="compact-table" id="relationsTable">
+                            <thead>
+                                <tr>
+                                    <th class="col-check"></th>
+                                    <th class="col-number">#</th>
+                                    <th class="col-music">Music</th>
+                                    <th class="col-music-artist">Music Artist</th>
+                                    <th class="col-album">Album</th>
+                                    <th class="col-album-artist">Album Artist</th>
+                                    <th class="col-date">Date Added</th>
+                                    <th class="col-actions">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="relationsTableBody">
+                                <% if (relationsList && relationsList.length > 0) { %>
+                                    <% relationsList.forEach((relation, index) => { %>
+                                        <tr data-music-id="<%= relation.id_music %>" data-album-id="<%= relation.id_al %>">
+                                            <td class="col-check">
+                                                <input type="checkbox" class="table-checkbox" onclick="toggleTableRowSelection(this)">
+                                            </td>
+                                            <td class="col-number"><%= index + 1 %></td>
+                                            
+                                            <td class="col-music">
+                                                <div class="table-item">
+                                                    <div class="item-avatar">
+                                                        <img src="<%= relation.music_cover || '/uploads/undefine.jpg' %>" 
+                                                             alt="<%= relation.title_music %>"
+                                                             onerror="this.src='/uploads/undefine.jpg'">
+                                                    </div>
+                                                    <div class="item-info">
+                                                        <div class="item-title"><%= relation.title_music %></div>
+                                                        <div class="item-subtitle"><%= relation.album_name %></div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            
+                                            <td class="col-music-artist">
+                                                <div class="artist-info">
+                                                    <%= relation.music_artists %>
+                                                </div>
+                                            </td>
+                                            
+                                            <td class="col-album">
+                                                <div class="table-item">
+                                                    <div class="item-avatar">
+                                                        <img src="<%= relation.album_cover || '/uploads/albumcover/default.jpg' %>" 
+                                                             alt="<%= relation.album_name %>"
+                                                             onerror="this.src='/uploads/albumcover/default.jpg'">
+                                                    </div>
+                                                    <div class="item-info">
+                                                        <div class="item-title"><%= relation.album_name %></div>
+                                                        <div class="item-subtitle"><%= relation.total_songs || 0 %> songs</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            
+                                            <td class="col-album-artist">
+                                                <div class="artist-info">
+                                                    <% if (relation.artist_profile) { %>
+                                                        <img src="<%= relation.artist_profile %>" 
+                                                             alt="<%= relation.album_artist %>"
+                                                             onerror="this.src='https://i.pravatar.cc/40?img=1'">
+                                                    <% } %>
+                                                    <span><%= relation.album_artist %></span>
+                                                </div>
+                                            </td>
+                                            
+                                            <td class="col-date">
+                                                <div class="date-info">
+                                                    <i class="fas fa-calendar"></i>
+                                                    <%= relation.formatted_date %>
+                                                </div>
+                                            </td>
+                                            
+                                            <td class="col-actions">
+                                                <div class="action-buttons">
+                                                    <button class="action-btn action-delete" title="Delete" onclick="deleteSingleRelation('<%= relation.id_music %>', '<%= relation.id_al %>', '<%= relation.title_music %>', '<%= relation.album_name %>')">
+                                                        <i class="fas fa-trash"></i>
+                                                        <span class="btn-tooltip">Delete</span>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    <% }) %>
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="8">
+                                            <div class="empty-state">
+                                                <i class="fas fa-compact-disc"></i>
+                                                <h3>No Relations Found</h3>
+                                                <p>
+                                                    <% if (currentFilters.search_music || currentFilters.search_album) { %>
+                                                        No music-album relations found for your search
+                                                    <% } else { %>
+                                                        Start by adding music to albums!
+                                                    <% } %>
+                                                </p>
+                                                <button class="btn btn-primary" onclick="addRelation()">
+                                                     Add Relation
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <% if (relationsList && relationsList.length > 0 && totalPages > 1) { %>
+                        <div class="relations-pagination">
+                            <div class="pagination-info">
+                                Showing <span id="startItem"><%= (currentPage - 1) * 20 + 1 %></span>-<span id="endItem"><%= Math.min(currentPage * 20, totalRelations) %></span> 
+                                of <span id="totalItems"><%= totalRelations %></span> relations
+                            </div>
+                            
+                            <div class="pagination-controls">
+                                <!-- Previous Button -->
+                                <button class="pagination-btn <%= currentPage === 1 ? 'disabled' : '' %>" 
+                                        id="prevPage" 
+                                        onclick="<%= currentPage > 1 ? 'changePage(' + (currentPage - 1) + ')' : '' %>"
+                                        <%= currentPage === 1 ? 'disabled' : '' %>>
+                                    <i class="fas fa-chevron-left"></i> Previous
+                                </button>
+                                
+                                <!-- Page Numbers -->
+                                <div class="page-numbers" id="pageNumbers">
+                                    <% 
+                                    let startPage = Math.max(1, currentPage - 2);
+                                    let endPage = Math.min(totalPages, startPage + 4);
+                                    
+                                    if (endPage - startPage < 4) {
+                                        startPage = Math.max(1, endPage - 4);
+                                    }
+                                    
+                                    for (let i = startPage; i <= endPage; i++) { 
+                                    %>
+                                        <button class="page-number <%= i === currentPage ? 'active' : '' %>" 
+                                                onclick="changePage(<%= i %>)">
+                                            <%= i %>
+                                        </button>
+                                    <% } %>
+                                </div>
+                                
+                                <!-- Next Button -->
+                                <button class="pagination-btn <%= currentPage === totalPages ? 'disabled' : '' %>" 
+                                        id="nextPage" 
+                                        onclick="<%= currentPage < totalPages ? 'changePage(' + (currentPage + 1) + ')' : '' %>"
+                                        <%= currentPage === totalPages ? 'disabled' : '' %>>
+                                    Next <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Relation Popup -->
+    <div style="display: none;" class="popup addRelationPopup bigPopup">
+        <div class="popup-overlay"></div>
+        <div class="popup-content">
+            <form id="addRelationForm" onsubmit="return submitAddRelation(event)" autocomplete="off" style="display: contents">
+                <div class="drag-handle">
+                    <div class="drag-handle-line"></div>
+                </div>
+
+                <div class="popup-header">
+                    <h3>Add Music to Album</h3>
+                    <i onclick="closeAddRelationPopup()" class="fa-solid fa-xmark"></i>
+                </div>
+
+                <div class="popup-body-scroll">
+                    <div class="form-group">
+                        <h4><i class="fas fa-music"></i> Select Music</h4>
+                        <div class="selection-info">
+                            <span id="musicSelectionCount">0 music selected</span>
+                            <span class="selection-count" id="musicCount">0</span>
+                        </div>
+                        <div class="custom-select-container">
+                            <div class="select-search-wrapper">
+                                <input type="text" class="select-search-input" placeholder="Search music..." id="musicSearch">
+                                <i class="fas fa-search select-search-icon"></i>
+                            </div>
+                            <div class="select-options" id="musicOptions">
+                                <!-- Options akan diisi via JavaScript -->
+                            </div>
+                            <div class="selected-tags" id="musicTags">
+                                <!-- Selected music akan muncul di sini -->
+                            </div>
+                        </div>
+                        <div class="album-message" id="musicMessageContainer" style="display: none;"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <h4><i class="fas fa-compact-disc"></i> Select Album</h4>
+                        <div class="selection-info">
+                            <span id="albumSelectionCount">0 album selected</span>
+                            <span class="selection-count" id="albumCount">0</span>
+                        </div>
+                        <div class="custom-select-container">
+                            <div class="select-search-wrapper">
+                                <input type="text" class="select-search-input" placeholder="Search album..." id="albumSearch">
+                                <i class="fas fa-search select-search-icon"></i>
+                            </div>
+                            <div class="select-options" id="albumOptions">
+                                <!-- Options akan diisi via JavaScript -->
+                            </div>
+                            <div class="selected-tags" id="albumTags">
+                                <!-- Selected album akan muncul di sini -->
+                            </div>
+                        </div>
+                        <div class="album-message" id="albumMessageContainer" style="display: none;"></div>
+                    </div>
+
+                    <div class="album-message info" id="relationInfoContainer" style="display: none;">
+                        <i class="fas fa-info-circle"></i>
+                        <span id="relationInfoText"></span>
+                    </div>
+                </div>
+
+                <div class="popup-actions">
+                    <button type="button" onclick="closeAddRelationPopup()" class="btn btn-secondary">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Relations</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Popup -->
+    <div style="display: none;" class="popup deleteConfirmPopup bigPopup">
+        <div class="popup-overlay"></div>
+        <div class="popup-content">
+            <div class="drag-handle">
+                <div class="drag-handle-line"></div>
+            </div>
+
+            <div class="popup-header">
+                <i onclick="closeDeletePopup()" class="fa-solid fa-xmark"></i>
+            </div>
+            
+            <div class="popup-body-scroll">
+                <div class="delete-confirm-content">
+                    <div class="delete-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <h4 id="deleteConfirmTitle">Delete Relation</h4>
+                    <p id="deleteConfirmMessage">Are you sure you want to delete this relation?</p>
+                    
+                    <div class="warning-message">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span>This will remove the music from the album.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="popup-actions">
+                <button type="button" onclick="closeDeletePopup()" class="btn btn-secondary">Cancel</button>
+                <button type="button" onclick="confirmDeleteSingle()" class="btn btn-danger" id="deleteConfirmBtn">
+                    <i class="fas fa-trash"></i> Delete
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bulk Delete Confirmation Popup -->
+    <div style="display: none;" class="popup bulkDeleteConfirmPopup bigPopup">
+        <div class="popup-overlay"></div>
+        <div class="popup-content">
+            <div class="drag-handle">
+                <div class="drag-handle-line"></div>
+            </div>
+
+            <div class="popup-header">
+                <i onclick="closeBulkDeletePopup()" class="fa-solid fa-xmark"></i>
+            </div>
+            
+            <div class="popup-body-scroll">
+                <div class="delete-confirm-content">
+                    <div class="delete-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <h4>Delete Multiple Relations</h4>
+                    <p id="bulkDeleteMessage">Are you sure you want to delete <span id="bulkDeleteCount">0</span> selected relations?</p>
+                    
+                    <div class="warning-message">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span>This action cannot be undone. All selected music will be removed from their albums.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="popup-actions">
+                <button type="button" onclick="closeBulkDeletePopup()" class="btn btn-secondary">Cancel</button>
+                <button type="button" onclick="confirmBulkDelete()" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> Delete All
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/admin/js/dashboard.js"></script>
+    <script>
+        // Global variables
+        let musicData = [];
+        let albumData = [];
+        let selectedMusic = [];
+        let selectedAlbums = [];
+        let currentFilters = {
+            search_music: '',
+            search_album: '',
+            page: 1
+        };
+        let filterTimeout = null;
+        let isFiltering = false;
+        let isBulkMode = false;
+        let selectedRelations = [];
+        let deleteTarget = null;
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeFilters();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.custom-select-container')) {
+                    closeAllDropdowns();
+                }
+            });
+
+            // Keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeAllDropdowns();
+                }
+                if (e.key === 'Delete' && isBulkMode && selectedRelations.length > 0) {
+                    deleteSelectedRelations();
+                }
+            });
+        }
+
+        // ============ FILTERING ============ //
+        function initializeFilters() {
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            currentFilters.search_music = urlParams.get('search_music') || '';
+            currentFilters.search_album = urlParams.get('search_album') || '';
+            currentFilters.page = parseInt(urlParams.get('page')) || 1;
+            
+            // Update UI elements
+            document.getElementById('searchMusic').value = currentFilters.search_music;
+            document.getElementById('searchAlbum').value = currentFilters.search_album;
+            
+            // Show/hide clear search buttons
+            updateClearSearchButtons();
+        }
+
+        function applyFilters() {
+            if (filterTimeout) {
+                clearTimeout(filterTimeout);
+            }
+            
+            filterTimeout = setTimeout(() => {
+                currentFilters.search_music = document.getElementById('searchMusic').value.trim();
+                currentFilters.search_album = document.getElementById('searchAlbum').value.trim();
+                currentFilters.page = 1;
+                
+                // Show/hide clear search buttons
+                updateClearSearchButtons();
+                
+                loadFilteredData();
+            }, 500);
+        }
+
+        function clearMusicSearch() {
+            document.getElementById('searchMusic').value = '';
+            applyFilters();
+        }
+
+        function clearAlbumSearch() {
+            document.getElementById('searchAlbum').value = '';
+            applyFilters();
+        }
+
+        function updateClearSearchButtons() {
+            const clearMusicBtn = document.querySelector('#searchMusic + .clear-search');
+            const clearAlbumBtn = document.querySelector('#searchAlbum + .clear-search');
+            
+            if (clearMusicBtn) {
+                clearMusicBtn.style.display = currentFilters.search_music ? 'block' : 'none';
+            }
+            if (clearAlbumBtn) {
+                clearAlbumBtn.style.display = currentFilters.search_album ? 'block' : 'none';
+            }
+        }
+
+        async function loadFilteredData() {
+            if (isFiltering) return;
+            
+            isFiltering = true;
+            showLoading(true);
+            
+            try {
+                // Build query parameters
+                const params = new URLSearchParams();
+                
+                if (currentFilters.search_music) {
+                    params.append('search_music', currentFilters.search_music);
+                }
+                
+                if (currentFilters.search_album) {
+                    params.append('search_album', currentFilters.search_album);
+                }
+                
+                if (currentFilters.page > 1) {
+                    params.append('page', currentFilters.page);
+                }
+                
+                // Show loading state
+                const tableRows = document.querySelectorAll('#relationsTableBody tr');
+                tableRows.forEach(row => {
+                    row.classList.add('loading');
+                });
+                
+                // Send request to server
+                const response = await fetch(`/admin/music-album/filter?${params.toString()}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch filtered data');
+                }
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Update URL without reloading page
+                    updateURL();
+                    
+                    // Update relations list
+                    updateRelationsList(data.relationsList, data.totalRelations, data.currentPage, data.totalPages);
+                } else {
+                    throw new Error(data.message || 'Failed to load filtered data');
+                }
+            } catch (error) {
+                console.error('Error loading filtered data:', error);
+                showNotification('Failed to load data. Please try again.', 'error');
+            } finally {
+                isFiltering = false;
+                showLoading(false);
+                
+                // Remove loading state
+                const tableRows = document.querySelectorAll('#relationsTableBody tr');
+                tableRows.forEach(row => {
+                    row.classList.remove('loading');
+                });
+            }
+        }
+
+        function updateURL() {
+            const params = new URLSearchParams();
+            
+            if (currentFilters.search_music) {
+                params.append('search_music', currentFilters.search_music);
+            }
+            
+            if (currentFilters.search_album) {
+                params.append('search_album', currentFilters.search_album);
+            }
+            
+            if (currentFilters.page > 1) {
+                params.append('page', currentFilters.page);
+            }
+            
+            const newUrl = `${window.location.pathname}${params.toString() ? '?' + params.toString() : ''}`;
+            window.history.pushState({ path: newUrl }, '', newUrl);
+        }
+
+        function updateRelationsList(relationsList, totalRelations, currentPage, totalPages) {
+            const tableBody = document.getElementById('relationsTableBody');
+            const paginationInfo = document.querySelector('.pagination-info');
+            
+            // Clear existing content
+            tableBody.innerHTML = '';
+            
+            if (relationsList && relationsList.length > 0) {
+                // Generate new table rows
+                relationsList.forEach((relation, index) => {
+                    const row = document.createElement('tr');
+                    row.dataset.musicId = relation.id_music;
+                    row.dataset.albumId = relation.id_al;
+                    
+                    row.innerHTML = `
+                        <td class="col-check">
+                            <input type="checkbox" class="table-checkbox" onclick="toggleTableRowSelection(this)">
+                        </td>
+                        <td class="col-number">${index + 1}</td>
+                        
+                        <td class="col-music">
+                            <div class="table-item">
+                                <div class="item-avatar">
+                                    <img src="${relation.music_cover || '/uploads/undefine.jpg'}" 
+                                         alt="${relation.title_music}"
+                                         onerror="this.src='/uploads/undefine.jpg'">
+                                </div>
+                                <div class="item-info">
+                                    <div class="item-title">${relation.title_music}</div>
+                                    <div class="item-subtitle">${relation.album_name}</div>
+                                </div>
+                            </div>
+                        </td>
+                        
+                        <td class="col-music-artist">
+                            <div class="artist-info">
+                                ${relation.music_artists}
+                            </div>
+                        </td>
+                        
+                        <td class="col-album">
+                            <div class="table-item">
+                                <div class="item-avatar">
+                                    <img src="${relation.album_cover || '/uploads/albumcover/default.jpg'}" 
+                                         alt="${relation.album_name}"
+                                         onerror="this.src='/uploads/albumcover/default.jpg'">
+                                </div>
+                                <div class="item-info">
+                                    <div class="item-title">${relation.album_name}</div>
+                                    <div class="item-subtitle">${relation.total_songs || 0} songs</div>
+                                </div>
+                            </div>
+                        </td>
+                        
+                        <td class="col-album-artist">
+                            <div class="artist-info">
+                                ${relation.artist_profile ? `
+                                    <img src="${relation.artist_profile}" 
+                                         alt="${relation.album_artist}"
+                                         onerror="this.src='https://i.pravatar.cc/40?img=1'">
+                                ` : ''}
+                                <span>${relation.album_artist}</span>
+                            </div>
+                        </td>
+                        
+                        <td class="col-date">
+                            <div class="date-info">
+                                <i class="fas fa-calendar"></i>
+                                ${relation.formatted_date}
+                            </div>
+                        </td>
+                        
+                        <td class="col-actions">
+                            <div class="action-buttons">
+                                <button class="action-btn action-delete" title="Delete" onclick="deleteSingleRelation('${relation.id_music}', '${relation.id_al}', '${relation.title_music}', '${relation.album_name}')">
+                                    <i class="fas fa-trash"></i>
+                                    <span class="btn-tooltip">Delete</span>
+                                </button>
+                            </div>
+                        </td>
+                    `;
+                    
+                    tableBody.appendChild(row);
+                });
+                
+                // Update pagination info
+                const startItem = (currentPage - 1) * 20 + 1;
+                const endItem = Math.min(currentPage * 20, totalRelations);
+                
+                if (paginationInfo) {
+                    paginationInfo.innerHTML = `
+                        Showing <span id="startItem">${startItem}</span>-<span id="endItem">${endItem}</span> 
+                        of <span id="totalItems">${totalRelations}</span> relations
+                    `;
+                }
+                
+                // Update pagination controls
+                updatePaginationControls(currentPage, totalPages);
+            } else {
+                // Show empty state
+                const searchMessage = currentFilters.search_music || currentFilters.search_album 
+                    ? 'No music-album relations found for your search' 
+                    : 'Start by adding music to albums!';
+                
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="8">
+                            <div class="empty-state">
+                                <i class="fas fa-compact-disc"></i>
+                                <h3>No Relations Found</h3>
+                                <p>${searchMessage}</p>
+                                <button class="btn btn-primary" onclick="addRelation()">
+                                   Add Relation
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                
+                if (paginationInfo) {
+                    paginationInfo.innerHTML = 'Showing 0-0 of 0 relations';
+                }
+                
+                const paginationControls = document.querySelector('.pagination-controls');
+                if (paginationControls) {
+                    paginationControls.innerHTML = '';
+                }
+            }
+            
+            // Update bulk mode if active
+            if (isBulkMode) {
+                enableBulkMode();
+            }
+        }
+
+        function updatePaginationControls(currentPage, totalPages) {
+            const paginationControls = document.querySelector('.pagination-controls');
+            
+            if (!paginationControls || totalPages <= 1) {
+                return;
+            }
+            
+            let startPage = Math.max(1, currentPage - 2);
+            let endPage = Math.min(totalPages, startPage + 4);
+            
+            if (endPage - startPage < 4) {
+                startPage = Math.max(1, endPage - 4);
+            }
+            
+            let pageNumbersHTML = '';
+            for (let i = startPage; i <= endPage; i++) {
+                pageNumbersHTML += `
+                    <button class="page-number ${i === currentPage ? 'active' : ''}" 
+                            onclick="changePage(${i})">
+                        ${i}
+                    </button>
+                `;
+            }
+            
+            paginationControls.innerHTML = `
+                <button class="pagination-btn ${currentPage === 1 ? 'disabled' : ''}" 
+                        id="prevPage" 
+                        onclick="${currentPage > 1 ? `changePage(${currentPage - 1})` : ''}"
+                        ${currentPage === 1 ? 'disabled' : ''}>
+                    <i class="fas fa-chevron-left"></i> Previous
+                </button>
+                
+                <div class="page-numbers" id="pageNumbers">
+                    ${pageNumbersHTML}
+                </div>
+                
+                <button class="pagination-btn ${currentPage === totalPages ? 'disabled' : ''}" 
+                        id="nextPage" 
+                        onclick="${currentPage < totalPages ? `changePage(${currentPage + 1})` : ''}"
+                        ${currentPage === totalPages ? 'disabled' : ''}>
+                    Next <i class="fas fa-chevron-right"></i>
+                </button>
+            `;
+        }
+
+        function changePage(page) {
+            currentFilters.page = page;
+            loadFilteredData();
+        }
+
+        function showLoading(show) {
+            const loadingIndicator = document.getElementById('filterLoading');
+            if (loadingIndicator) {
+                loadingIndicator.style.display = show ? 'block' : 'none';
+            }
+        }
+
+        // ============ ADD RELATION ============ //
+        function addRelation() {
+            const popup = document.querySelector('.addRelationPopup');
+            const popupContent = popup.querySelector('.popup-content');
+            const isMobile = isTrueMobile();
+
+            // Reset form
+            resetAddRelationForm();
+            
+            // Load data
+            loadAddRelationData();
+
+            if (isMobile) {
+               popup.style.display = 'block';
+                setTimeout(() => {
+                    popup.classList.add('active');
+                    if (popupContent) {
+                    popupContent.style.transform = 'translateY(0)';
+                    }
+                }, 10);
+            } else {
+                $(".addRelationPopup").show();
+                $(".addRelationPopup").addClass("active");
+                $(".addRelationPopup .popup-overlay").removeClass("fadeOut").addClass("fadeIn");
+            }
+        }
+
+        function resetAddRelationForm() {
+            selectedMusic = [];
+            selectedAlbums = [];
+            document.getElementById('musicTags').innerHTML = '';
+            document.getElementById('albumTags').innerHTML = '';
+            document.getElementById('musicSearch').value = '';
+            document.getElementById('albumSearch').value = '';
+            document.getElementById('musicSelectionCount').textContent = '0 music selected';
+            document.getElementById('albumSelectionCount').textContent = '0 album selected';
+            document.getElementById('musicCount').textContent = '0';
+            document.getElementById('albumCount').textContent = '0';
+            hideMusicMessage();
+            hideAlbumMessage();
+            hideRelationInfo();
+            closeAllDropdowns();
+        }
+
+        async function loadAddRelationData() {
+            try {
+                // Show loading state for music
+                const musicOptions = document.getElementById('musicOptions');
+                musicOptions.innerHTML = '<div class="select-option loading-option"><i class="fas fa-spinner fa-spin"></i> Loading music...</div>';
+                musicOptions.classList.add('active');
+
+                // Show loading state for albums
+                const albumOptions = document.getElementById('albumOptions');
+                albumOptions.innerHTML = '<div class="select-option loading-option"><i class="fas fa-spinner fa-spin"></i> Loading albums...</div>';
+                albumOptions.classList.add('active');
+
+                const response = await fetch('/admin/music-album/get-data', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to load data');
+                }
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    musicData = data.music || [];
+                    albumData = data.albums || [];
+                    
+                    // Update counts
+                    document.getElementById('musicCount').textContent = musicData.length;
+                    document.getElementById('albumCount').textContent = albumData.length;
+                    
+                    // Populate dropdowns
+                    populateMusicOptions();
+                    populateAlbumOptions();
+                    
+                    // Update selection info
+                    updateMusicSelectionInfo();
+                    updateAlbumSelectionInfo();
+                    updateRelationInfo();
+                } else {
+                    throw new Error(data.message || 'Failed to load data');
+                }
+            } catch (error) {
+                console.error('Error loading data:', error);
+                showMusicErrorMessage('Failed to load data. Please try again.');
+                showAlbumErrorMessage('Failed to load data. Please try again.');
+                
+                document.getElementById('musicOptions').innerHTML = `
+                    <div class="select-option error-option">
+                        <i class="fas fa-exclamation-circle"></i> Failed to load music
+                    </div>
+                `;
+                
+                document.getElementById('albumOptions').innerHTML = `
+                    <div class="select-option error-option">
+                        <i class="fas fa-exclamation-circle"></i> Failed to load albums
+                    </div>
+                `;
+            }
+        }
+
+        function populateMusicOptions() {
+            const musicOptions = document.getElementById('musicOptions');
+            musicOptions.innerHTML = '';
+            
+            if (musicData && musicData.length > 0) {
+                musicData.forEach(music => {
+                    const isSelected = selectedMusic.some(m => m.id === music.id_music);
+                    const option = document.createElement('div');
+                    option.className = 'select-option';
+                    if (isSelected) option.classList.add('selected');
+                    option.dataset.value = music.id_music;
+                    option.dataset.name = music.title_music;
+                    option.innerHTML = `
+                        <i class="fas fa-check option-check"></i>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <img src="${music.cover_music || '/uploads/undefine.jpg'}" 
+                                 alt="${music.title_music}"
+                                 style="width: 30px; height: 30px; border-radius: 4px; object-fit: cover;"
+                                 onerror="this.src='/uploads/undefine.jpg'">
+                            <div style="flex: 1;">
+                                <div style="font-weight: 500; color: white;">${music.title_music}</div>
+                                <div style="font-size: 12px; color: #888;">${music.artists || 'No artist'}</div>
+                            </div>
+                        </div>
+                    `;
+                    option.onclick = () => toggleMusic(music.id_music, music.title_music, music.cover_music);
+                    musicOptions.appendChild(option);
+                });
+            } else {
+                musicOptions.innerHTML = `
+                    <div class="select-option no-data">
+                        No music found
+                    </div>
+                `;
+            }
+        }
+
+        function populateAlbumOptions() {
+            const albumOptions = document.getElementById('albumOptions');
+            albumOptions.innerHTML = '';
+            
+            if (albumData && albumData.length > 0) {
+                albumData.forEach(album => {
+                    const isSelected = selectedAlbums.some(a => a.id === album.id_al);
+                    const option = document.createElement('div');
+                    option.className = 'select-option';
+                    if (isSelected) option.classList.add('selected');
+                    option.dataset.value = album.id_al;
+                    option.dataset.name = album.album_name;
+                    option.innerHTML = `
+                        <i class="fas fa-check option-check"></i>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <img src="${album.album_cover || '/uploads/albumcover/default.jpg'}" 
+                                 alt="${album.album_name}"
+                                 style="width: 30px; height: 30px; border-radius: 4px; object-fit: cover;"
+                                 onerror="this.src='/uploads/albumcover/default.jpg'">
+                            <div style="flex: 1;">
+                                <div style="font-weight: 500; color: white;">${album.album_name}</div>
+                                <div style="font-size: 12px; color: #888;">
+                                    ${album.artist_name || 'Unknown Artist'} • ${album.total_songs || 0} songs
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    option.onclick = () => toggleAlbum(album.id_al, album.album_name, album.album_cover, album.artist_name);
+                    albumOptions.appendChild(option);
+                });
+            } else {
+                albumOptions.innerHTML = `
+                    <div class="select-option no-data">
+                        No albums found
+                    </div>
+                `;
+            }
+        }
+
+        function toggleMusic(musicId, musicName, musicCover) {
+    // Konversi ke string untuk konsistensi
+    musicId = String(musicId);
+    
+    const index = selectedMusic.findIndex(m => String(m.id) === musicId);
+    
+    if (index === -1) {
+        // Add music
+        selectedMusic.push({ 
+            id: musicId, 
+            name: musicName, 
+            cover: musicCover 
+        });
+    } else {
+        // Remove music
+        selectedMusic.splice(index, 1);
+    }
+    
+    updateMusicTags();
+    updateMusicOption(musicId);
+    updateMusicSelectionInfo();
+    updateRelationInfo();
+    
+    // Close dropdown if searching
+    if (document.getElementById('musicSearch').value) {
+        document.getElementById('musicOptions').classList.remove('active');
+    }
+}
+
+function toggleAlbum(albumId, albumName, albumCover, albumArtist) {
+    // Konversi ke string untuk konsistensi
+    albumId = String(albumId);
+    
+    const index = selectedAlbums.findIndex(a => String(a.id) === albumId);
+    
+    if (index === -1) {
+        // Add album
+        selectedAlbums.push({ 
+            id: albumId, 
+            name: albumName, 
+            cover: albumCover,
+            artist: albumArtist
+        });
+    } else {
+        // Remove album
+        selectedAlbums.splice(index, 1);
+    }
+    
+    updateAlbumTags();
+    updateAlbumOption(albumId);
+    updateAlbumSelectionInfo();
+    updateRelationInfo();
+    
+    // Close dropdown if searching
+    if (document.getElementById('albumSearch').value) {
+        document.getElementById('albumOptions').classList.remove('active');
+    }
+}
+
+
+
+        function updateMusicTags() {
+    const tagsContainer = document.getElementById('musicTags');
+    tagsContainer.innerHTML = '';
+    
+    selectedMusic.forEach(music => {
+        const tag = document.createElement('div');
+        tag.className = 'selected-tag';
+        tag.innerHTML = `
+            <img src="${music.cover || '/uploads/undefine.jpg'}" 
+                 alt="${music.name}"
+                 style="width: 20px; height: 20px; border-radius: 4px; object-fit: cover;"
+                 onerror="this.src='/uploads/undefine.jpg'">
+            <span>${music.name}</span>
+            <span class="tag-remove" data-id="${music.id}">
+                <i class="fas fa-times"></i>
+            </span>
+        `;
+        tagsContainer.appendChild(tag);
+    });
+    
+    // Tambahkan event listener untuk tombol remove
+    tagsContainer.querySelectorAll('.tag-remove').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const musicId = this.getAttribute('data-id');
+            removeMusic(musicId);
+        });
+    });
+}
+
+function updateAlbumTags() {
+    const tagsContainer = document.getElementById('albumTags');
+    tagsContainer.innerHTML = '';
+    
+    selectedAlbums.forEach(album => {
+        const tag = document.createElement('div');
+        tag.className = 'selected-tag';
+        tag.innerHTML = `
+            <img src="${album.cover || '/uploads/albumcover/default.jpg'}" 
+                 alt="${album.name}"
+                 style="width: 20px; height: 20px; border-radius: 4px; object-fit: cover;"
+                 onerror="this.src='/uploads/albumcover/default.jpg'">
+            <span>${album.name}</span>
+            <span class="tag-remove" data-id="${album.id}">
+                <i class="fas fa-times"></i>
+            </span>
+        `;
+        tagsContainer.appendChild(tag);
+    });
+    
+    // Tambahkan event listener untuk tombol remove
+    tagsContainer.querySelectorAll('.tag-remove').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const albumId = this.getAttribute('data-id');
+            removeAlbum(albumId);
+        });
+    });
+}
+
+function updateMusicOption(musicId) {
+    const option = document.querySelector(`#musicOptions .select-option[data-value="${musicId}"]`);
+    if (option) {
+        const isSelected = selectedMusic.some(m => String(m.id) === String(musicId));
+        option.classList.toggle('selected', isSelected);
+    }
+}
+
+function updateAlbumOption(albumId) {
+    const option = document.querySelector(`#albumOptions .select-option[data-value="${albumId}"]`);
+    if (option) {
+        const isSelected = selectedAlbums.some(a => String(a.id) === String(albumId));
+        option.classList.toggle('selected', isSelected);
+    }
+}
+
+        function removeMusic(musicId) {
+            // Konversi musicId ke tipe yang sama
+            musicId = String(musicId);
+            selectedMusic = selectedMusic.filter(m => String(m.id) !== musicId);
+            updateMusicTags();
+            updateMusicOption(musicId);
+            updateMusicSelectionInfo();
+            updateRelationInfo();
+        }
+
+        function removeAlbum(albumId) {
+            // Konversi albumId ke tipe yang sama
+            albumId = String(albumId);
+            selectedAlbums = selectedAlbums.filter(a => String(a.id) !== albumId);
+            updateAlbumTags();
+            updateAlbumOption(albumId);
+            updateAlbumSelectionInfo();
+            updateRelationInfo();
+        }
+        function updateMusicSelectionInfo() {
+            const count = selectedMusic.length;
+            document.getElementById('musicSelectionCount').textContent = 
+                count === 0 ? '0 music selected' : `${count} music selected`;
+        }
+
+        function updateAlbumSelectionInfo() {
+            const count = selectedAlbums.length;
+            document.getElementById('albumSelectionCount').textContent = 
+                count === 0 ? '0 album selected' : `${count} album selected`;
+        }
+
+        function updateRelationInfo() {
+            const musicCount = selectedMusic.length;
+            const albumCount = selectedAlbums.length;
+            const totalRelations = musicCount * albumCount;
+            
+            const infoContainer = document.getElementById('relationInfoContainer');
+            const infoText = document.getElementById('relationInfoText');
+            
+            if (musicCount > 0 && albumCount > 0) {
+                infoText.textContent = 
+                    `This will create ${totalRelations} relation(s): ${musicCount} music × ${albumCount} albums`;
+                infoContainer.style.display = 'flex';
+            } else {
+                infoContainer.style.display = 'none';
+            }
+        }
+
+        // Search functionality
+        document.getElementById('musicSearch')?.addEventListener('input', function(e) {
+            filterOptions('musicOptions', e.target.value);
+        });
+
+        document.getElementById('musicSearch')?.addEventListener('focus', function() {
+            closeOtherDropdowns('musicOptions');
+            document.getElementById('musicOptions').classList.add('active');
+        });
+
+        document.getElementById('albumSearch')?.addEventListener('input', function(e) {
+            filterOptions('albumOptions', e.target.value);
+        });
+
+        document.getElementById('albumSearch')?.addEventListener('focus', function() {
+            closeOtherDropdowns('albumOptions');
+            document.getElementById('albumOptions').classList.add('active');
+        });
+
+        function filterOptions(containerId, searchTerm) {
+            const options = document.querySelectorAll(`#${containerId} .select-option`);
+            searchTerm = searchTerm.toLowerCase();
+            
+            options.forEach(option => {
+                const text = option.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    option.style.display = 'flex';
+                } else {
+                    option.style.display = 'none';
+                }
+            });
+        }
+
+        function closeOtherDropdowns(currentDropdownId) {
+            const dropdowns = ['musicOptions', 'albumOptions'];
+            dropdowns.forEach(dropdownId => {
+                if (dropdownId !== currentDropdownId) {
+                    const dropdown = document.getElementById(dropdownId);
+                    dropdown.classList.remove('active');
+                }
+            });
+        }
+
+        function closeAllDropdowns() {
+            document.getElementById('musicOptions').classList.remove('active');
+            document.getElementById('albumOptions').classList.remove('active');
+        }
+
+        // Message functions
+        function showMusicErrorMessage(message) {
+            const messageContainer = document.getElementById('musicMessageContainer');
+            messageContainer.className = 'album-message error';
+            messageContainer.innerHTML = `
+                <i class="fas fa-exclamation-circle"></i>
+                <span>${message}</span>
+            `;
+            messageContainer.style.display = 'flex';
+        }
+
+        function showAlbumErrorMessage(message) {
+            const messageContainer = document.getElementById('albumMessageContainer');
+            messageContainer.className = 'album-message error';
+            messageContainer.innerHTML = `
+                <i class="fas fa-exclamation-circle"></i>
+                <span>${message}</span>
+            `;
+            messageContainer.style.display = 'flex';
+        }
+
+        function hideMusicMessage() {
+            const messageContainer = document.getElementById('musicMessageContainer');
+            messageContainer.style.display = 'none';
+        }
+
+        function hideAlbumMessage() {
+            const messageContainer = document.getElementById('albumMessageContainer');
+            messageContainer.style.display = 'none';
+        }
+
+        function hideRelationInfo() {
+            const infoContainer = document.getElementById('relationInfoContainer');
+            infoContainer.style.display = 'none';
+        }
+
+        async function submitAddRelation(event) {
+            event.preventDefault();
+            
+            // Validation
+            if (selectedMusic.length === 0) {
+                showMusicErrorMessage('Please select at least one music');
+                return false;
+            }
+            
+            if (selectedAlbums.length === 0) {
+                showAlbumErrorMessage('Please select at least one album');
+                return false;
+            }
+            
+            // Prepare data
+            const data = {
+                music_ids: selectedMusic.map(m => m.id),
+                album_ids: selectedAlbums.map(a => a.id)
+            };
+            
+            try {
+                const response = await fetch('/admin/music-album/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    const message = result.relations.length > 0 
+                        ? `Added ${result.relations.length} relation(s) successfully!`
+                        : result.message;
+                    
+                    showNotification(message, 'success');
+                    closeAddRelationPopup();
+                    
+                    // Reload the page to show new relations
+                    window.location.reload();
+                } else {
+                    showNotification(result.message || 'Failed to add relations', 'error');
+                }
+            } catch (error) {
+                console.error('Error adding relations:', error);
+                showNotification('Failed to add relations. Please try again.', 'error');
+            }
+            
+            return false;
+        }
+
+        function closeAddRelationPopup() {
+            const popup = document.querySelector('.addRelationPopup');
+            popup.classList.remove('active');
+            
+            setTimeout(() => {
+                popup.style.display = 'none';
+                resetAddRelationForm();
+            }, 300);
+        }
+
+        // ============ BULK SELECTION ============ //
+        function toggleBulkSelection() {
+            isBulkMode = !isBulkMode;
+            const bulkBtn = document.getElementById('bulkSelectBtn');
+            const bulkActions = document.getElementById('bulkActions');
+            
+            if (isBulkMode) {
+                bulkBtn.innerHTML = '<i class="fas fa-times"></i> Cancel Selection';
+                bulkBtn.classList.add('btn-danger');
+                bulkBtn.classList.remove('btn-secondary');
+                enableBulkMode();
+            } else {
+                bulkBtn.innerHTML = '<i class="fas fa-check-square"></i> Bulk Select';
+                bulkBtn.classList.remove('btn-danger');
+                bulkBtn.classList.add('btn-secondary');
+                disableBulkMode();
+            }
+        }
+
+function enableBulkMode() {
+    const tableRows = document.querySelectorAll('#relationsTableBody tr');
+    
+    tableRows.forEach(row => {
+        row.classList.add('bulk-mode');
+        
+        // Find checkbox or create one
+        let checkboxCell = row.querySelector('.col-check');
+        if (!checkboxCell) return;
+        
+        let checkbox = checkboxCell.querySelector('.table-checkbox');
+        if (!checkbox) {
+            checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.className = 'table-checkbox';
+            checkbox.onclick = (e) => {
+                e.stopPropagation();
+                toggleTableRowSelection(checkbox);
+            };
+            checkboxCell.innerHTML = '';
+            checkboxCell.appendChild(checkbox);
+        }
+        
+        // Set initial state based on selectedRelations
+        const musicId = row.dataset.musicId;
+        const albumId = row.dataset.albumId;
+        const isSelected = selectedRelations.some(r => 
+            r.musicId === musicId && r.albumId === albumId
+        );
+        checkbox.checked = isSelected;
+    });
+    
+    // Show bulk actions
+    const bulkActions = document.getElementById('bulkActions');
+    bulkActions.classList.add('active');
+    updateBulkSelectionCount();
+}
+
+        function disableBulkMode() {
+            // Remove bulk mode class
+            const tableRows = document.querySelectorAll('#relationsTableBody tr');
+            tableRows.forEach(row => {
+                row.classList.remove('bulk-mode');
+            });
+            
+            // Hide bulk actions bar
+            const bulkActions = document.getElementById('bulkActions');
+            bulkActions.classList.remove('active');
+            
+            // Clear selection
+            selectedRelations = [];
+        }
+
+function toggleTableRowSelection(checkbox) {
+    const tableRow = checkbox.closest('tr');
+    if (!tableRow) return;
+    
+    const musicId = tableRow.dataset.musicId;
+    const albumId = tableRow.dataset.albumId;
+    
+    if (!musicId || !albumId) return;
+    
+    const relationIndex = selectedRelations.findIndex(r => 
+        r.musicId === musicId && r.albumId === albumId
+    );
+    
+    if (checkbox.checked) {
+        // Add if not already in array
+        if (relationIndex === -1) {
+            selectedRelations.push({ musicId, albumId });
+        }
+    } else {
+        // Remove if exists
+        if (relationIndex > -1) {
+            selectedRelations.splice(relationIndex, 1);
+        }
+    }
+    
+    updateBulkSelectionCount();
+}
+function toggleSelectAll() {
+    const checkboxes = document.querySelectorAll('.table-checkbox');
+    const tableRows = document.querySelectorAll('#relationsTableBody tr');
+    
+    // Cek apakah semua sudah tercentang
+    let allChecked = true;
+    checkboxes.forEach(cb => {
+        if (!cb.checked) allChecked = false;
+    });
+    
+    if (allChecked && selectedRelations.length === tableRows.length) {
+        // Uncheck all
+        checkboxes.forEach(cb => {
+            cb.checked = false;
+            const tableRow = cb.closest('tr');
+            const musicId = tableRow.dataset.musicId;
+            const albumId = tableRow.dataset.albumId;
+            
+            // Remove from selectedRelations
+            const index = selectedRelations.findIndex(r => 
+                r.musicId === musicId && r.albumId === albumId
+            );
+            if (index > -1) {
+                selectedRelations.splice(index, 1);
+            }
+        });
+    } else {
+        // Check all
+        checkboxes.forEach(cb => {
+            cb.checked = true;
+            const tableRow = cb.closest('tr');
+            const musicId = tableRow.dataset.musicId;
+            const albumId = tableRow.dataset.albumId;
+            
+            // Add to selectedRelations if not already there
+            const exists = selectedRelations.some(r => 
+                r.musicId === musicId && r.albumId === albumId
+            );
+            if (!exists) {
+                selectedRelations.push({ musicId, albumId });
+            }
+        });
+    }
+    
+    updateBulkSelectionCount();
+}
+
+        function updateBulkSelectionCount() {
+            const count = selectedRelations.length;
+            document.getElementById('bulkSelectionCount').textContent = 
+                count === 1 ? '1 item selected' : `${count} items selected`;
+        }
+
+        function deleteSelectedRelations() {
+            if (selectedRelations.length === 0) {
+                showNotification('No relations selected', 'warning');
+                return;
+            }
+            
+            // Show bulk delete confirmation
+            document.getElementById('bulkDeleteCount').textContent = selectedRelations.length;
+            const popup = document.querySelector('.bulkDeleteConfirmPopup');
+            popup.style.display = 'flex';
+            setTimeout(() => {
+                popup.classList.add('active');
+            }, 10);
+        }
+
+        function closeBulkDeletePopup() {
+            const popup = document.querySelector('.bulkDeleteConfirmPopup');
+            popup.classList.remove('active');
+            
+            setTimeout(() => {
+                popup.style.display = 'none';
+            }, 300);
+        }
+
+        async function confirmBulkDelete() {
+            try {
+                const response = await fetch('/admin/music-album/delete-multiple', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ relations: selectedRelations })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showNotification(result.message, 'success');
+                    closeBulkDeletePopup();
+                    
+                    // Remove selected items from DOM
+                    selectedRelations.forEach(relation => {
+                        const tableRow = document.querySelector(
+                            `tr[data-music-id="${relation.musicId}"][data-album-id="${relation.albumId}"]`
+                        );
+                        if (tableRow) {
+                            tableRow.style.transition = 'all 0.3s ease';
+                            tableRow.style.opacity = '0';
+                            tableRow.style.height = '0';
+                            tableRow.style.padding = '0';
+                            tableRow.style.margin = '0';
+                            tableRow.style.border = 'none';
+                            
+                            setTimeout(() => {
+                                tableRow.remove();
+                            }, 300);
+                        }
+                    });
+                    
+                    // Update counts and disable bulk mode
+                    updateStatsAfterDelete(selectedRelations.length);
+                    toggleBulkSelection();
+                    
+                } else {
+                    showNotification(result.message || 'Failed to delete relations', 'error');
+                }
+            } catch (error) {
+                console.error('Error deleting multiple relations:', error);
+                showNotification('Failed to delete relations. Please try again.', 'error');
+            }
+        }
+
+        // ============ SINGLE DELETE ============ //
+        function deleteSingleRelation(musicId, albumId, musicName, albumName) {
+            deleteTarget = { musicId, albumId };
+            
+            document.getElementById('deleteConfirmTitle').textContent = 
+                `Delete "${musicName}" from "${albumName}"`;
+            document.getElementById('deleteConfirmMessage').textContent = 
+                `Are you sure you want to remove "${musicName}" from album "${albumName}"?`;
+            
+            // Show delete confirmation
+            const popup = document.querySelector('.deleteConfirmPopup');
+            popup.style.display = 'flex';
+            setTimeout(() => {
+                popup.classList.add('active');
+            }, 10);
+        }
+
+        function closeDeletePopup() {
+            const popup = document.querySelector('.deleteConfirmPopup');
+            popup.classList.remove('active');
+            
+            setTimeout(() => {
+                popup.style.display = 'none';
+                deleteTarget = null;
+            }, 300);
+        }
+
+        async function confirmDeleteSingle() {
+            if (!deleteTarget) return;
+            
+            try {
+                const { musicId, albumId } = deleteTarget;
+                
+                const response = await fetch(`/admin/music-album/delete/${musicId}/${albumId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showNotification('Relation deleted successfully', 'success');
+                    closeDeletePopup();
+                    
+                    // Remove item from DOM
+                    const tableRow = document.querySelector(
+                        `tr[data-music-id="${musicId}"][data-album-id="${albumId}"]`
+                    );
+                    if (tableRow) {
+                        tableRow.style.transition = 'all 0.3s ease';
+                        tableRow.style.opacity = '0';
+                        tableRow.style.height = '0';
+                        tableRow.style.padding = '0';
+                        tableRow.style.margin = '0';
+                        tableRow.style.border = 'none';
+                        
+                        setTimeout(() => {
+                            tableRow.remove();
+                            updateStatsAfterDelete(1);
+                        }, 300);
+                    }
+                } else {
+                    showNotification(result.message || 'Failed to delete relation', 'error');
+                }
+            } catch (error) {
+                console.error('Error deleting relation:', error);
+                showNotification('Failed to delete relation. Please try again.', 'error');
+            }
+        }
+
+        // ============ UTILITY FUNCTIONS ============ //
+        function updateStatsAfterDelete(deletedCount) {
+            // Update total relations count
+            const totalRelationsEl = document.getElementById('totalRelations');
+            if (totalRelationsEl) {
+                const current = parseInt(totalRelationsEl.textContent) || 0;
+                totalRelationsEl.textContent = Math.max(0, current - deletedCount);
+            }
+            
+            // Update pagination info
+            const totalItemsEl = document.getElementById('totalItems');
+            if (totalItemsEl) {
+                const current = parseInt(totalItemsEl.textContent) || 0;
+                totalItemsEl.textContent = Math.max(0, current - deletedCount);
+            }
+            
+            // Show empty state if no relations left
+            const tableRows = document.querySelectorAll('#relationsTableBody tr');
+            if (tableRows.length === 0) {
+                const tableBody = document.getElementById('relationsTableBody');
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="8">
+                            <div class="empty-state">
+                                <i class="fas fa-compact-disc"></i>
+                                <h3>No Relations Found</h3>
+                                <p>Start by adding music to albums!</p>
+                                <button class="btn btn-primary" onclick="addRelation()">
+                                    Add Relation
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        function showNotification(message, type = 'success') {
+            // Buat atau temukan elemen notifikasi
+            let notification = document.getElementById('customNotification');
+            if (!notification) {
+                notification = document.createElement('div');
+                notification.id = 'customNotification';
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    padding: 12px 16px;
+                    border-radius: 8px;
+                    color: white;
+                    font-weight: 500;
+                    z-index: 99999;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                    transform: translateX(120%);
+                    transition: transform 0.3s ease;
+                    max-width: 300px;
+                    font-size: 14px;
+                `;
+                document.body.appendChild(notification);
+            }
+            
+            // Set warna berdasarkan type
+            const colors = {
+                success: '#4CAF50',
+                error: '#F44336',
+                info: '#2196F3',
+                warning: '#FF9800'
+            };
+            notification.style.backgroundColor = colors[type] || colors.success;
+            
+            // Set pesan
+            notification.textContent = message;
+            
+            // Tampilkan notifikasi
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Sembunyikan setelah 3 detik
+            setTimeout(() => {
+                notification.style.transform = 'translateX(120%)';
+            }, 3000);
+        }
+
+
+    </script>
+</body>
+</html>

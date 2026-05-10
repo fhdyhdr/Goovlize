@@ -1,0 +1,17 @@
+DEOCKER
+
+CREATE USER IF NOT EXISTS 'goovlize'@'%' IDENTIFIED BY '123456';
+GRANT ALL PRIVILEGES ON goovlize.* TO 'goovlize'@'%';
+FLUSH PRIVILEGES;
+
+
+XAMPP
+
+CREATE USER IF NOT EXISTS 'goovlize'@'localhost' IDENTIFIED BY '123456';
+GRANT ALL PRIVILEGES ON goovlize.* TO 'goovlize'@'localhost';
+FLUSH PRIVILEGES;
+
+LOGIN ADMIN
+
+admin@goovlize.com
+Admin@123!

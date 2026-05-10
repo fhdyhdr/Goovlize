@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Admin Login - Goovlize</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        /* Modern Login Page Styles - Updated to match dashboard colors */
+        :root {
+            /* Primary colors from dashboard */
+            --primary-color: #8a8aa1;      /* charcoal */
+            --primary-dark: #27272A;
+            --primary-light: #52525B;
+            
+            /* Accent colors from dashboard */
+            --secondary-color: #2DD4BF;    /* soft teal */
+            --accent-color: #FACC15;       /* warm yellow */
+            --danger-color: #F87171;
+            --success-color: #4ADE80;
+            --warning-color: #FBBF24;
+            --info-color: #60A5FA;
+            
+            /* Backgrounds from dashboard */
+            --dark-bg: #18181B;        /* main background */
+            --card-bg: #1F1F23;        /* cards */
+            --sidebar-bg: #141417;     /* sidebar */
+            
+            /* Text colors from dashboard */
+            --text-primary: #E4E4E7;
+            --text-secondary: #A1A1AA;
+            --text-muted: #71717A;
+            
+            /* Shadows from dashboard */
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+            --shadow-md: 0 6px 12px rgba(0,0,0,0.4);
+            --shadow-lg: 0 14px 28px rgba(0,0,0,0.5);
+            --shadow-xl: 0 24px 40px rgba(0,0,0,0.6);
+            
+            /* Gradients */
+            --gradient-primary: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        body {
+            background: var(--dark-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+        }
+
+        /* Fix for iOS Safari */
+        @supports (-webkit-touch-callout: none) {
+            body {
+                min-height: -webkit-fill-available;
+            }
+        }
+
+        /* Background Animation */
+        .login-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .bg-shape {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(138, 138, 161, 0.1), rgba(39, 39, 42, 0.05));
+            filter: blur(60px);
+        }
+
+        .shape-1 {
+            width: min(400px, 80vw);
+            height: min(400px, 80vw);
+            top: -200px;
+            right: -100px;
+            background: linear-gradient(135deg, rgba(138, 138, 161, 0.2), rgba(39, 39, 42, 0.1));
+        }
+
+        .shape-2 {
+            width: min(300px, 60vw);
+            height: min(300px, 60vw);
+            bottom: -150px;
+            left: -100px;
+            background: linear-gradient(135deg, rgba(45, 212, 191, 0.15), rgba(5, 150, 105, 0.05));
+        }
+
+        .shape-3 {
+            width: min(200px, 40vw);
+            height: min(200px, 40vw);
+            top: 50%;
+            left: 10%;
+            background: linear-gradient(135deg, rgba(250, 204, 21, 0.15), rgba(217, 119, 6, 0.05));
+        }
+
+        /* Login Container */
+        .login-container {
+            width: 100%;
+            max-width: 450px;
+            perspective: 1000px;
+            position: relative;
+            z-index: 1;
+            margin: auto;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+            overflow: visible;
+            min-height: auto;
+        }
+
+        .login-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: clamp(20px, 5vw, 40px);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transform-style: preserve-3d;
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: visible;
+            max-height: 90vh;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+        }
+
+        /* Enable scrolling for login card */
+        @media (max-height: 600px) {
+            .login-card {
+                max-height: 85vh;
+                overflow-y: auto;
+            }
+        }
+
+        /* Header Styles */
+        .login-header {
+            text-align: center;
+            margin-bottom: clamp(20px, 5vw, 40px);
+            position: relative;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: clamp(15px, 4vw, 20px);
+        }
+
+        .logo-icon {
+            width: clamp(40px, 10vw, 50px);
+            height: clamp(40px, 10vw, 50px);
+            background: var(--gradient-primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: clamp(20px, 5vw, 24px);
+            box-shadow: 0 8px 20px rgba(138, 138, 161, 0.3);
+            flex-shrink: 0;
+        }
+
+        .logo-text {
+            font-size: clamp(22px, 6vw, 28px);
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--text-primary), var(--text-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+        }
+
+        .login-header h1 {
+            color: var(--text-primary);
+            font-size: clamp(22px, 6vw, 28px);
+            margin-bottom: 8px;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        .login-header p {
+            color: var(--text-secondary);
+            font-size: clamp(13px, 3.5vw, 15px);
+            line-height: 1.6;
+            padding: 0 clamp(10px, 3vw, 0);
+        }
+
+        /* Alert Styles */
+        .alert {
+            padding: clamp(12px, 3vw, 16px);
+            border-radius: 12px;
+            margin-bottom: clamp(16px, 4vw, 24px);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideIn 0.3s ease;
+            border: 1px solid transparent;
+            font-size: clamp(13px, 3.5vw, 15px);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .alert-danger {
+            background: rgba(248, 113, 113, 0.1);
+            color: #FCA5A5;
+            border-color: rgba(248, 113, 113, 0.2);
+        }
+
+        .alert-success {
+            background: rgba(74, 222, 128, 0.1);
+            color: #86EFAC;
+            border-color: rgba(74, 222, 128, 0.2);
+        }
+
+        .alert i {
+            font-size: clamp(18px, 4.5vw, 20px);
+            flex-shrink: 0;
+        }
+
+        /* Form Styles */
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(16px, 4vw, 24px);
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        .form-label {
+            display: block;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            font-size: clamp(13px, 3.5vw, 14px);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .form-label i {
+            color: var(--primary-color);
+            font-size: clamp(14px, 3.5vw, 16px);
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: clamp(14px, 3.5vw, 16px) clamp(44px, 10vw, 48px) clamp(14px, 3.5vw, 16px) clamp(14px, 3.5vw, 16px);
+            background: var(--sidebar-bg);
+            border: 2px solid rgba(113, 113, 122, 0.3);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: clamp(14px, 3.5vw, 15px);
+            transition: all 0.3s ease;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(138, 138, 161, 0.1);
+            background: var(--sidebar-bg);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-muted);
+            font-size: clamp(13px, 3.5vw, 15px);
+        }
+
+        .input-icon {
+            position: absolute;
+            right: clamp(12px, 3vw, 16px);
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: clamp(18px, 4.5vw, 20px);
+            pointer-events: none;
+        }
+
+        /* Password Toggle */
+        .password-toggle {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 8px;
+            position: absolute;
+            right: clamp(8px, 2vw, 12px);
+            top: 50%;
+            transform: translateY(-50%);
+            transition: color 0.3s ease;
+            font-size: clamp(18px, 4.5vw, 20px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 44px;
+            min-height: 44px;
+            z-index: 2;
+        }
+
+        .password-toggle:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+
+        /* Button Styles */
+        .login-btn {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            padding: clamp(14px, 3.5vw, 16px);
+            border-radius: 12px;
+            font-size: clamp(15px, 4vw, 16px);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+            box-shadow: 0 8px 20px rgba(138, 138, 161, 0.3);
+            min-height: 50px;
+            min-width: 44px;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .login-btn:active {
+            transform: scale(0.98);
+            box-shadow: 0 4px 10px rgba(138, 138, 161, 0.3);
+        }
+
+        /* Footer */
+        .login-footer {
+            text-align: center;
+            margin-top: clamp(20px, 5vw, 30px);
+            padding-top: clamp(15px, 4vw, 20px);
+            border-top: 1px solid rgba(113, 113, 122, 0.2);
+        }
+
+        .copyright {
+            color: var(--text-secondary);
+            font-size: clamp(12px, 3vw, 13px);
+            line-height: 1.5;
+            padding: 0 5px;
+        }
+
+        .version {
+            color: var(--text-muted);
+            font-size: clamp(11px, 2.5vw, 12px);
+            margin-top: 5px;
+            opacity: 0.7;
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: none;
+            width: clamp(18px, 4.5vw, 20px);
+            height: clamp(18px, 4.5vw, 20px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+            flex-shrink: 0;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Particles Effect */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(138, 138, 161, 0.5);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+            pointer-events: none;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Floating Animation for Card */
+        @keyframes floatCard {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .login-card {
+            animation: floatCard 6s ease-in-out infinite;
+        }
+
+        /* Refresh Control for Mobile */
+        .refresh-control {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: transparent;
+            z-index: 1000;
+            display: none;
+        }
+
+        /* Mobile Optimization */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+                touch-action: pan-y pan-x;
+                -webkit-touch-callout: none;
+                -webkit-text-size-adjust: 100%;
+            }
+
+            .login-container {
+                max-width: 100%;
+                height: auto;
+                padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+            }
+
+            .login-card {
+                max-width: 100%;
+                margin: 0;
+                padding: 20px;
+                border-radius: 20px;
+                max-height: calc(100vh - 40px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+                overscroll-behavior: contain;
+            }
+
+            /* Landscape Mode */
+            @media (orientation: landscape) and (max-height: 500px) {
+                body {
+                    padding: 5px;
+                    align-items: flex-start;
+                    justify-content: center;
+                    overflow-y: auto;
+                    position: relative;
+                    height: auto;
+                    min-height: 100vh;
+                }
+
+                .login-container {
+                    max-height: 95vh;
+                    margin: 10px auto;
+                }
+
+                .login-card {
+                    max-height: 90vh;
+                    overflow-y: auto;
+                    -webkit-overflow-scrolling: touch;
+                    margin: 0;
+                    padding: 15px;
+                }
+
+                .login-header {
+                    margin-bottom: 15px;
+                }
+
+                .login-header h1 {
+                    font-size: 20px;
+                    margin-bottom: 5px;
+                }
+
+                .login-header p {
+                    display: none;
+                }
+
+                .logo-container {
+                    margin-bottom: 10px;
+                }
+
+                .login-form {
+                    gap: 12px;
+                }
+
+                .form-input {
+                    padding: 12px 40px 12px 12px;
+                    font-size: 14px;
+                }
+
+                .login-btn {
+                    padding: 12px;
+                    min-height: 44px;
+                }
+            }
+
+            /* Portrait Mode */
+            @media (orientation: portrait) {
+                .login-card {
+                    max-height: 85vh;
+                }
+            }
+        }
+
+        /* Small Phones */
+        @media (max-width: 360px) {
+            .login-card {
+                padding: 15px;
+                border-radius: 16px;
+            }
+
+            .login-header h1 {
+                font-size: 20px;
+            }
+
+            .logo-text {
+                font-size: 20px;
+            }
+
+            .login-btn {
+                font-size: 14px;
+            }
+        }
+
+        /* Prevent zoom on input focus in mobile */
+        @media (max-width: 768px) {
+            input, select, textarea {
+                font-size: 16px !important;
+            }
+            
+            .form-input {
+                font-size: 16px !important;
+            }
+        }
+
+        /* Fix for iOS input shadow */
+        input, textarea {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            border-radius: 0;
+        }
+
+        /* iOS Pull-to-Refresh Prevention */
+        body {
+            overscroll-behavior-y: none;
+        }
+
+        /* Disable text selection except inputs */
+        .login-card *:not(input):not(textarea) {
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        input, textarea {
+            -webkit-user-select: text;
+            user-select: text;
+        }
+
+        /* Fix for mobile keyboard */
+        .login-card {
+            will-change: transform;
+        }
+
+        /* Safe area handling */
+        .safe-area-top {
+            padding-top: env(safe-area-inset-top);
+        }
+
+        .safe-area-bottom {
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        /* Refresh prevention */
+        body.prevent-refresh {
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Shapes -->
+    <div class="login-bg">
+        <div class="bg-shape shape-1"></div>
+        <div class="bg-shape shape-2"></div>
+        <div class="bg-shape shape-3"></div>
+    </div>
+
+    <!-- Particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Refresh Control -->
+    <div class="refresh-control" id="refreshControl"></div>
+
+    <!-- Login Container -->
+    <div class="login-container">
+        <div class="login-card">
+            <!-- Header -->
+            <div class="login-header">
+                <div class="logo-container">
+                    <div class="logo-icon">
+                        <i class="fas fa-music"></i>
+                    </div>
+                    <div class="logo-text">Goovlize</div>
+                </div>
+                <h1>Welcome Back</h1>
+                <p>Sign in to access the admin dashboard</p>
+            </div>
+
+            <!-- Alerts -->
+            <% if (error) { %>
+            <div class="alert alert-danger" id="error-alert">
+                <i class="fas fa-exclamation-circle"></i>
+                <div><%= error %></div>
+            </div>
+            <% } %>
+            
+            <% if (success) { %>
+            <div class="alert alert-success" id="success-alert">
+                <i class="fas fa-check-circle"></i>
+                <div><%= success %></div>
+            </div>
+            <% } %>
+
+            <!-- Login Form -->
+            <form method="POST" action="/admin/login" class="login-form" id="loginForm">
+                <!-- Email Input -->
+                <div class="form-group">
+                    <label for="email" class="form-label">
+                        <i class="fas fa-envelope"></i>
+                        Email Address
+                    </label>
+                    <div class="input-group">
+                        <input type="email" 
+                               class="form-input" 
+                               id="email" 
+                               name="email" 
+                               required 
+                               placeholder="admin@goovlize.com"
+                               autocomplete="username"
+                               inputmode="email">
+                        <div class="input-icon">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Password Input -->
+                <div class="form-group">
+                    <label for="password" class="form-label">
+                        <i class="fas fa-lock"></i>
+                        Password
+                    </label>
+                    <div class="input-group">
+                        <input type="password" 
+                               class="form-input" 
+                               id="password" 
+                               name="password" 
+                               required 
+                               placeholder="Enter your password"
+                               autocomplete="current-password">
+                        <button type="button" class="password-toggle" id="togglePassword" aria-label="Show password">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="login-btn" id="submitBtn">
+                    <span id="btnText">Sign In</span>
+                    <div class="loading" id="loadingSpinner"></div>
+                    <i class="fas fa-arrow-right" id="btnIcon"></i>
+                </button>
+            </form>
+
+            <!-- Footer -->
+            <div class="login-footer">
+                <p class="copyright">
+                    &copy; <%= new Date().getFullYear() %> Goovlize. All rights reserved.
+                </p>
+                <p class="version">Admin Panel v2.0</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Fix untuk mobile refresh dan scroll issues
+        (function() {
+            'use strict';
+            
+            // Prevent pull-to-refresh
+            let lastTouchY = 0;
+            let touchStartY = 0;
+            const body = document.body;
+            
+            // Prevent zoom
+            document.addEventListener('gesturestart', function(e) {
+                e.preventDefault();
+            });
+            
+            // Set viewport height untuk mobile
+            function setVH() {
+                let vh = window.innerHeight * 0.01;
+                document.documentElement.style.setProperty('--vh', `${vh}px`);
+            }
+            
+            setVH();
+            window.addEventListener('resize', setVH);
+            window.addEventListener('orientationchange', setVH);
+            
+            // Fix untuk keyboard muncul di mobile
+            let viewport = document.querySelector("meta[name=viewport]");
+            viewport.setAttribute("content", viewport.content + ", height=" + window.innerHeight);
+            
+        })();
+
+        // DOM Elements
+        const loginForm = document.getElementById('loginForm');
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('password');
+        const submitBtn = document.getElementById('submitBtn');
+        const btnText = document.getElementById('btnText');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const btnIcon = document.getElementById('btnIcon');
+        const refreshControl = document.getElementById('refreshControl');
+
+        // Prevent pull-to-refresh
+        let touchStartY = 0;
+        document.addEventListener('touchstart', function(e) {
+            touchStartY = e.touches[0].clientY;
+        }, { passive: true });
+
+        // Create Particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = window.innerWidth < 768 ? 20 : 30;
+            
+            // Clear existing particles
+            particlesContainer.innerHTML = '';
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // Random position
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                
+                // Random size
+                const size = Math.random() * 3 + 1;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // Random color (menggunakan warna dari dashboard)
+                const colors = [
+                    'rgba(138, 138, 161, 0.5)',    /* primary-color */
+                    'rgba(45, 212, 191, 0.5)',     /* secondary-color */
+                    'rgba(250, 204, 21, 0.5)',     /* accent-color */
+                    'rgba(96, 165, 250, 0.5)'      /* info-color */
+                ];
+                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                
+                // Random animation
+                particle.style.animationDuration = `${Math.random() * 10 + 15}s`;
+                particle.style.animationDelay = `${Math.random() * 5}s`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Toggle Password Visibility
+        togglePassword.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            
+            // Toggle icon
+            const icon = this.querySelector('i');
+            if (type === 'password') {
+                icon.className = 'fas fa-eye';
+                this.setAttribute('aria-label', 'Show password');
+            } else {
+                icon.className = 'fas fa-eye-slash';
+                this.setAttribute('aria-label', 'Hide password');
+            }
+        });
+
+        // Form Submission with Loading State
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Show loading state
+            btnText.textContent = 'Signing In...';
+            loadingSpinner.style.display = 'block';
+            btnIcon.style.display = 'none';
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = '0.8';
+            
+            // Get form data
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            // Simulate API call delay
+            setTimeout(() => {
+                // Submit the form
+                this.submit();
+            }, 1000);
+        });
+
+        // Auto-hide alerts after 5 seconds
+        setTimeout(() => {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => {
+                alert.style.opacity = '0';
+                alert.style.transform = 'translateY(-10px)';
+                alert.style.transition = 'all 0.3s ease';
+                setTimeout(() => {
+                    alert.style.display = 'none';
+                }, 300);
+            });
+        }, 5000);
+
+        // Input focus effects
+        const inputs = document.querySelectorAll('.form-input');
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'scale(1.02)';
+                this.parentElement.style.transition = 'transform 0.3s ease';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'scale(1)';
+            });
+            
+            // Fix untuk iOS keyboard
+            input.addEventListener('focus', function() {
+                setTimeout(() => {
+                    this.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 300);
+            });
+        });
+
+        // Load saved credentials if "Remember me" was checked
+        document.addEventListener('DOMContentLoaded', function() {
+            // Create particles
+            createParticles();
+            
+            // Auto-focus email input dengan delay untuk mobile
+            setTimeout(() => {
+                document.getElementById('email').focus();
+            }, 300);
+            
+            // Handle orientation change
+            window.addEventListener('orientationchange', function() {
+                setTimeout(() => {
+                    document.body.scrollTop = 0;
+                    document.documentElement.scrollTop = 0;
+                    createParticles();
+                }, 300);
+            });
+            
+            // Handle resize
+            let resizeTimer;
+            window.addEventListener('resize', function() {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(() => {
+                    createParticles();
+                }, 250);
+            });
+        });
+
+        // Disable right click context menu
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
+        });
+
+        // Handle back/forward buttons
+        window.addEventListener('pageshow', function(event) {
+            // Jika page dimuat dari cache, reset form
+            if (event.persisted) {
+                document.getElementById('loginForm').reset();
+                btnText.textContent = 'Sign In';
+                loadingSpinner.style.display = 'none';
+                btnIcon.style.display = 'block';
+                submitBtn.disabled = false;
+                submitBtn.style.opacity = '1';
+            }
+        });
+
+        // Prevent page reload on mobile
+        window.onbeforeunload = function() {
+            return null;
+        };
+
+        // Fix untuk mobile keyboard tidak menutupi input
+        window.addEventListener('resize', function() {
+            if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') {
+                window.setTimeout(function() {
+                    document.activeElement.scrollIntoViewIfNeeded();
+                }, 0);
+            }
+        });
+    </script>
+</body>
+</html>

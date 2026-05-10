@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Dashboard Statistics Report</title>
+    <style>
+        /* Reset dan styling dasar */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Arial', sans-serif; 
+            background: #1a1a2e; 
+            color: white; 
+            padding: 20px; 
+            line-height: 1.6; 
+        }
+        
+        /* Header Report */
+        .report-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #8b5cf6;
+        }
+        
+        .report-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 10px;
+        }
+        
+        .report-subtitle {
+            color: #a5a5a5;
+            font-size: 14px;
+        }
+        
+        /* Section styling */
+        .section {
+            margin-bottom: 25px;
+            padding: 15px;
+            background: #2d2d44;
+            border-radius: 8px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: white;
+            border-left: 4px solid #8b5cf6;
+            padding-left: 10px;
+        }
+        
+        /* Statistik Card */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .stat-card-pdf {
+            background: #2d2d44;
+            border-radius: 8px;
+            padding: 20px;
+            border: 1px solid #3d3d5a;
+            text-align: center;
+        }
+        
+        .stat-icon {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #8b5cf6;
+        }
+        
+        .stat-label {
+            color: #a5a5a5;
+            font-size: 12px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: white;
+        }
+        
+        /* Chart Container */
+        .chart-container {
+            margin: 20px 0;
+            padding: 15px;
+            background: #2d2d44;
+            border-radius: 8px;
+        }
+        
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 15px;
+        }
+        
+        .chart-wrapper {
+            background: #1a1a2e;
+            border-radius: 6px;
+            padding: 15px;
+            border: 1px solid #3d3d5a;
+        }
+        
+        .chart-image {
+            width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+        
+        .chart-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: white;
+            text-align: center;
+        }
+        
+        /* Top Lists */
+        .top-list-pdf {
+            background: #2d2d44;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .list-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: white;
+        }
+        
+        .list-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border-bottom: 1px solid #3d3d5a;
+        }
+        
+        .list-item:last-child { border-bottom: none; }
+        
+        .item-rank {
+            width: 32px;
+            height: 32px;
+            background: #8b5cf6;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        
+        .item-rank.top-1 { background: #f59e0b; }
+        .item-rank.top-2 { background: #6b7280; }
+        .item-rank.top-3 { background: #7d1c8d; }
+        
+        .item-info { flex: 1; }
+        
+        .item-name { 
+            font-weight: 600; 
+            font-size: 14px; 
+        }
+        
+        .item-details { 
+            color: #a5a5a5; 
+            font-size: 12px; 
+        }
+        
+        .item-value {
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        /* Tabel */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        
+        .data-table th {
+            background: #8b5cf6;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-size: 14px;
+        }
+        
+        .data-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #3d3d5a;
+        }
+        
+        /* Platform Statistics */
+        .platform-stats {
+            background: #2d2d44;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid #8b5cf6;
+        }
+        
+        .stats-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .stats-row:last-child {
+            border-bottom: none;
+        }
+        
+        .stats-label {
+            color: #a5a5a5;
+        }
+        
+        .stats-value {
+            color: white;
+            font-weight: 600;
+        }
+        
+        /* Footer */
+        .report-footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #3d3d5a;
+            color: #a5a5a5;
+            font-size: 11px;
+            text-align: center;
+        }
+        
+        /* Break untuk halaman PDF */
+        .page-break {
+            page-break-before: always;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Report -->
+    <div class="report-header">
+        <h1 class="report-title">📊 Goovlize Music Dashboard Statistics Report</h1>
+        <p class="report-subtitle">
+            Generated on <%= new Date().toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            }) %> • Time Range: <%= timeRange %>
+        </p>
+        <p class="report-subtitle">Report ID: <%= reportId %> | Generated by: <%= generatedBy %></p>
+    </div>
+
+    <!-- Overview Statistics -->
+    <div class="section">
+        <h2 class="section-title">📈 Platform Overview</h2>
+        <div class="stats-grid">
+            <div class="stat-card-pdf">
+                <div class="stat-icon">🎵</div>
+                <div class="stat-label">Total Music</div>
+                <div class="stat-value"><%= statistics.totalMusic.toLocaleString() %></div>
+            </div>
+            <div class="stat-card-pdf">
+                <div class="stat-icon">👤</div>
+                <div class="stat-label">Total Artists</div>
+                <div class="stat-value"><%= statistics.totalArtists.toLocaleString() %></div>
+            </div>
+            <div class="stat-card-pdf">
+                <div class="stat-icon">💿</div>
+                <div class="stat-label">Total Albums</div>
+                <div class="stat-value"><%= statistics.totalAlbums.toLocaleString() %></div>
+            </div>
+            <div class="stat-card-pdf">
+                <div class="stat-icon">▶️</div>
+                <div class="stat-label">Total Plays</div>
+                <div class="stat-value"><%= statistics.totalPlays.toLocaleString() %></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="section page-break">
+        <h2 class="section-title">📊 Data Visualization</h2>
+        
+        <div class="chart-grid">
+            <div class="chart-wrapper">
+                <h3 class="chart-title">Plays Over Time (<%= timeRange %>)</h3>
+                <% if (playsChartImage) { %>
+                    <img src="<%= playsChartImage %>" alt="Plays Chart" class="chart-image">
+                <% } else { %>
+                    <div style="background: #1a1a2e; height: 200px; display: flex; align-items: center; justify-content: center; color: #a5a5a5;">
+                        <p>Chart data not available</p>
+                    </div>
+                <% } %>
+            </div>
+            
+            <div class="chart-wrapper">
+                <h3 class="chart-title">Genre Distribution</h3>
+                <% if (genreChartImage) { %>
+                    <img src="<%= genreChartImage %>" alt="Genre Chart" class="chart-image">
+                <% } else { %>
+                    <div style="background: #1a1a2e; height: 200px; display: flex; align-items: center; justify-content: center; color: #a5a5a5;">
+                        <p>Chart data not available</p>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Content -->
+    <div class="section">
+        <h2 class="section-title">🏆 Top Performers</h2>
+        
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+            <!-- Top Played Music -->
+            <div class="top-list-pdf">
+                <h3 class="list-title">🎵 Top 5 Most Played Music</h3>
+                <% if (statistics.topPlayed && statistics.topPlayed.length > 0) { %>
+                    <% statistics.topPlayed.forEach((music, index) => { %>
+                        <div class="list-item">
+                            <div class="item-rank <%= 'top-' + (index + 1) %>"><%= index + 1 %></div>
+                            <div class="item-info">
+                                <div class="item-name"><%= music.title %></div>
+                                <div class="item-details"><%= music.artist %></div>
+                            </div>
+                            <div class="item-value"><%= music.plays.toLocaleString() %> plays</div>
+                        </div>
+                    <% }) %>
+                <% } else { %>
+                    <p style="color: #a5a5a5; text-align: center; padding: 20px;">No top music data available</p>
+                <% } %>
+            </div>
+            
+            <!-- Popular Genres -->
+            <div class="top-list-pdf">
+                <h3 class="list-title">🎭 Top Genres</h3>
+                <% if (statistics.popularGenres && statistics.popularGenres.length > 0) { %>
+                    <% statistics.popularGenres.forEach((genre, index) => { 
+                        const percentage = statistics.totalMusic > 0 ? 
+                            Math.round((genre.count / statistics.totalMusic) * 100) : 0;
+                    %>
+                        <div class="list-item">
+                            <div class="item-rank"><%= index + 1 %></div>
+                            <div class="item-info">
+                                <div class="item-name"><%= genre.name %></div>
+                                <div class="item-details"><%= genre.count %> songs</div>
+                            </div>
+                            <div class="item-value"><%= percentage %>%</div>
+                        </div>
+                    <% }) %>
+                <% } else { %>
+                    <p style="color: #a5a5a5; text-align: center; padding: 20px;">No genre data available</p>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity & Platform Stats -->
+    <div class="section page-break">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <!-- Recent Activity -->
+            <div>
+                <h3 class="list-title">🕒 Recent Activity</h3>
+                <% if (statistics.recentUploads && statistics.recentUploads.length > 0) { %>
+                    <% statistics.recentUploads.forEach((activity) => { %>
+                        <div class="list-item">
+                            <div style="background: #8b5cf6; color: white; width: 36px; height: 36px; 
+                                 border-radius: 8px; display: flex; align-items: center; 
+                                 justify-content: center; margin-right: 12px; font-size: 14px; flex-shrink: 0;">
+                                <span>🎵</span>
+                            </div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600; font-size: 14px; color: white;">
+                                    New Music Added
+                                </div>
+                                <div style="color: #a5a5a5; font-size: 12px;">
+                                    "<%= activity.title %>" by <%= activity.artist %>
+                                </div>
+                            </div>
+                            <div style="color: #a5a5a5; font-size: 11px;">
+                                <%= activity.date %>
+                            </div>
+                        </div>
+                    <% }) %>
+                <% } else { %>
+                    <p style="color: #a5a5a5; text-align: center; padding: 20px;">No recent activities</p>
+                <% } %>
+            </div>
+            
+            <!-- Platform Statistics -->
+            <div class="platform-stats">
+                <h3 style="color: white; margin-bottom: 15px; font-size: 16px;">📊 Platform Statistics</h3>
+                
+                <div class="stats-row">
+                    <span class="stats-label">Average Plays per Song</span>
+                    <span class="stats-value"><%= avgPlays.toLocaleString() %></span>
+                </div>
+                
+                <div class="stats-row">
+                    <span class="stats-label">Songs per Artist (Avg)</span>
+                    <span class="stats-value"><%= avgSongsPerArtist %></span>
+                </div>
+                
+                <div class="stats-row">
+                    <span class="stats-label">Songs per Album (Avg)</span>
+                    <span class="stats-value"><%= avgSongsPerAlbum %></span>
+                </div>
+                
+                <div class="stats-row">
+                    <span class="stats-label">Active Users (Daily Est.)</span>
+                    <span class="stats-value"><%= activeUsers.toLocaleString() %></span>
+                </div>
+                
+                <div class="stats-row">
+                    <span class="stats-label">Engagement Rate</span>
+                    <span class="stats-value">
+                        <% 
+                        // PERBAIKAN DISINI: Gunakan statistics.totalMusic jika totalMusic tidak ada
+                        const totalMusicValue = typeof totalMusic !== 'undefined' ? totalMusic : statistics.totalMusic;
+                        const engagementRate = totalMusicValue > 0 ? 
+                            ((statistics.totalPlays / totalMusicValue) * 100).toFixed(1) : 0;
+                        %>
+                        <%= engagementRate %>%
+                    </span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Summary Table -->
+        <div style="margin-top: 25px;">
+            <h3 class="list-title">📈 Performance Summary</h3>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Value</th>
+                        <th>Growth Potential</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Music Library</td>
+                        <td><%= statistics.totalMusic %> songs</td>
+                        <td>
+                            <% 
+                            const musicGrowth = statistics.totalMusic >= 100 ? 'High' : 
+                                               statistics.totalMusic >= 50 ? 'Medium' : 'Low';
+                            %>
+                            <%= musicGrowth %>
+                        </td>
+                        <td>
+                            <span style="color: <%= musicGrowth === 'High' ? '#10B981' : 
+                                                 musicGrowth === 'Medium' ? '#F59E0B' : '#EF4444' %>;">
+                                ● <%= musicGrowth === 'High' ? 'Excellent' : 
+                                     musicGrowth === 'Medium' ? 'Good' : 'Needs Improvement' %>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Artist Diversity</td>
+                        <td><%= statistics.totalArtists %> artists</td>
+                        <td>
+                            <% 
+                            const artistRatio = (statistics.totalArtists / statistics.totalMusic * 100).toFixed(1);
+                            const artistGrowth = artistRatio >= 30 ? 'High' : 
+                                                artistRatio >= 15 ? 'Medium' : 'Low';
+                            %>
+                            <%= artistGrowth %>
+                        </td>
+                        <td>
+                            <span style="color: <%= artistGrowth === 'High' ? '#10B981' : 
+                                                 artistGrowth === 'Medium' ? '#F59E0B' : '#EF4444' %>;">
+                                ● <%= artistGrowth === 'High' ? 'Diverse' : 
+                                     artistGrowth === 'Medium' ? 'Moderate' : 'Concentrated' %>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>User Engagement</td>
+                        <td><%= statistics.totalPlays.toLocaleString() %> plays</td>
+                        <td>
+                            <% 
+                            const playPerSong = avgPlays;
+                            const engagementGrowth = playPerSong >= 100 ? 'High' : 
+                                                    playPerSong >= 50 ? 'Medium' : 'Low';
+                            %>
+                            <%= engagementGrowth %>
+                        </td>
+                        <td>
+                            <span style="color: <%= engagementGrowth === 'High' ? '#10B981' : 
+                                                 engagementGrowth === 'Medium' ? '#F59E0B' : '#EF4444' %>;">
+                                ● <%= engagementGrowth === 'High' ? 'High' : 
+                                     engagementGrowth === 'Medium' ? 'Moderate' : 'Low' %>
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Report Footer -->
+    <div class="report-footer">
+        <p>© <%= new Date().getFullYear() %> Goovlize Music Platform</p>
+        <p>This is an official automated report generated by the Music Dashboard System.</p>
+        <p>For more detailed analytics and real-time data, please visit the admin dashboard.</p>
+    </div>
+</body>
+</html>

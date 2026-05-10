@@ -1,0 +1,103 @@
+    <div class="wrapper">
+      <div class="content">
+        <div class="topContent">
+          <div class="menuBar">
+            <i class="fa-solid fa-chevron-down" onclick="slideDownPlayer()"></i>
+            <div class="scroll-wrapper">
+              <p class="appName"></p>
+            </div>
+            <i class="fa-solid fa-bars"></i>
+          </div>
+
+        <div class="musicGroups">
+    <!-- Custom playlists akan di-generate di sini -->
+  </div>
+
+  
+        </div>
+
+        <div class="middleContent">
+          <div class="swiper-container slider-one">
+            <div class="swiper-wrapper slider-one">
+              <div class="swiper-slide">
+                <div class="settings">
+                  <i
+                    class="far fa-heart heartFoot"
+                    onclick="toggleHeart(this)"
+                  ></i>
+                  <i class="fa-solid fa-plus" onclick="expandTop(this)"></i>
+                </div>
+                <div class="albumContent">
+                  <div class="albumCover">
+                    <img class="current-cover" src="" />
+                  </div>
+                  <p class="artistName title"></p>
+                  <p class="songName artistNames"></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bottomContent expand">
+          <i
+            class="fa-solid fa-chevron-down downbottom"
+            onclick="expandBottomToggle(this)"
+          ></i>
+          <div class="progress-container progress-player">
+            <div class="player-progressbar">
+              <div class="player-bar progressBar"></div>
+            </div>
+            <div class="time-container">
+              <span class="progress-time start-time"></span>
+              <span class="progress-time end-time"></span>
+            </div>
+          </div>
+          <div class="player">
+            <div id="repeatBtn" onclick="repeatMode()">
+              <i class="fas fa-undo-alt"></i>
+            </div>
+            <svg
+              class="svg-icon prevplayscreen"
+              onclick="playPreviousMusic()"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M18.4 21.8l-12-9c-.53333333-.4-.53333333-1.2 0-1.6l12-9c.6592363-.49442719 1.6-.02404532 1.6.8v18c0 .8240453-.9407637 1.2944272-1.6.8zM18 5l-9.33333333 7L18 19V5zM6 22H4V2h2v20z"
+              />
+            </svg>
+            <div onclick="playPause()" class="btnPlay">
+              <svg
+                class="svg-icon control-play"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+              >
+                <defs />
+                <path
+                  fill-rule="evenodd"
+                  d="M5 21V3c0-.79116579.87524596-1.26900738 1.54075759-.84117848L20.5407576 11.1588215c.6123232.3936364.6123232 1.2887206 0 1.682357l-14.00000001 9C5.87524596 22.2690074 5 21.7911658 5 21zm2-1.8316655L18.1507426 12 7 4.8316655v14.336669z"
+                />
+              </svg>
+            </div>
+            <svg
+              class="svg-icon nextplayscreen"
+              onclick="playNextMusic()"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M4 21V3c0-.82404532.94076375-1.29442719 1.6-.8l12 9c.5333333.4.5333333 1.2 0 1.6l-12 9c-.65923625.4944272-1.6.0240453-1.6-.8zm2-2l9.3333333-7L6 5v14zm14 3h-2V2h2v20z"
+              />
+            </svg>
+            <div id="randomBtnDesk" onclick="randomMode()">
+              <i class="fas fa-random"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="albumBg"></div>
+      </div>
+    </div>

@@ -1,0 +1,2288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genre Management - Admin Panel</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/admin/css/dashboard.css">
+    <link rel="stylesheet" href="/css/popup.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="/js/main.js" defer></script>
+
+    <style>
+        /* Genre Management Styles */
+        .genre-management-container {
+            padding: 20px;
+        }
+
+        .genre-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .genre-header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .genre-header h1 i {
+            color: var(--primary-color);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 12px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 14px;
+            padding: 12px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            background: rgba(139, 92, 246, 0.05);
+        }
+
+        /* Filters */
+        .genre-filters {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+            border: 1px solid var(--border-color);
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .filter-group label {
+            display: block;
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .filter-input {
+            width: 100%;
+            padding: 10px 16px;
+            background: var(--sidebar-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+        }
+
+        .filter-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .clear-search {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+
+        .filter-loading {
+            padding: 10px;
+            text-align: center;
+            color: var(--primary-color);
+            font-size: 14px;
+            display: none;
+        }
+
+        /* Genre List Container */
+        .genre-list-container {
+            background: transparent;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .genre-list-body {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            max-height: none;
+            overflow-y: visible;
+        }
+
+        /* Genre Item */
+        .genre-item {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .genre-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            border-color: var(--primary-color);
+        }
+
+        .genre-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .genre-item:hover::before {
+            opacity: 1;
+        }
+
+        /* Genre Header */
+        .genre-header-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .genre-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+            position: relative;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+        }
+
+        .genre-item:hover .genre-icon {
+            transform: scale(1.05);
+            border-color: var(--primary-color);
+        }
+
+        .genre-icon i {
+            font-size: 24px;
+            color: white;
+        }
+
+        .genre-details {
+            flex: 1;
+            margin-left: 15px;
+            overflow: hidden;
+        }
+
+        .genre-details h4 {
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            margin: 0 0 5px 0;
+            line-height: 1.3;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .genre-details p {
+            color: var(--text-secondary);
+            font-size: 13px;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .genre-details p i {
+            font-size: 12px;
+        }
+
+        /* Genre Content */
+        .genre-content {
+            margin-bottom: 15px;
+            flex: 1;
+        }
+
+        .genre-stats {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 12px;
+        }
+
+        .stat-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .genre-item:hover .stat-item {
+            border-color: rgba(139, 92, 246, 0.3);
+            background: rgba(139, 92, 246, 0.1);
+        }
+
+        .stat-value {
+            color: white;
+            font-size: 20px;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        .genre-description {
+            color: var(--text-secondary);
+            font-size: 13px;
+            line-height: 1.5;
+            margin-bottom: 15px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-style: italic;
+            opacity: 0.8;
+        }
+
+        /* Genre Footer */
+        .genre-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 15px;
+            margin-top: auto;
+        }
+
+        .genre-date {
+            color: var(--text-secondary);
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        @media (min-width: 769px) {
+            .genre-date {
+                margin-right: 15px;
+                padding: 8px 12px;
+                background: rgba(255, 255, 255, 0.05);
+                border-radius: 6px;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+            }
+        }
+
+        .genre-date i {
+            font-size: 11px;
+        }
+
+        .genre-actions {
+            display: flex;
+            gap: 8px;
+            margin-left: auto;
+        }
+
+        .action-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+            background: var(--sidebar-bg);
+            color: var(--text-secondary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: currentColor;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .action-btn i {
+            position: relative;
+            z-index: 1;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .action-btn:hover::before {
+            opacity: 0.1;
+        }
+
+        .action-view:hover {
+            border-color: var(--info-color);
+            color: var(--info-color);
+        }
+
+        .action-edit:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .action-delete:hover {
+            border-color: var(--danger-color);
+            color: var(--danger-color);
+        }
+
+        .action-btn .btn-tooltip {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .action-btn:hover .btn-tooltip {
+            opacity: 1;
+            visibility: visible;
+            bottom: -25px;
+        }
+
+        /* Empty State */
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 20px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 2px dashed var(--border-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .empty-state i {
+            font-size: 64px;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .empty-state h3 {
+            color: var(--text-primary);
+            font-size: 24px;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .empty-state p {
+            color: var(--text-secondary);
+            font-size: 16px;
+            margin-bottom: 24px;
+            max-width: 400px;
+            line-height: 1.5;
+        }
+
+        /* Pagination */
+        .genre-pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .pagination-info {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .pagination-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pagination-btn {
+            padding: 8px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--sidebar-bg);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            background: rgba(139, 92, 246, 0.05);
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .page-numbers {
+            display: flex;
+            gap: 4px;
+        }
+
+        .page-number {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: var(--sidebar-bg);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .page-number:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            background: rgba(139, 92, 246, 0.05);
+        }
+
+        .page-number.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .genre-list-body {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+        }
+
+        @media (max-width: 992px) {
+            .genre-list-body {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 15px;
+                padding: 15px;
+            }
+            
+            .genre-item {
+                padding: 15px;
+            }
+            
+            .genre-stats {
+                gap: 10px;
+            }
+            
+            .stat-value {
+                font-size: 18px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .genre-header {
+                flex-direction: column;
+                text-align: center;
+                margin-bottom: 20px;
+                gap: 16px;
+            }
+            
+            .header-actions {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            .filter-group {
+                min-width: 100%;
+            }
+            
+            .genre-header-info {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            
+            .genre-icon {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .genre-details {
+                margin-left: 0;
+                width: 100%;
+            }
+            
+            .genre-stats {
+                flex-direction: row;
+                gap: 8px;
+            }
+            
+            .stat-item {
+                padding: 8px;
+            }
+            
+            .stat-value {
+                font-size: 16px;
+            }
+            
+            .stat-label {
+                font-size: 10px;
+            }
+            
+            .genre-footer {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .genre-date {
+                margin-right: 0;
+                justify-content: center;
+            }
+            
+            .genre-actions {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .genre-list-body {
+                grid-template-columns: 1fr;
+                gap: 12px;
+                padding: 12px;
+            }
+            
+            .genre-item {
+                padding: 15px;
+            }
+            
+            .empty-state {
+                padding: 40px 15px;
+                min-height: 300px;
+            }
+            
+            .empty-state i {
+                font-size: 48px;
+            }
+            
+            .empty-state h3 {
+                font-size: 20px;
+            }
+            
+            .empty-state p {
+                font-size: 14px;
+            }
+            
+            .genre-pagination {
+                flex-direction: column;
+                gap: 16px;
+                padding: 16px;
+                text-align: center;
+            }
+            
+            .pagination-info {
+                order: 2;
+                font-size: 12px;
+            }
+            
+            .pagination-controls {
+                order: 1;
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .pagination-btn {
+                padding: 8px 12px;
+                font-size: 13px;
+            }
+            
+            .page-numbers {
+                display: none;
+            }
+        }
+
+        /* Loader animation */
+        .genre-item.loading {
+            animation: loadingPulse 1.5s infinite;
+        }
+
+        @keyframes loadingPulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+
+        /* Popup Styles for Genre */
+        .genre-creator {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .genre-icon-container {
+            width: 150px;
+            flex-shrink: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .genre-icon-preview {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            border: 3px dashed #444;
+            transition: all 0.3s ease;
+        }
+
+        .genre-icon-preview i {
+            font-size: 48px;
+            color: white;
+        }
+
+        .genre-info {
+            flex: 1;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #eee;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .form-group input[type="text"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #444;
+            border-radius: 6px;
+            background-color: #2a2a2a;
+            color: white;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+
+        .form-group input[type="text"]:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        .character-count {
+            text-align: right;
+            font-size: 12px;
+            color: #888;
+            margin-top: 4px;
+        }
+
+        .error-message {
+            color: #ff6b6b;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        /* Delete Confirmation Popup */
+        .delete-confirm-content {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .delete-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 25px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.2));
+            border: 2px solid rgba(239, 68, 68, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulseWarning 2s infinite;
+        }
+
+        @keyframes pulseWarning {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+            }
+        }
+
+        .delete-icon i {
+            font-size: 36px;
+            color: var(--danger-color);
+        }
+
+        .delete-confirm-content h4 {
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+
+        .delete-confirm-content p {
+            color: var(--text-secondary);
+            font-size: 15px;
+            line-height: 1.5;
+            margin-bottom: 25px;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .delete-details {
+            background: rgba(42, 42, 42, 0.5);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .delete-detail-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .delete-detail-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .delete-detail-item:first-child {
+            padding-top: 0;
+        }
+
+        .delete-detail-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--card-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .delete-detail-icon i {
+            font-size: 16px;
+            color: var(--primary-color);
+        }
+
+        .delete-detail-content {
+            flex: 1;
+            text-align: left;
+        }
+
+        .delete-detail-title {
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .delete-detail-value {
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .warning-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 25px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .warning-message i {
+            color: var(--danger-color);
+            font-size: 18px;
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        .warning-message span {
+            color: #ff8a8a;
+            font-size: 14px;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger-color), #dc2626);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 12px 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-danger:active {
+            transform: translateY(0);
+        }
+
+        .btn-danger::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(rgba(255, 255, 255, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .btn-danger:hover::before {
+            opacity: 1;
+        }
+
+        /* Responsive for mobile popups */
+        @media (max-width: 768px) {
+            .genre-creator {
+                flex-direction: column;
+                align-items: center !important;
+                text-align: center;
+                gap: 20px;
+            }
+            
+            .genre-icon-container {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+            }
+            
+            .genre-info {
+                width: 100%;
+            }
+            
+            .delete-confirm-content {
+                padding: 15px 0;
+            }
+            
+            .delete-icon {
+                width: 60px;
+                height: 60px;
+                margin-bottom: 20px;
+            }
+            
+            .delete-icon i {
+                font-size: 28px;
+            }
+            
+            .delete-confirm-content h4 {
+                font-size: 20px;
+            }
+            
+            .delete-confirm-content p {
+                font-size: 14px;
+            }
+            
+            .delete-details {
+                padding: 15px;
+            }
+            
+            .delete-detail-item {
+                gap: 12px;
+                padding: 10px 0;
+            }
+            
+            .delete-detail-icon {
+                width: 36px;
+                height: 36px;
+            }
+            
+            .delete-detail-icon i {
+                font-size: 14px;
+            }
+            
+            .delete-detail-title {
+                font-size: 12px;
+            }
+            
+            .delete-detail-value {
+                font-size: 14px;
+            }
+            
+            .warning-message {
+                padding: 12px;
+                font-size: 13px;
+            }
+            
+            .warning-message i {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="music-dashboard-container">
+          <div class="music-sidebar" id="musicSidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <div class="music-icon-container">
+                        <i class="fas fa-music"></i>
+                    </div>
+                    <span class="logo-text">Goovlize</span>
+                </div>
+                <button class="sidebar-close-btn" id="sidebarCloseBtn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="sidebar-card">
+                <div class="card-content">
+                    <div class="card-icon">
+                        <i class="fas fa-headphones-alt"></i>
+                    </div>
+                    <div class="card-text">
+                        <h3>Music Studio</h3>
+                        <p>Admin Panel</p>
+                    </div>
+                    <div class="card-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Menu Items -->
+            <div class="menu-section">
+                <div onclick="window.location.href='/admin/dashboard'" class="menu-item">
+                    <div class="menu-icon">
+                        <i class="fas fa-tachometer-alt"></i>
+                    </div>
+                    <span class="menu-text">Dashboard</span>
+                </div>
+
+                <div onclick="window.location.href='/admin/music'" class="menu-item">
+                    <div class="menu-icon">
+                       <i class="fa-regular fa-file-audio"></i>
+                    </div>
+                    <span class="menu-text">Music</span>
+                </div>
+
+                 <div onclick="window.location.href='/admin/artist'" class="menu-item">
+                    <div class="menu-icon">
+                       <i class="fa-solid fa-user-check"></i>
+                    </div>
+                    <span class="menu-text">Artist</span>
+                </div>
+
+                <div onclick="window.location.href='/admin/playlist'" class="menu-item notification">
+                    <div class="menu-icon">
+                       <i class="fa-regular fa-circle-play"></i>
+                    </div>
+                    <span class="menu-text">Playlist</span>
+                </div>
+
+                <div onclick="window.location.href='/admin/album'" class="menu-item">
+                    <div class="menu-icon">
+                       <i class="fa-solid fa-compact-disc"></i>
+                    </div>
+                    <span class="menu-text">Album</span>
+                </div>
+
+                <div onclick="window.location.href='/admin/music-genre'" class="menu-item active">
+                    <div class="menu-icon">
+                         <i class="fas fa-tags"></i>
+                    </div>
+                    <span class="menu-text">Genre</span>
+                </div>
+
+                <div onclick="window.location.href='/admin/music-playlist'" class="menu-item">
+                    <div class="menu-icon">
+                         <i class="fas fa-link"></i>
+                    </div>
+                    <span class="menu-text">Music in Playlists</span>
+                </div>
+
+                <div onclick="window.location.href='/admin/music-album'" class="menu-item">
+                    <div class="menu-icon">
+                         <i class="fas fa-link"></i>
+                    </div>
+                    <span class="menu-text">Music in Album</span>
+                </div>
+                
+
+
+            </div>
+
+            <div class="menu-section shortcuts">
+                <div class="section-title">=====================</div>
+                
+                <div onclick="window.location.href='/admin/statistics'" class="menu-item">
+                    <div class="menu-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <span class="menu-text">Analytics</span>
+                            <span class="notification-badge"></span>
+                    </div>
+
+                <div onclick="window.location.href='/admin/logout'" class="menu-item">
+                    <div class="menu-icon">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    </div>
+                    <span class="menu-text">Logout</span>
+                </div>
+            </div>
+
+            <!-- Storage Usage -->
+            <div style="background: transparent; border:none; box-shadow:none" class="storage-card">
+                <div style="display: none;" class="storage-content">
+                    <h4><i class="fas fa-database"></i> Storage Usage</h4>
+                    <p>Audio Files: 45.2 GB / 100 GB</p>
+                    <div class="storage-percentage">45%</div>
+                    <div class="storage-bar">
+                        <div class="storage-bar-bg"></div>
+                        <div class="storage-bar-fill" style="width: 45%"></div>
+                    </div>
+                    <div class="storage-details">
+                        <span>Albums: 12 GB</span>
+                        <span>Songs: 28 GB</span>
+                        <span>Other: 5.2 GB</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin Profile -->
+            <div class="admin-profile">
+                <img src="/uploads/profile/default/default_pp.jpg" alt="Admin" class="admin-avatar">
+                <div class="admin-info">
+                    <% if (typeof admin !== 'undefined' && admin) { %>
+        
+                            <span class="admin-name"><%= admin.admin_name || 'Admin' %></span>
+                     <% } %>
+
+                    <span class="admin-role">Music Admin</span>
+                </div>
+                <div style="display: none;" class="admin-options">
+                    <i class="fas fa-ellipsis-v"></i>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="music-main-content">
+            <!-- Top Bar (optional) -->
+            <div style="display: none;" class="top-bar">
+                <div class="top-left">
+                    <div class="greeting">
+                        <h1>Genre Management</h1>
+                        <div class="pro-badge">
+                            <i class="fas fa-crown"></i>
+                            <span>Admin</span>
+                        </div>
+                    </div>
+                    <div class="date-info">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span id="currentDate">Loading...</span>
+                    </div>
+                </div>
+                
+                <div class="top-right">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-indicator">3</span>
+                    </button>
+                    <button class="sidebar-toggle" id="sidebarToggleBtn">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Genre Management Content -->
+            <div class="genre-management-container">
+                <!-- Header dengan Actions -->
+                <div class="genre-header">
+                    <h1><i class="fas fa-tags"></i> Genre Library</h1>
+                    <div class="header-actions">
+                        <button class="btn-primary" onclick="addGenre()">
+                            <i class="fas fa-plus"></i>
+                            Add Genre
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="genre-filters">
+                    <div class="filter-row">
+                        <div class="filter-group">
+                            <label><i class="fas fa-search"></i> Search Genres</label>
+                            <div class="search-container" style="position: relative;">
+                                <input type="text" class="filter-input" placeholder="Search genres..." id="quickSearch" onkeyup="applyFilters()">
+                                <button class="clear-search" onclick="clearSearch()" style="display: none;">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Loading indicator -->
+                    <div id="filterLoading" class="filter-loading" style="display: none;">
+                        <i class="fas fa-spinner fa-spin"></i> Loading...
+                    </div>
+                </div>
+
+                <!-- Genre List -->
+                <div class="genre-list-container">
+                    <!-- Body -->
+                    <div class="genre-list-body" id="genreList">
+                        <% if (genreList && genreList.length > 0) { %>
+                            <% genreList.forEach((genre, index) => { %>
+                                <div class="genre-item" data-id="<%= genre.id_genre %>">
+                                    <div class="genre-header-info">
+                                        <div class="genre-icon">
+                                            <i class="fas fa-tag"></i>
+                                        </div>
+                                        <div class="genre-details">
+                                            <h4><%= genre.genre_name %></h4>
+                                            <p><i class="fas fa-calendar"></i> Added <%= genre.formatted_date %></p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="genre-content">
+                                        <div class="genre-stats">
+                                            <div class="stat-item">
+                                                <div class="stat-value"><%= genre.total_songs %></div>
+                                                <div class="stat-label">Songs</div>
+                                            </div>
+                                            <div class="stat-item">
+                                                <div class="stat-value"><%= genre.total_playlists %></div>
+                                                <div class="stat-label">Playlists</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="genre-description">
+                                            <% if (genre.total_songs > 0) { %>
+                                                <%= genre.genre_name %> has <%= genre.total_songs %> songs in <%= genre.total_playlists %> playlists
+                                            <% } else { %>
+                                                No songs yet
+                                            <% } %>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="genre-footer">
+                                        <div class="genre-date">
+                                            <i class="fas fa-clock"></i>
+                                            <%= genre.formatted_date %>
+                                        </div>
+                                        <div class="genre-actions">
+                                            <button class="action-btn action-edit" title="Edit" onclick="editGenre('<%= genre.id_genre %>')">
+                                                <i class="fas fa-edit"></i>
+                                                <span class="btn-tooltip">Edit</span>
+                                            </button>
+                                            <button class="action-btn action-delete" title="Delete" onclick="deleteGenre('<%= genre.id_genre %>', '<%= genre.genre_name %>')">
+                                                <i class="fas fa-trash"></i>
+                                                <span class="btn-tooltip">Delete</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% }) %>
+                        <% } else { %>
+                            <div class="empty-state">
+                                <i class="fas fa-tags"></i>
+                                <h3>No Genres Found</h3>
+                                <p>
+                                    <% if (currentFilters.search) { %>
+                                        No genres found for "<%= currentFilters.search %>"
+                                    <% } else { %>
+                                        Start by adding your first genre!
+                                    <% } %>
+                                </p>
+                                <button class="btn btn-primary" onclick="addGenre()">
+                                    Add Genre
+                                </button>
+                            </div>
+                        <% } %>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="genre-pagination">
+                        <div class="pagination-info">
+                            <% if (genreList && genreList.length > 0) { %>
+                                Showing <span id="startItem"><%= (currentPage - 1) * 20 + 1 %></span>-<span id="endItem"><%= Math.min(currentPage * 20, totalGenres) %></span> 
+                                of <span id="totalItems"><%= totalGenres %></span> genres
+                            <% } else { %>
+                                Showing 0-0 of 0 genres
+                            <% } %>
+                        </div>
+                        
+                        <% if (totalPages > 1) { %>
+                            <div class="pagination-controls">
+                                <!-- Previous Button -->
+                                <button class="pagination-btn <%= currentPage === 1 ? 'disabled' : '' %>" 
+                                        id="prevPage" 
+                                        onclick="<%= currentPage > 1 ? 'changePage(' + (currentPage - 1) + ')' : '' %>"
+                                        <%= currentPage === 1 ? 'disabled' : '' %>>
+                                    <i class="fas fa-chevron-left"></i> Previous
+                                </button>
+                                
+                                <!-- Page Numbers -->
+                                <div class="page-numbers" id="pageNumbers">
+                                    <% 
+                                    let startPage = Math.max(1, currentPage - 2);
+                                    let endPage = Math.min(totalPages, startPage + 4);
+                                    
+                                    if (endPage - startPage < 4) {
+                                        startPage = Math.max(1, endPage - 4);
+                                    }
+                                    
+                                    for (let i = startPage; i <= endPage; i++) { 
+                                    %>
+                                        <button class="page-number <%= i === currentPage ? 'active' : '' %>" 
+                                                onclick="changePage(<%= i %>)">
+                                            <%= i %>
+                                        </button>
+                                    <% } %>
+                                </div>
+                                
+                                <!-- Next Button -->
+                                <button class="pagination-btn <%= currentPage === totalPages ? 'disabled' : '' %>" 
+                                        id="nextPage" 
+                                        onclick="<%= currentPage < totalPages ? 'changePage(' + (currentPage + 1) + ')' : '' %>"
+                                        <%= currentPage === totalPages ? 'disabled' : '' %>>
+                                    Next <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Genre Popup -->
+    <div style="display: none;" class="popup addGenrePopup bigPopup">
+        <div class="popup-overlay"></div>
+        <div class="popup-content">
+            <form id="addGenreForm" onsubmit="return submitAddGenre(event)" autocomplete="off" style="display: contents">
+                <div class="drag-handle">
+                    <div class="drag-handle-line"></div>
+                </div>
+
+                <div class="popup-header">
+                    <h3>Add Genre</h3>
+                    <i onclick="closeAddGenrePopup()" class="fa-solid fa-xmark"></i>
+                </div>
+
+                <div class="popup-body-scroll">
+                    <div class="genre-creator">
+                        <div class="genre-icon-container">
+                            <div class="genre-icon-preview">
+                                <i class="fas fa-tag"></i>
+                            </div>
+                        </div>
+
+                        <div class="genre-info">
+                            <div class="form-group">
+                                <label for="genreName">Genre Name</label>
+                                <input type="text" id="genreName" name="genre_name" maxlength="50" placeholder="Enter genre name" required>
+                                <div class="character-count"><span id="genreNameCounter">0</span>/50</div>
+                                <div class="error-message" id="genreNameError"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="popup-actions">
+                    <button type="button" onclick="closeAddGenrePopup()" class="btn btn-secondary">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Genre</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Genre Popup -->
+    <div style="display: none;" class="popup editGenrePopup bigPopup">
+        <div class="popup-overlay"></div>
+        <div class="popup-content">
+            <form id="editGenreForm" onsubmit="return submitEditGenre(event)" autocomplete="off" style="display: contents">
+                <div class="drag-handle">
+                    <div class="drag-handle-line"></div>
+                </div>
+
+                <div class="popup-header">
+                    <h3>Edit Genre</h3>
+                    <i onclick="closeEditGenrePopup()" class="fa-solid fa-xmark"></i>
+                </div>
+
+                <div class="popup-body-scroll">
+                    <input type="hidden" id="editGenreId" name="genre_id">
+                    
+                    <div class="genre-creator">
+                        <div class="genre-icon-container">
+                            <div class="genre-icon-preview">
+                                <i class="fas fa-tag"></i>
+                            </div>
+                        </div>
+
+                        <div class="genre-info">
+                            <div class="form-group">
+                                <label for="editGenreName">Genre Name</label>
+                                <input type="text" id="editGenreName" name="genre_name" maxlength="50" placeholder="Enter genre name" required>
+                                <div class="character-count"><span id="editGenreNameCounter">0</span>/50</div>
+                                <div class="error-message" id="editGenreNameError"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="popup-actions">
+                    <button type="button" onclick="closeEditGenrePopup()" class="btn btn-secondary">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Update Genre</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Popup -->
+    <div style="display: none;" class="popup deleteGenreConfirmPopup bigPopup">
+        <div class="popup-overlay"></div>
+        <div class="popup-content">
+            <div class="drag-handle">
+                <div class="drag-handle-line"></div>
+            </div>
+
+            <div class="popup-header">
+                <h3>Delete Genre</h3>
+                <i onclick="closeDeleteGenrePopup()" class="fa-solid fa-xmark"></i>
+            </div>
+            
+            <div class="popup-body-scroll">
+                <div class="delete-confirm-content">
+                    <div class="delete-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <h4 id="deleteGenreConfirmTitle">Delete Genre</h4>
+                    <p id="deleteGenreConfirmMessage">Are you sure you want to delete this genre? This action cannot be undone.</p>
+                    
+                    <div class="delete-details" id="deleteGenreDetails">
+                        <!-- Details will be populated by JavaScript -->
+                    </div>
+                    
+                    <div class="warning-message">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span>This genre has <span id="genreSongCount">0</span> songs. You cannot delete a genre with existing songs.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="popup-actions">
+                <button type="button" onclick="closeDeleteGenrePopup()" class="btn btn-secondary">Cancel</button>
+                <button type="button" onclick="confirmDeleteGenre()" class="btn btn-danger" id="deleteGenreConfirmBtn" disabled>
+                    <i class="fas fa-trash"></i> Delete
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/admin/js/dashboard.js"></script>
+    <script>
+        // Global variables
+        let currentFilters = {
+            search: '',
+            page: 1
+        };
+        let filterTimeout = null;
+        let isFiltering = false;
+        let genreToDelete = null;
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeFilters();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            // Character counter for genre name
+            const genreNameInput = document.getElementById('genreName');
+            if (genreNameInput) {
+                genreNameInput.addEventListener('input', function() {
+                    document.getElementById('genreNameCounter').textContent = this.value.length;
+                });
+            }
+
+            // Edit genre name character counter
+            const editGenreNameInput = document.getElementById('editGenreName');
+            if (editGenreNameInput) {
+                editGenreNameInput.addEventListener('input', function() {
+                    document.getElementById('editGenreNameCounter').textContent = this.value.length;
+                });
+            }
+        }
+
+        // ============ ADD GENRE ============ //
+        function addGenre() {
+            const popup = document.querySelector('.addGenrePopup');
+            const popupContent = popup.querySelector('.popup-content');
+            var isMobile = isTrueMobile();
+
+            // Reset form
+            resetAddGenreForm();
+            
+            if (isMobile) {
+                popup.style.display = 'block';
+                setTimeout(() => {
+                    popup.classList.add('active');
+                    if (popupContent) {
+                        popupContent.style.transform = 'translateY(0)';
+                    }
+                }, 10);
+            } else {
+                $(".addGenrePopup").show();
+                $(".addGenrePopup").addClass("active");
+                $(".addGenrePopup .popup-overlay").removeClass("fadeOut").addClass("fadeIn");
+            }
+        }
+
+        function resetAddGenreForm() {
+            document.getElementById('genreName').value = '';
+            document.getElementById('genreNameCounter').textContent = '0';
+            document.getElementById('genreNameError').textContent = '';
+        }
+
+        async function submitAddGenre(event) {
+            event.preventDefault();
+            
+            // Validation
+            const genreName = document.getElementById('genreName').value.trim();
+            if (!genreName) {
+                document.getElementById('genreNameError').textContent = 'Genre name is required';
+                return false;
+            }
+
+            try {
+                const response = await fetch('/admin/genre/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ genre_name: genreName })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showNotification('Genre added successfully!', 'success');
+                    closeAddGenrePopup();
+                    window.location.reload();
+                } else {
+                    showNotification(result.message || 'Failed to add genre', 'error');
+                }
+            } catch (error) {
+                console.error('Error adding genre:', error);
+                showNotification('Failed to add genre. Please try again.', 'error');
+            }
+            
+            return false;
+        }
+
+        function closeAddGenrePopup() {
+            const popup = document.querySelector('.addGenrePopup');
+            popup.classList.remove('active');
+            
+            setTimeout(() => {
+                popup.style.display = 'none';
+                resetAddGenreForm();
+            }, 300);
+        }
+
+        // ============ EDIT GENRE ============ //
+        async function editGenre(genreId) {
+            try {
+                const popup = document.querySelector('.editGenrePopup');
+                const popupContent = popup.querySelector('.popup-content');
+                const isMobile = isTrueMobile();
+
+                // Reset form edit terlebih dahulu
+                resetEditGenreForm();
+                
+                // Set genre ID
+                document.getElementById('editGenreId').value = genreId;
+                
+                // Load genre data
+                await loadGenreDataForEdit(genreId);
+
+                // Tampilkan popup
+                if (isMobile) {
+                    popup.style.display = 'block';
+                    setTimeout(() => {
+                        popup.classList.add('active');
+                        if (popupContent) {
+                            popupContent.style.transform = 'translateY(0)';
+                        }
+                    }, 10);
+                } else {
+                    popup.style.display = 'flex';
+                    setTimeout(() => {
+                        popup.classList.add('active');
+                    }, 10);
+                }
+
+            } catch (error) {
+                console.error('Error opening edit popup:', error);
+                showNotification('Failed to load genre data for editing: ' + error.message, 'error');
+                
+                // Tutup popup jika ada error
+                const popup = document.querySelector('.editGenrePopup');
+                if (popup) {
+                    popup.style.display = 'none';
+                    popup.classList.remove('active');
+                }
+            }
+        }
+
+        async function loadGenreDataForEdit(genreId) {
+            try {
+                const response = await fetch(`/admin/genre/get/${genreId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    const genre = data.genre;
+                    
+                    // Isi form dengan data yang ada
+                    document.getElementById('editGenreName').value = genre.genre_name || '';
+                    
+                    // Update character counter
+                    document.getElementById('editGenreNameCounter').textContent = genre.genre_name?.length || 0;
+                    
+                } else {
+                    throw new Error(data.message || 'Failed to load genre data');
+                }
+                
+            } catch (error) {
+                console.error('Error loading genre data:', error);
+                throw error;
+            }
+        }
+
+        function resetEditGenreForm() {
+            document.getElementById('editGenreName').value = '';
+            document.getElementById('editGenreNameCounter').textContent = '0';
+            document.getElementById('editGenreNameError').textContent = '';
+        }
+
+        async function submitEditGenre(event) {
+            event.preventDefault();
+            
+            // Validation
+            const genreName = document.getElementById('editGenreName').value.trim();
+            if (!genreName) {
+                document.getElementById('editGenreNameError').textContent = 'Genre name is required';
+                return false;
+            }
+
+            const genreId = document.getElementById('editGenreId').value;
+            if (!genreId) {
+                showNotification('Genre ID is missing', 'error');
+                return false;
+            }
+
+            try {
+                const response = await fetch('/admin/genre/update', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        genre_id: genreId,
+                        genre_name: genreName 
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showNotification('Genre updated successfully!', 'success');
+                    closeEditGenrePopup();
+                    window.location.reload();
+                } else {
+                    showNotification(result.message || 'Failed to update genre', 'error');
+                }
+            } catch (error) {
+                console.error('Error updating genre:', error);
+                showNotification('Failed to update genre. Please try again.', 'error');
+            }
+            
+            return false;
+        }
+
+        function closeEditGenrePopup() {
+            const popup = document.querySelector('.editGenrePopup');
+            popup.classList.remove('active');
+            
+            setTimeout(() => {
+                popup.style.display = 'none';
+                resetEditGenreForm();
+            }, 300);
+        }
+
+        // ============ DELETE GENRE ============ //
+        async function deleteGenre(genreId, genreName) {
+            try {
+                // Get genre details first
+                const response = await fetch(`/admin/genre/get/${genreId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch genre details');
+                }
+                
+                const data = await response.json();
+                
+                if (!data.success) {
+                    showNotification('Failed to load genre details', 'error');
+                    return;
+                }
+                
+                const genre = data.genre;
+                
+                genreToDelete = {
+                    id: genreId,
+                    name: genreName,
+                    songs: genre.total_songs || 0,
+                    playlists: genre.total_playlists || 0
+                };
+                
+                // Update popup content
+                document.getElementById('deleteGenreConfirmTitle').textContent = `Delete "${genreName}"`;
+                document.getElementById('deleteGenreConfirmMessage').textContent = `Are you sure you want to delete "${genreName}"?`;
+                document.getElementById('genreSongCount').textContent = genre.total_songs || 0;
+                
+                // Update details section
+                const detailsContainer = document.getElementById('deleteGenreDetails');
+                detailsContainer.innerHTML = `
+                    <div class="delete-detail-item">
+                        <div class="delete-detail-icon">
+                            <i class="fas fa-music"></i>
+                        </div>
+                        <div class="delete-detail-content">
+                            <div class="delete-detail-title">Total Songs</div>
+                            <div class="delete-detail-value">${genre.total_songs || 0}</div>
+                        </div>
+                    </div>
+                    <div class="delete-detail-item">
+                        <div class="delete-detail-icon">
+                            <i class="fas fa-list-music"></i>
+                        </div>
+                        <div class="delete-detail-content">
+                            <div class="delete-detail-title">Playlists</div>
+                            <div class="delete-detail-value">${genre.total_playlists || 0}</div>
+                        </div>
+                    </div>
+                `;
+                
+                // Enable/disable delete button based on song count
+                const deleteBtn = document.getElementById('deleteGenreConfirmBtn');
+                if (genre.total_songs > 0) {
+                    deleteBtn.disabled = true;
+                    deleteBtn.innerHTML = '<i class="fas fa-exclamation-circle"></i> Cannot Delete (Has Songs)';
+                } else {
+                    deleteBtn.disabled = false;
+                    deleteBtn.innerHTML = '<i class="fas fa-trash"></i> Delete';
+                }
+                
+                // Show popup
+                openDeleteGenrePopup();
+                
+            } catch (error) {
+                console.error('Error preparing delete genre:', error);
+                showNotification('Failed to prepare genre deletion', 'error');
+            }
+        }
+
+        function openDeleteGenrePopup() {
+            const popup = document.querySelector('.deleteGenreConfirmPopup');
+            const popupContent = popup.querySelector('.popup-content');
+            var isMobile = isTrueMobile();
+            
+            if (isMobile) {
+                popup.style.display = 'block';
+                setTimeout(() => {
+                    popup.classList.add('active');
+                    if (popupContent) {
+                        popupContent.style.transform = 'translateY(0)';
+                    }
+                }, 10);
+            } else {
+                $(".deleteGenreConfirmPopup").show();
+                $(".deleteGenreConfirmPopup").addClass("active");
+                $(".deleteGenreConfirmPopup .popup-overlay").removeClass("fadeOut").addClass("fadeIn");
+            }
+        }
+
+        function closeDeleteGenrePopup() {
+            const popup = document.querySelector('.deleteGenreConfirmPopup');
+            popup.classList.remove('active');
+            
+            setTimeout(() => {
+                popup.style.display = 'none';
+                genreToDelete = null;
+            }, 300);
+        }
+
+        async function confirmDeleteGenre() {
+            if (!genreToDelete || !genreToDelete.id) return;
+            
+            try {
+                const response = await fetch(`/admin/genre/delete/${genreToDelete.id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showNotification(`"${genreToDelete.name}" has been deleted successfully`, 'success');
+                    closeDeleteGenrePopup();
+                    
+                    // Remove genre item from list
+                    const genreItem = document.querySelector(`.genre-item[data-id="${genreToDelete.id}"]`);
+                    if (genreItem) {
+                        genreItem.style.transition = 'all 0.3s ease';
+                        genreItem.style.transform = 'translateX(-100%)';
+                        genreItem.style.opacity = '0';
+                        
+                        setTimeout(() => {
+                            genreItem.remove();
+                            updateGenreCountAfterDelete();
+                        }, 300);
+                    } else {
+                        window.location.reload();
+                    }
+                } else {
+                    showNotification(result.message || 'Failed to delete genre', 'error');
+                }
+            } catch (error) {
+                console.error('Error deleting genre:', error);
+                showNotification('Failed to delete genre. Please try again.', 'error');
+            }
+        }
+
+        function updateGenreCountAfterDelete() {
+            const genreItems = document.querySelectorAll('.genre-item');
+            const totalGenres = genreItems.length;
+            
+            // Update total count
+            const totalItemsSpan = document.getElementById('totalItems');
+            if (totalItemsSpan) {
+                totalItemsSpan.textContent = totalGenres;
+            }
+            
+            // Update pagination info
+            const paginationInfo = document.querySelector('.pagination-info');
+            if (paginationInfo && totalItemsSpan) {
+                const startItem = parseInt(paginationInfo.querySelector('#startItem').textContent) || 1;
+                const endItem = Math.min(startItem + genreItems.length - 1, totalGenres);
+                
+                paginationInfo.innerHTML = `
+                    Showing <span id="startItem">${startItem}</span>-<span id="endItem">${endItem}</span> 
+                    of <span id="totalItems">${totalGenres}</span> genres
+                `;
+            }
+            
+            // Show empty state if no genres left
+            if (totalGenres === 0) {
+                const genreListBody = document.getElementById('genreList');
+                genreListBody.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-tags"></i>
+                        <h3>No Genres Found</h3>
+                        <p>No genres found. Start by adding your first genre!</p>
+                        <button class="btn btn-primary" onclick="addGenre()">
+                            Add Genre
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        // ============ FILTERING ============ //
+        function initializeFilters() {
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            currentFilters.search = urlParams.get('search') || '';
+            currentFilters.page = parseInt(urlParams.get('page')) || 1;
+            
+            // Update UI elements
+            document.getElementById('quickSearch').value = currentFilters.search;
+            
+            // Show/hide clear search button
+            const clearSearchBtn = document.querySelector('.clear-search');
+            if (clearSearchBtn) {
+                clearSearchBtn.style.display = currentFilters.search ? 'block' : 'none';
+            }
+        }
+
+        function applyFilters() {
+            if (filterTimeout) {
+                clearTimeout(filterTimeout);
+            }
+            
+            filterTimeout = setTimeout(() => {
+                currentFilters.search = document.getElementById('quickSearch').value.trim();
+                currentFilters.page = 1;
+                
+                // Show/hide clear search button
+                const clearSearchBtn = document.querySelector('.clear-search');
+                if (clearSearchBtn) {
+                    clearSearchBtn.style.display = currentFilters.search ? 'block' : 'none';
+                }
+                
+                loadFilteredData();
+            }, 500);
+        }
+
+        function clearSearch() {
+            document.getElementById('quickSearch').value = '';
+            document.querySelector('.clear-search').style.display = 'none';
+            applyFilters();
+        }
+
+        async function loadFilteredData() {
+            if (isFiltering) return;
+            
+            isFiltering = true;
+            showLoading(true);
+            
+            try {
+                // Build query parameters
+                const params = new URLSearchParams();
+                
+                if (currentFilters.search) {
+                    params.append('search', currentFilters.search);
+                }
+                
+                if (currentFilters.page > 1) {
+                    params.append('page', currentFilters.page);
+                }
+                
+                // Show loading state
+                const genreList = document.querySelectorAll('.genre-item');
+                genreList.forEach(item => {
+                    item.classList.add('loading');
+                });
+                
+                // Send request to server
+                const response = await fetch(`/admin/genre/filter?${params.toString()}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch filtered data');
+                }
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Update URL without reloading page
+                    updateURL();
+                    
+                    // Update genre list
+                    updateGenreList(data.genreList, data.totalGenres, data.currentPage, data.totalPages);
+                } else {
+                    throw new Error(data.message || 'Failed to load filtered data');
+                }
+            } catch (error) {
+                console.error('Error loading filtered data:', error);
+            } finally {
+                isFiltering = false;
+                showLoading(false);
+                
+                // Remove loading state
+                const genreList = document.querySelectorAll('.genre-item');
+                genreList.forEach(item => {
+                    item.classList.remove('loading');
+                });
+            }
+        }
+
+        function updateURL() {
+            const params = new URLSearchParams();
+            
+            if (currentFilters.search) {
+                params.append('search', currentFilters.search);
+            }
+            
+            if (currentFilters.page > 1) {
+                params.append('page', currentFilters.page);
+            }
+            
+            const newUrl = `${window.location.pathname}${params.toString() ? '?' + params.toString() : ''}`;
+            window.history.pushState({ path: newUrl }, '', newUrl);
+        }
+
+        function updateGenreList(genreList, totalGenres, currentPage, totalPages) {
+            const genreListBody = document.getElementById('genreList');
+            const paginationInfo = document.querySelector('.pagination-info');
+            
+            // Clear existing content
+            genreListBody.innerHTML = '';
+            
+            if (genreList && genreList.length > 0) {
+                // Generate new genre items
+                genreList.forEach((genre, index) => {
+                    const genreItem = document.createElement('div');
+                    genreItem.className = 'genre-item';
+                    genreItem.dataset.id = genre.id_genre;
+                    
+                    genreItem.innerHTML = `
+                        <div class="genre-header-info">
+                            <div class="genre-icon">
+                                <i class="fas fa-tag"></i>
+                            </div>
+                            <div class="genre-details">
+                                <h4>${genre.genre_name}</h4>
+                                <p><i class="fas fa-calendar"></i> Added ${genre.formatted_date}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="genre-content">
+                            <div class="genre-stats">
+                                <div class="stat-item">
+                                    <div class="stat-value">${genre.total_songs}</div>
+                                    <div class="stat-label">Songs</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value">${genre.total_playlists}</div>
+                                    <div class="stat-label">Playlists</div>
+                                </div>
+                            </div>
+                            
+                            <div class="genre-description">
+                                ${genre.total_songs > 0 ? 
+                                    `${genre.genre_name} has ${genre.total_songs} songs in ${genre.total_playlists} playlists` : 
+                                    'No songs yet'}
+                            </div>
+                        </div>
+                        
+                        <div class="genre-footer">
+                            <div class="genre-date">
+                                <i class="fas fa-clock"></i>
+                                ${genre.formatted_date}
+                            </div>
+                            <div class="genre-actions">
+                                <button class="action-btn action-edit" title="Edit" onclick="editGenre('${genre.id_genre}')">
+                                    <i class="fas fa-edit"></i>
+                                    <span class="btn-tooltip">Edit</span>
+                                </button>
+                                <button class="action-btn action-delete" title="Delete" onclick="deleteGenre('${genre.id_genre}', '${genre.genre_name}')">
+                                    <i class="fas fa-trash"></i>
+                                    <span class="btn-tooltip">Delete</span>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    genreListBody.appendChild(genreItem);
+                });
+                
+                // Update pagination info
+                const startItem = (currentPage - 1) * 20 + 1;
+                const endItem = Math.min(currentPage * 20, totalGenres);
+                
+                paginationInfo.innerHTML = `
+                    Showing <span id="startItem">${startItem}</span>-<span id="endItem">${endItem}</span> 
+                    of <span id="totalItems">${totalGenres}</span> genres
+                `;
+                
+                // Update pagination controls
+                updatePaginationControls(currentPage, totalPages);
+            } else {
+                // Show empty state
+                const searchMessage = currentFilters.search ? `No genres found for "${currentFilters.search}"` : 'Start by adding your first genre!';
+                
+                genreListBody.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-tags"></i>
+                        <h3>No Genres Found</h3>
+                        <p>${searchMessage}</p>
+                        <button class="btn btn-primary" onclick="addGenre()">
+                            Add Genre
+                        </button>
+                    </div>
+                `;
+                
+                paginationInfo.innerHTML = 'Showing 0-0 of 0 genres';
+                document.querySelector('.pagination-controls').innerHTML = '';
+            }
+        }
+
+        function updatePaginationControls(currentPage, totalPages) {
+            const paginationControls = document.querySelector('.pagination-controls');
+            
+            if (totalPages <= 1) {
+                paginationControls.innerHTML = '';
+                return;
+            }
+            
+            let startPage = Math.max(1, currentPage - 2);
+            let endPage = Math.min(totalPages, startPage + 4);
+            
+            if (endPage - startPage < 4) {
+                startPage = Math.max(1, endPage - 4);
+            }
+            
+            let pageNumbersHTML = '';
+            for (let i = startPage; i <= endPage; i++) {
+                pageNumbersHTML += `
+                    <button class="page-number ${i === currentPage ? 'active' : ''}" 
+                            onclick="changePage(${i})">
+                        ${i}
+                    </button>
+                `;
+            }
+            
+            paginationControls.innerHTML = `
+                <button class="pagination-btn ${currentPage === 1 ? 'disabled' : ''}" 
+                        id="prevPage" 
+                        onclick="${currentPage > 1 ? `changePage(${currentPage - 1})` : ''}"
+                        ${currentPage === 1 ? 'disabled' : ''}>
+                    <i class="fas fa-chevron-left"></i> Previous
+                </button>
+                
+                <div class="page-numbers" id="pageNumbers">
+                    ${pageNumbersHTML}
+                </div>
+                
+                <button class="pagination-btn ${currentPage === totalPages ? 'disabled' : ''}" 
+                        id="nextPage" 
+                        onclick="${currentPage < totalPages ? `changePage(${currentPage + 1})` : ''}"
+                        ${currentPage === totalPages ? 'disabled' : ''}>
+                    Next <i class="fas fa-chevron-right"></i>
+                </button>
+            `;
+        }
+
+        function changePage(page) {
+            currentFilters.page = page;
+            loadFilteredData();
+        }
+
+        function showLoading(show) {
+            const loadingIndicator = document.getElementById('filterLoading');
+            if (loadingIndicator) {
+                loadingIndicator.style.display = show ? 'block' : 'none';
+            }
+        }
+
+        // Utility function for notifications
+        function showNotification(message, type = 'success') {
+            let notification = document.getElementById('customNotification');
+            if (!notification) {
+                notification = document.createElement('div');
+                notification.id = 'customNotification';
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    padding: 15px 20px;
+                    border-radius: 8px;
+                    color: white;
+                    font-weight: 500;
+                    z-index: 99999;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                    transform: translateX(120%);
+                    transition: transform 0.3s ease;
+                    max-width: 300px;
+                `;
+                document.body.appendChild(notification);
+            }
+            
+            const colors = {
+                success: '#4CAF50',
+                error: '#F44336',
+                info: '#2196F3',
+                warning: '#FF9800'
+            };
+            notification.style.backgroundColor = colors[type] || colors.success;
+            
+            notification.textContent = message;
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateX(120%)';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

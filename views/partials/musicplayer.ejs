@@ -1,0 +1,153 @@
+      <div style="display: none" class="music-player" onclick="playerScreen()">
+        <div class="progress-container">
+          <span class="progress-time start-time"></span>
+          <div class="player-progressbar">
+            <div class="player-bar progressBar"></div>
+          </div>
+          <span class="progress-time end-time"></span>
+        </div>
+
+        <!-- Konten music player yang sudah ada -->
+        <div class="song-bar">
+          <div class="song-infos">
+            <div class="image-container">
+              <img class="current-cover" src="/uploads/undefine.jpg" alt="" />
+            </div>
+            <div class="song-description">
+              <p class="title"></p>
+              <p class="artist artistNames"></p>
+            </div>
+          </div>
+          <div
+            class="icons favFoot"
+            onclick="event.stopPropagation(); event.preventDefault(); toggleHeart(this)"
+          >
+            <i class="far fa-heart heartFoot"></i>
+          </div>
+        </div>
+        <div class="progress-controller">
+          <div class="control-buttons">
+            <div id="repeatBtnDesk" onclick="repeatMode()">
+              <i class="fas fa-undo-alt"></i>
+            </div>
+            <svg
+              class="svg-icon"
+              onclick="playPreviousMusic()"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+            >
+              <defs />
+              <path
+                fill-rule="evenodd"
+                d="M18.4 21.8l-12-9c-.53333333-.4-.53333333-1.2 0-1.6l12-9c.6592363-.49442719 1.6-.02404532 1.6.8v18c0 .8240453-.9407637 1.2944272-1.6.8zM18 5l-9.33333333 7L18 19V5zM6 22H4V2h2v20z"
+              />
+            </svg>
+            <div onclick="playPause()" class="background-play">
+              <svg
+                class="svg-icon control-play"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+              >
+                <defs />
+                <path
+                  fill-rule="evenodd"
+                  d="M5 21V3c0-.79116579.87524596-1.26900738 1.54075759-.84117848L20.5407576 11.1588215c.6123232.3936364.6123232 1.2887206 0 1.682357l-14.00000001 9C5.87524596 22.2690074 5 21.7911658 5 21zm2-1.8316655L18.1507426 12 7 4.8316655v14.336669z"
+                />
+              </svg>
+            </div>
+            <svg
+              class="svg-icon"
+              onclick="playNextMusic()"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+            >
+              <defs />
+              <path
+                fill-rule="evenodd"
+                d="M4 21V3c0-.82404532.94076375-1.29442719 1.6-.8l12 9c.5333333.4.5333333 1.2 0 1.6l-12 9c-.65923625.4944272-1.6.0240453-1.6-.8zm2-2l9.3333333-7L6 5v14zm14 3h-2V2h2v20z"
+              />
+            </svg>
+            <div id="randomBtnDesk" onclick="randomMode()">
+              <i class="fas fa-random"></i>
+            </div>
+          </div>
+        </div>
+        <div class="other-features">
+
+          <svg onclick="openLyric()" style="cursor: pointer;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <!-- Scroll -->
+          <path d="M8 21h12a2 2 0 0 0 2-2v-2H10v2a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v2h4"/>
+          <path d="M19 17V5a2 2 0 0 0-2-2H4"/>
+          
+          <!-- Text dalam scroll -->
+          <line x1="8" y1="9" x2="16" y2="9"/>
+          <line x1="8" y1="13" x2="14" y2="13"/>
+          <line x1="8" y1="17" x2="12" y2="17"/>
+          
+          <!-- Music symbol -->
+          <path d="M18 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" fill="currentColor"/>
+        </svg>
+
+
+          <div class="volume-container">
+            <div class="volume-icon" id="volume-icon">
+              <i id="volume-high" class="fas fa-volume-up"></i>
+              <i id="volume-low" class="fas fa-volume-down"></i>
+              <i id="volume-mute" class="fas fa-volume-mute"></i>
+            </div>
+            <div class="volume-bar-container">
+              <div class="volume-bar">
+                <div class="volume-fill" id="volume-fill"></div>
+              </div>
+            </div>
+          </div>
+
+
+            <svg
+              style="display: none"
+              class="svg-icon smalldesk"
+              onclick="playPreviousMusic()"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+            >
+              <defs />
+              <path
+                fill-rule="evenodd"
+                d="M18.4 21.8l-12-9c-.53333333-.4-.53333333-1.2 0-1.6l12-9c.6592363-.49442719 1.6-.02404532 1.6.8v18c0 .8240453-.9407637 1.2944272-1.6.8zM18 5l-9.33333333 7L18 19V5zM6 22H4V2h2v20z"
+              />
+            </svg>
+
+
+
+          <svg
+            onclick="event.stopPropagation(); event.preventDefault(); playPause()"
+            style="display: none"
+            class="svg-icon mobile-play control-play"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+          >
+            <defs />
+            <path
+              fill-rule="evenodd"
+              d="M5 21V3c0-.79116579.87524596-1.26900738 1.54075759-.84117848L20.5407576 11.1588215c.6123232.3936364.6123232 1.2887206 0 1.682357l-14.00000001 9C5.87524596 22.2690074 5 21.7911658 5 21zm2-1.8316655L18.1507426 12 7 4.8316655v14.336669z"
+            />
+          </svg>
+
+
+            <svg
+              style="display: none"
+              class="svg-icon smalldesk"
+              onclick="playNextMusic()"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+            >
+              <defs />
+              <path
+                fill-rule="evenodd"
+                d="M4 21V3c0-.82404532.94076375-1.29442719 1.6-.8l12 9c.5333333.4.5333333 1.2 0 1.6l-12 9c-.65923625.4944272-1.6.0240453-1.6-.8zm2-2l9.3333333-7L6 5v14zm14 3h-2V2h2v20z"
+              />
+            </svg>
+
+
+        </div>
+      </div>

@@ -1,0 +1,9 @@
+<div class="playlist-info">
+  <p>
+    Playlist by
+    <span class="summary__text--white"><%= playlist.name_user || 'Unknown' %></span>
+    •
+    <%= playlist.totalTracks %> <%= playlist.totalTracks === 1 ? 'song' : 'songs' %>,
+    <%= playlist.formattedDuration %>
+  </p>
+</div>

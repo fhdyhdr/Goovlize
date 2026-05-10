@@ -1,0 +1,1438 @@
+ <link rel="stylesheet" href="/css/search.css" />
+<div class="search-container" id="taskList">
+    <div class="headsearch">
+      <div class="search-header">
+        <h1 class="app-header">Search</h1>
+        <div class="search-buttons">
+          <button class="s-button active" data-type="all">All</button>
+          <button class="s-button" data-type="music">Music</button>
+          <button class="s-button" data-type="playlist">Playlist</button>
+          <button class="s-button" data-type="artist">Artist</button>
+          <button class="s-button" data-type="album">Album</button>
+          <button class="s-button" data-type="user">User</button>
+        </div>
+      </div>
+
+      <div class="add-task">
+        <input type="text" id="musicSearch" autocomplete="off" placeholder="Search" class="task-input">
+        <input type="submit" value="" class="submit-task" title="Add Task" onclick="focusMusicSearch()">
+      </div>
+    </div>
+
+    <!-- Main content wrapper -->
+    <div class="content-wrapper">
+      <!-- Left content (search results) -->
+      <div class="left-content">
+        
+        <div id="searchResults">
+          <!-- Search results will appear here -->
+        </div>
+
+    <section>
+        <!-- Header dengan satu set tombol navigasi -->
+        <div class="head">
+          <h2>Kategori</h2>
+      
+          <div class="controls">
+            <button id="prev" class="nav-btn" aria-label="Prev">‹</button>
+            <button id="next" class="nav-btn" aria-label="Next">›</button>
+          </div>
+        </div>
+      
+        <!-- Slider 1 -->
+        <div class="slider-wrapper">
+            <div class="slider" id="slider1">
+              <div class="track" id="track1">
+                <article class="project-card" active>
+                  <img class="project-card__bg" src="https://i.pinimg.com/1200x/9e/95/48/9e9548fff37ca123a0ddd89bdd811c13.jpg" alt="">
+                  <div class="project-card__content">
+                    <img class="project-card__thumb" src="https://i.pinimg.com/736x/0f/fc/92/0ffc922ec6c0e7ce47c1f55c07890fad.jpg" alt="">
+                    <div>
+                      <h3 class="project-card__title">Focus & Study</h3>
+                      <p class="project-card__desc">Untuk kerja, belajar, coding, membaca</p>
+                      <button onclick="kategori1()" class="project-card__btn">Lihat Playlist</button>
+                    </div>
+                  </div>
+                </article>
+          
+                <article class="project-card">
+                  <img class="project-card__bg" src="/uploads/search/type1.jpeg" alt="">
+                  <div class="project-card__content">
+                    <img class="project-card__thumb" src="/uploads/search/type1.1.jpeg" alt="">
+                    <div>
+                      <h3 class="project-card__title">Relax & Chill</h3>
+                      <p class="project-card__desc">Santai, lepas stres, background harian</p>
+                      <button onclick="kategori2()" class="project-card__btn">Lihat Playlist</button>
+                    </div>
+                  </div>
+                </article>
+          
+                <article class="project-card">
+                  <img class="project-card__bg" src="https://i.pinimg.com/736x/ec/0f/77/ec0f7701e51b33da40ddcf203d53bd83.jpg" alt="">
+                  <div class="project-card__content">
+                    <img class="project-card__thumb" src="https://i.pinimg.com/736x/a6/9e/08/a69e082a60e4ba6814e4e517152d488a.jpg" alt="">
+                    <div>
+                      <h3 class="project-card__title">Cinematic & Storytelling</h3>
+                      <p class="project-card__desc">Film, trailer, narasi, dokumenter</p>
+                      <button  onclick="kategori3()" class="project-card__btn">Lihat Playlist</button>
+                    </div>
+                  </div>
+                </article>
+          
+                <article class="project-card">
+                  <img class="project-card__bg" src="/uploads/search/type3.jpeg" alt="">
+                  <div class="project-card__content">
+                    <img class="project-card__thumb" src="/uploads/search/type3.3.jpeg" alt="">
+                    <div>
+                      <h3 class="project-card__title">Upbeat & Positive</h3>
+                      <p class="project-card__desc">Cerah, optimis, ringan</p>
+                      <button onclick="kategori4()" class="project-card__btn">Lihat Playlist</button>
+                    </div>
+                  </div>
+                </article>
+          
+                <article class="project-card">
+                  <img class="project-card__bg" src="/uploads/search/type4.jpeg" alt="">
+                  <div class="project-card__content">
+                    <img class="project-card__thumb" src="/uploads/search/type4.4.jpeg" alt="">
+                    <div>
+                      <h3 class="project-card__title">Energy & Action</h3>
+                      <p class="project-card__desc">Gerak, kecepatan, intensitas</p>
+                      <button onclick="kategori5()" class="project-card__btn">Lihat Playlist</button>
+                    </div>
+                  </div>
+                </article>
+              </div>
+            </div>
+            
+            <!-- Dots untuk Slider 1 -->
+            <div class="dots" id="dots1"></div>
+        </div>
+        
+        <!-- Slider 2 -->
+        <div class="slider-wrapper">
+            <div class="slider" id="slider2">
+              <div class="track" id="track2">
+                <article class="project-card" active>
+                  <img class="project-card__bg" src="https://i.pinimg.com/1200x/e9/81/35/e981356f4f53c358fa46000921521805.jpg" alt="">
+                  <div class="project-card__content">
+                    <img class="project-card__thumb" src="https://i.pinimg.com/736x/89/07/73/89077373f37c3969535f7924ccef5987.jpg" alt="">
+                    <div>
+                      <h3 class="project-card__title">Urban & Beat</h3>
+                      <p class="project-card__desc">Beat-based instrumental</p>
+                      <button onclick="kategori6()" class="project-card__btn">Lihat Playlist</button>
+                    </div>
+                  </div>
+                </article>
+          
+                <article class="project-card">
+                  <img class="project-card__bg" src="https://i.pinimg.com/736x/96/ea/82/96ea824192734534cc30a28289e446b5.jpg" alt="">
+                  <div class="project-card__content">
+                    <img class="project-card__thumb" src="https://i.pinimg.com/1200x/3a/88/97/3a88978f75c52f8c43f76e058fc241c7.jpg" alt="">
+                    <div>
+                      <h3 class="project-card__title">Ambient & Atmosphere</h3>
+                      <p class="project-card__desc">Soundscape & tekstur suara</p>
+                      <button onclick="kategori7()" class="project-card__btn">Lihat Playlist</button>
+                    </div>
+                  </div>
+                </article>
+          
+                <article class="project-card">
+                  <img class="project-card__bg" src="https://i.pinimg.com/736x/22/09/aa/2209aaccbff8c40b63a2d43667da28ae.jpg" alt="">
+                  <div class="project-card__content">
+                    <img class="project-card__thumb" src="https://i.pinimg.com/736x/fc/5f/0e/fc5f0e02b07c3065c0958b3f54e3dec5.jpg" alt="">
+                    <div>
+                      <h3 class="project-card__title">Creative & Experimental</h3>
+                      <p class="project-card__desc">Unik, artsy, non-mainstream</p>
+                      <button onclick="kategori8()" class="project-card__btn">Lihat Playlist</button>
+                    </div>
+                  </div>
+                </article>
+          
+                <article class="project-card">
+                  <img class="project-card__bg" src="https://i.pinimg.com/736x/35/5f/48/355f48de29d31c740bfd11b9999bbe75.jpg" alt="">
+                  <div class="project-card__content">
+                    <img class="project-card__thumb" src="https://i.pinimg.com/1200x/94/6f/24/946f24b2c366afe060cc3d1c055cf832.jpg" alt="">
+                    <div>
+                      <h3 class="project-card__title">Corporate & Commercial</h3>
+                      <p class="project-card__desc">Presentasi, bisnis, branding</p>
+                      <button onclick="kategori9()" class="project-card__btn">Lihat Playlist</button>
+                    </div>
+                  </div>
+                </article>
+          
+                <article class="project-card">
+                  <img class="project-card__bg" src="https://i.pinimg.com/736x/64/4e/5a/644e5ae9f8284fd96735cb47c9a5d778.jpg" alt="">
+                  <div class="project-card__content">
+                    <img class="project-card__thumb" src="https://i.pinimg.com/736x/94/2b/21/942b21006f3c1b176d34e1bced9ba9cb.jpg" alt="">
+                    <div>
+                      <h3 class="project-card__title">Romantic & Emotional</h3>
+                      <p class="project-card__desc">Perasaan, momen personal</p>
+                      <button onclick="kategori10()" class="project-card__btn">Lihat Playlist</button>
+                    </div>
+                  </div>
+                </article>
+              </div>
+            </div>
+            
+            <!-- Dots untuk Slider 2 -->
+            <div class="dots" id="dots2"></div>
+        </div>
+    </section>
+
+
+
+      </div>
+      
+      <!-- Right content (optional details panel) -->
+      <div class="right-content">
+
+          <div class="head">
+    <h2>Popular</h2>
+
+    
+  </div>
+  
+          <div class="card-grid">
+    <!-- Card 1: Resilience -->
+    <div onclick="PopularTracks()" class="card" style="background-color: hsl(4, 56%, 48%); color: hsl(4, 56%, 38%);">
+      <svg class="card__bg" width="648px" height="648px" aria-hidden="true">
+        <use href="#grass-top-down"></use>
+      </svg>
+      <div class="card__header">
+        <div class="card__label">#1 TODAY</div>
+        <div class="card__category">
+          <svg class="icon" width="16px" height="16px" aria-hidden="true">
+            <use href="#star-8"></use>
+          </svg>
+          <span class="card__category-icon" style="color: hsl(4, 56%, 48%);">
+            <svg class="icon" width="16px" height="16px" aria-hidden="true">
+              <use href="#link"></use>
+            </svg>
+          </span>
+        </div>
+      </div>
+      <div class="card__content">
+        <h2 class="card__title">#1 Track Today</h2>
+        <p class="card__description">Lagu dengan jumlah pemutaran tertinggi hari ini.</p>
+        <div class="card__stats">
+          <div class="card__rating">
+            <svg class="icon" width="16px" height="16px" aria-hidden="true">
+              <use href="#star"></use>
+            </svg>
+            4.1
+          </div>
+          <div class="card__completion">
+            <svg class="icon" width="16px" height="16px" aria-hidden="true">
+              <use href="#check-circle"></use>
+            </svg>
+            12%
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2: Growth -->
+    <div onclick="top50track()" class="card" style="background-color: hsl(158, 43%, 33%); color: hsl(158, 43%, 23%);">
+      <svg class="card__bg" width="648px" height="648px" aria-hidden="true">
+        <use href="#grass-left"></use>
+      </svg>
+      <div class="card__header">
+        <div class="card__label">TOP 50</div>
+        <div class="card__category">
+          <svg class="icon" width="16px" height="16px" aria-hidden="true">
+            <use href="#star-8"></use>
+          </svg>
+          <span class="card__category-icon" style="color: hsl(158, 43%, 33%);">
+            <svg class="icon" width="16px" height="16px" aria-hidden="true">
+              <use href="#people"></use>
+            </svg>
+          </span>
+        </div>
+      </div>
+      <div class="card__content">
+        <h2 class="card__title">Top 50 Tracks</h2>
+        <p class="card__description">Koleksi 50 lagu paling banyak diputar saat ini.</p>
+        <div class="card__stats">
+          <div class="card__rating">
+            <svg class="icon" width="16px" height="16px" aria-hidden="true">
+              <use href="#star"></use>
+            </svg>
+            4.5
+          </div>
+          <div class="card__completion">
+            <svg class="icon" width="16px" height="16px" aria-hidden="true">
+              <use href="#check-circle"></use>
+            </svg>
+            32%
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Card 4: Visioning -->
+    <div  onclick="mostPlayed()" class="card" style="background-color: hsl(320, 60%, 58%); color: hsl(320, 60%, 48%);">
+      <svg class="card__bg" width="648px" height="648px" aria-hidden="true">
+        <use href="#circles-top"></use>
+      </svg>
+      <div class="card__header">
+        <div class="card__label">MOST PLAYED</div>
+        <div class="card__category">
+          <svg class="icon" width="16px" height="16px" aria-hidden="true">
+            <use href="#star-8"></use>
+          </svg>
+          <span class="card__category-icon" style="color: hsl(320, 60%, 58%);">
+            <svg class="icon" width="16px" height="16px" aria-hidden="true">
+              <use href="#ribbon"></use>
+            </svg>
+          </span>
+        </div>
+      </div>
+      <div class="card__content">
+        <h2 class="card__title">Most Played This Week</h2>
+        <p class="card__description">Konten yang paling sering diputar sepanjang minggu ini.</p>
+        <div class="card__stats">
+          <div class="card__rating">
+            <svg class="icon" width="16px" height="16px" aria-hidden="true">
+              <use href="#star"></use>
+            </svg>
+            4.6
+          </div>
+          <div class="card__completion">
+            <svg class="icon" width="16px" height="16px" aria-hidden="true">
+              <use href="#check-circle"></use>
+            </svg>
+            100%
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 5: Goal Orientation -->
+    <div onclick="TopPlaylist()" class="card" style="background-color: hsl(225, 58%, 53%); color: hsl(225, 58%, 43%);">
+      <svg class="card__bg" width="648px" height="648px" aria-hidden="true">
+        <use href="#circles-corner"></use>
+      </svg>
+      <div class="card__header">
+        <div class="card__label">TOP PLAYLIST</div>
+        <div class="card__category">
+          <svg class="icon" width="16px" height="16px" aria-hidden="true">
+            <use href="#star-8"></use>
+          </svg>
+          <span class="card__category-icon" style="color: hsl(225, 58%, 53%);">
+            <svg class="icon" width="16px" height="16px" aria-hidden="true">
+              <use href="#coil"></use>
+            </svg>
+          </span>
+        </div>
+      </div>
+      <div class="card__content">
+        <h2 class="card__title">Top Playlist</h2>
+        <p class="card__description">Playlist dengan pendengar terbanyak minggu ini.</p>
+        <div class="card__stats">
+          <div class="card__rating">
+            <svg class="icon" width="16px" height="16px" aria-hidden="true">
+              <use href="#star"></use>
+            </svg>
+            4.2
+          </div>
+          <div class="card__completion">
+            <svg class="icon" width="16px" height="16px" aria-hidden="true">
+              <use href="#check-circle"></use>
+            </svg>
+            46%
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 6: Self-belief -->
+    <div onclick="EditorChoice()" class="card" style="background-color: hsl(262, 44%, 53%); color: hsl(262, 44%, 43%);">
+      <svg class="card__bg" width="648px" height="648px" aria-hidden="true">
+        <use href="#grass-bottom"></use>
+      </svg>
+      <div class="card__header">
+        <div class="card__label">EDITOR PICK</div>
+        <div class="card__category">
+          <svg class="icon" width="16px" height="16px" aria-hidden="true">
+            <use href="#star-8"></use>
+          </svg>
+          <span class="card__category-icon" style="color: hsl(262, 44%, 53%);">
+            <svg class="icon" width="16px" height="16px" aria-hidden="true">
+              <use href="#ribbon"></use>
+            </svg>
+          </span>
+        </div>
+      </div>
+      <div class="card__content">
+        <h2 class="card__title">Editor’s Choice</h2>
+        <p class="card__description">Pilihan khusus dari editor untuk rekomendasi terbaik.</p>
+        <div class="card__stats">
+          <div class="card__rating">
+            <svg class="icon" width="16px" height="16px" aria-hidden="true">
+              <use href="#star"></use>
+            </svg>
+            3.9
+          </div>
+          <div class="card__completion">
+            <svg class="icon" width="16px" height="16px" aria-hidden="true">
+              <use href="#check-circle"></use>
+            </svg>
+            60%
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SVG Sprites (hidden) -->
+  <svg width="0" height="0" display="none">
+    <symbol id="circles-corner" viewBox="0 0 316 316">
+      <g fill="none" stroke="currentcolor" stroke-linecap="round" stroke-width="5">
+        <path
+          d="M 323.074 256.963 C 312.956 263.991 295.834 280.024 295.479 292.107 C 294.971 309.41 311.806 311.371 322.384 317.098" />
+        <path
+          d="M 322.384 225.723 C 303.276 230.431 291.393 236.843 273.403 256.963 C 252.542 280.29 261.674 308.503 261.674 315.536" />
+        <path
+          d="M 320.316 193.268 C 285.716 194.491 258.866 221.733 245.117 244.813 C 225.414 277.888 238.218 316.923 236.839 320.568" />
+        <path
+          d="M 321.006 147.971 C 301.136 149.81 258.571 170.234 231.318 197.955 C 189.23 240.768 190.427 315.532 187.856 321.35" />
+        <path
+          d="M 323.764 101.113 C 285.498 101.275 236.306 121.433 195.446 163.591 C 144.032 216.636 154.999 289.235 145.772 320.568" />
+        <path
+          d="M 320.316 48 C 307.75 49.984 222.602 48.394 158.881 119.856 C 96.203 190.147 104.486 309.571 103 321.35" />
+      </g>
+    </symbol>
+
+    <symbol id="circles-top" viewBox="0 0 648 648">
+      <g fill="none" stroke="currentcolor" stroke-linecap="round">
+        <path stroke-width="10"
+          d="M 453.754 -21.507 C 426.967 6.445 420.959 57.037 331.465 60.601 C 234.771 64.452 225.579 0.318 214.418 -28.495" />
+        <path stroke-width="10"
+          d="M 156.767 -33.735 C 167.249 11.104 188.994 80.565 217.912 111.263 C 239.879 134.581 286.462 149.302 307.007 147.95" />
+        <path stroke-width="10"
+          d="M 307.007 128.398 C 331.812 142.719 401.333 127.174 443.273 102.193 C 482.243 78.981 545.369 8.9 555.079 -28.829" />
+        <path stroke-width="10"
+          d="M 68.545 -23.06 C 69.207 -20.985 69.087 78.639 108.725 135.914 C 148.883 193.94 180.333 225.897 241.496 225.01" />
+        <path stroke-width="13"
+          d="M 289.538 242.287 C 349.575 238.65 410.797 237.601 509.657 175.902 C 594.584 122.899 644.472 14.236 663.391 -28.494" />
+        <path stroke-width="10"
+          d="M -2.208 -47.265 C 0.121 58.718 67.059 227.084 132.309 281.167 C 179.791 320.523 209.414 320.27 289.537 300.383" />
+        <path stroke-width="15"
+          d="M 279.055 313.722 C 311.054 325.465 444.581 310.019 502.669 285.771 C 635.523 230.313 649.997 179.204 658.147 173.963" />
+        <path stroke-width="10"
+          d="M -40.642 217.539 C -33.11 240.221 37.621 309.223 86.887 336.334 C 137.474 364.172 230.737 391.311 284.496 376.743" />
+        <path stroke-width="13"
+          d="M 255.671 376.584 C 304.19 396.955 402.82 394.656 501.796 360.633 C 566.99 338.222 659.371 264.987 690.471 247.08" />
+      </g>
+    </symbol>
+
+    <symbol id="curves" viewBox="0 0 648 648">
+      <g fill="none" stroke="currentcolor" stroke-width="20">
+        <path
+          d="M 371.646 -16.266 C 328.554 21.003 255.465 49.043 214.417 88.552 C 204.914 97.698 201.122 117.816 203.936 130.48 C 204.954 135.063 223.705 151.184 228.393 151.444 C 247.225 152.49 268.217 141.879 286.044 135.721 C 300.864 130.601 356.726 98.89 368.152 88.552 C 384.788 73.5 419.727 21.192 443.272 20.42 C 466.201 19.668 488.552 28.981 486.946 51.866 C 484.611 85.14 405.888 122.024 397.85 125.239 C 379.675 132.509 315.118 176.349 300.019 181.142 C 278.43 187.996 171.305 238.027 191.707 270.238 C 199.694 282.848 245.401 287.141 251.104 285.961 C 272.473 281.54 312.575 264.398 329.718 256.263 C 349.247 246.995 369.945 239.359 387.368 226.564 C 407.616 211.695 436.166 193.291 460.741 170.661 C 481.974 151.109 503.703 120.367 507.91 114.757 C 521.283 96.926 532.568 77.618 544.597 58.854 C 548.202 53.231 566.334 18.673 595.259 15.179 C 614.89 12.808 637.386 23.453 635.44 43.131 C 620.486 194.344 475.403 251.2 355.923 287.708 C 322.634 297.88 289.732 309.309 256.345 319.154 C 244.287 322.709 231.584 323.914 219.658 327.889 C 180.191 341.045 142.564 353.262 162.008 415.238 C 167.355 432.282 247.011 426.256 258.092 422.226 C 279.039 414.609 326.614 401.1 347.188 392.527 C 354.656 389.415 361.4 384.754 368.152 380.298 C 390.53 365.529 413.129 351.02 434.537 334.877 C 453.303 320.726 468.437 302.193 486.946 287.708 C 517.369 263.898 550.649 243.076 581.283 219.576 C 606.25 200.423 655.973 142.746 680.862 123.492 C 686.867 118.846 759.061 175.106 719.294 203.853 C 670.087 239.425 565.388 323.141 514.898 352.346 C 492.125 365.519 417.408 399.066 394.356 411.744 C 370.813 424.693 337.524 440.083 312.248 457.165 C 286.069 474.857 285.912 495.194 296.525 499.093 C 325.501 509.737 358.468 501.038 389.115 497.346 C 407.223 495.164 424.116 487.063 441.525 481.623 C 488.901 466.818 494.222 458.543 539.356 427.467 C 558.379 414.369 577.623 401.591 597.006 389.033 C 618.971 374.802 641.049 360.738 663.391 347.106 C 675.414 339.77 673.133 397.859 651.163 415.238 C 633.929 428.871 605.25 440.426 586.524 451.924 C 572.056 460.808 508.422 486.1 528.874 516.563 C 547.527 544.346 603.523 534.311 621.465 527.044 C 649.531 515.676 662.009 508.054 682.609 490.358" />
+      </g>
+    </symbol>
+
+    <symbol id="grass-bottom" viewBox="0 0 316 316">
+      <g fill="none" stroke="currentcolor" stroke-linecap="round" stroke-width="13">
+        <path
+          d="M -6.788 282.052 C -4.546 287.782 -3.008 293.841 -0.062 299.243 C 2.784 304.461 7.448 315.401 11.897 320.919" />
+        <path d="M 13.392 285.042 C 18.647 299.491 19.377 303.987 26.846 316.434" />
+        <path
+          d="M 10.403 255.892 C 18.126 268.1 26.574 279.879 33.573 292.516 C 35.596 296.17 35.483 300.719 37.31 304.475 C 40.002 310.008 43.788 314.939 47.027 320.171" />
+        <path d="M 47.774 287.284 C 52.002 297.502 56.227 307.722 60.481 317.929" />
+        <path
+          d="M 44.785 246.175 C 49.675 260.848 53.297 270.703 58.986 284.294 C 62.728 293.233 71.281 316.622 72.44 322.414" />
+        <path
+          d="M 22.362 188.622 C 27.594 199.086 38.539 219.041 43.29 229.732 C 50.345 245.606 53.425 264.204 61.228 279.81 C 69.402 296.159 76.224 306.065 84.399 322.414" />
+        <path
+          d="M 57.491 238.701 C 65.657 255.035 73.049 271.488 79.167 288.779 C 81.587 295.619 92.457 316.107 95.611 322.414" />
+        <path
+          d="M 56.743 183.391 C 61.975 193.108 68.145 202.375 72.44 212.541 C 78.515 226.917 85.369 245.441 91.872 259.629 C 97.075 270.981 108.605 311.031 114.297 322.413" />
+        <path
+          d="M 76.177 184.138 C 91.78 212.061 100.554 238.605 111.306 268.598 C 118.802 289.509 130.625 308.273 138.214 329.14" />
+        <path d="M 90.378 170.684 C 108.895 223.385 130.34 274.872 147.931 327.646" />
+        <path
+          d="M 109.064 164.705 C 117.024 184.794 123.722 205.386 132.234 225.247 C 139.142 241.365 146.972 257.16 152.415 273.83 C 157.772 290.237 160.922 307.862 165.122 324.656" />
+        <path
+          d="M 127.002 161.715 C 143.25 201.521 158.521 243.342 169.606 285.042 C 173.147 298.361 175.233 312.033 178.575 325.403" />
+        <path
+          d="M 127.002 110.142 C 134.904 130.974 137.653 139.537 143.446 160.968 C 148.766 180.652 158.894 207.104 164.374 226.742 C 166.031 232.679 196.951 328.3 193.524 323.161" />
+        <path
+          d="M 154.657 140.039 C 163.385 172.455 172.915 205.005 183.06 237.206 C 188.364 254.039 192.591 271.982 198.009 288.779 C 202.031 301.247 204.588 314.046 209.968 326.151" />
+        <path
+          d="M 162.879 110.142 C 170.428 135.111 177.653 150.814 184.555 175.916 C 189.521 193.975 199.588 216.203 204.735 234.217 C 206.413 240.09 219.23 293.229 223.421 324.656" />
+        <path
+          d="M 178.576 97.436 C 184.541 117.818 186.068 130.379 192.777 150.504 C 198.384 167.325 205.75 183.56 210.715 200.582 C 218.341 226.729 225.946 251.506 234.633 277.567 C 239.81 293.097 241.1 310.166 245.097 326.151" />
+        <path
+          d="M 201.746 97.436 C 216.896 140.495 222.925 154.097 234.633 198.339 C 236.468 205.274 245.266 234.076 247.339 240.943 C 255.447 267.801 256.223 296.658 263.035 323.908" />
+        <path
+          d="M 209.968 66.044 C 223.005 97.55 231.599 127.905 239.865 160.968 C 241.465 167.367 241.733 174.075 243.602 180.401 C 251.476 207.05 259.968 233.866 266.025 261.124 C 271.118 284.044 271.769 300.15 276.489 323.161" />
+        <path
+          d="M 213.705 51.095 C 217.691 62.306 222.42 73.281 225.664 84.729 C 230.903 103.218 246.792 155.626 249.582 165.452 C 252.53 175.836 263.215 214.825 266.025 225.247 C 275.182 259.203 281.472 289.776 289.943 323.909" />
+        <path
+          d="M 233.886 94.446 C 240.842 112.533 245.303 130.951 251.824 149.009 C 265.074 185.702 278.609 222.356 287.701 260.376 C 293.14 283.122 293.587 296.067 299.66 321.665" />
+        <path
+          d="M 232.391 54.832 C 249.313 84.694 259.24 114.525 269.015 147.514 C 277.557 176.343 285.967 204.684 292.185 234.216 C 294.359 244.54 294.882 255.198 295.923 265.609 C 297.71 283.484 301.952 301.449 304.144 319.424" />
+        <path
+          d="M 234.633 18.207 C 244.82 45.939 250.435 69.483 259.298 97.436 C 268.537 126.574 281.018 154.417 288.448 184.138 C 299.023 226.437 304.722 269.632 310.871 312.697" />
+        <path
+          d="M 274.994 51.095 C 279.304 69.235 288.942 111.507 292.185 129.575 C 295.806 149.748 301.384 169.764 304.144 190.118 C 308.269 220.536 307.823 250.37 313.861 280.557" />
+        <path
+          d="M 277.984 16.713 C 284.96 35.897 289.433 56.171 295.175 75.76 C 301.339 96.792 305.05 117.67 308.629 139.292 C 312.635 163.498 317.1 187.626 321.335 211.793" />
+        <path d="M 287.701 -4.963 C 298.101 20.171 317.937 70.676 322.083 99.678" />
+        <path d="M 304.892 -2.721 C 310.622 13.972 316.353 30.665 322.083 47.358" />
+      </g>
+    </symbol>
+
+    <symbol id="grass-left" viewBox="0 0 316 316">
+      <g fill="none" stroke="currentcolor" stroke-linecap="round" stroke-width="13">
+        <path d="M 38.058 7.993 C 28.089 11.316 0.838 21.446 -9.778 21.446" />
+        <path d="M 54.502 25.931 C 36.784 32.374 9.564 33.659 -9.031 34.9" />
+        <path
+          d="M 40.3 44.617 C 32.596 47.185 20.108 49.102 12.645 49.102 C 11.724 49.102 -11.273 49.849 -11.273 49.849" />
+        <path d="M 70.197 55.828 C 44.513 59.371 10.302 63.302 -15.01 63.302" />
+        <path
+          d="M 38.805 78.251 C 29.458 78.251 19.421 80.494 10.403 80.494 C 9.638 80.494 -11.273 81.241 -11.273 81.241" />
+        <path d="M 146.436 76.009 C 98.755 87.302 33.852 89.444 -15.011 93.2" />
+        <path d="M 92.62 96.191 C 64.188 99.928 19.045 106.654 -12.021 106.654" />
+        <path d="M 127.002 110.623 C 86.185 118.524 29.402 125.223 -11.273 121.835" />
+        <path d="M 123.265 126.33 C 81.9 132.793 33.25 138.54 -9.031 141.279" />
+        <path
+          d="M 129.245 137.299 C 105.14 140.135 80.943 144.406 56.743 146.268 C 35.936 147.869 15.883 150.753 -5.294 150.753" />
+        <path
+          d="M 144.193 148.51 C 104.716 148.51 68.301 160.469 28.341 160.469 C 18.874 160.469 8.423 162.712 -0.062 162.712 C -0.691 162.712 -9.031 162.712 -9.031 162.712" />
+        <path d="M 138.214 168.691 C 86.225 174.993 43.197 175.802 -9.03 179.156" />
+        <path
+          d="M 138.961 185.135 C 108.316 187.377 77.638 189.2 47.027 191.862 C 27.053 193.599 12.579 197.094 -7.535 197.094" />
+        <path
+          d="M 192.029 200.083 C 138.506 205.436 85.211 206.11 31.331 206.81 C 14.889 207.024 5.881 207.212 -10.526 208.305" />
+        <path
+          d="M 148.678 215.032 C 110.861 217.395 72.943 217.687 35.068 218.769 C 17.607 219.268 6.926 222.506 -10.526 222.506" />
+        <path
+          d="M 187.545 234.465 C 164.527 234.465 142.438 237.455 120.275 237.455 C 75.157 237.455 32.388 235.96 -11.273 235.96" />
+        <path
+          d="M 195.766 254.646 C 142.507 254.646 90.644 258.383 35.815 258.383 C 23.34 258.383 -12.021 257.636 -12.021 257.636" />
+        <path
+          d="M 180.818 274.079 C 141.514 274.079 99.399 278.564 61.228 278.564 C 36.924 278.564 14.485 276.322 -7.536 276.322" />
+        <path
+          d="M 210.715 289.028 C 204.148 289.875 157.957 296.233 142.698 297.25 C 90.954 300.699 39.787 298.087 -10.525 298.745" />
+        <path
+          d="M 229.401 295.755 C 188.963 295.755 159.401 307.714 104.579 308.461 C 64.791 309.003 28.292 309.956 -11.273 309.956" />
+        <path
+          d="M 218.189 311.202 C 210.762 311.202 181.915 317.374 162.132 321.666 C 148.352 324.656 113.549 327.646 113.549 327.646" />
+      </g>
+    </symbol>
+
+    <symbol id="grass-top-down" viewBox="0 0 316 316">
+      <g fill="none" stroke="currentcolor" stroke-width="5">
+        <path d="M 254.465 58.472 C 253.758 57.413 249.41 50.048 249.41 50.048" />
+        <path d="M 219.08 33.198 C 218.119 31.756 213.59 25.615 213.183 25.615" />
+        <path d="M 176.956 42.465 C 174.963 39.476 168.531 32.13 168.531 29.828" />
+        <path d="M 133.989 34.883 C 132.597 34.419 128.092 28.143 128.092 28.143" />
+        <path
+          d="M 194.648 55.945 C 190.175 52.963 190.159 49.771 187.066 46.678 C 186.738 46.35 186.223 41.623 186.223 41.623" />
+        <path
+          d="M 240.985 73.637 C 240.985 65.822 229.336 60.303 224.977 55.945 C 224.652 55.62 222.45 50.048 222.45 50.048" />
+        <path d="M 221.608 64.37 C 216.87 62.791 212.666 53.418 209.813 53.418" />
+        <path d="M 307.541 98.069 C 305.648 96.807 300.801 88.802 300.801 88.802" />
+        <path d="M 292.376 80.377 C 290.33 79.013 284.794 71.11 284.794 71.11" />
+        <path d="M 284.794 94.699 C 282.933 91.907 278.897 89.912 278.897 87.117" />
+        <path d="M 286.479 110.707 C 283.645 109.762 276.369 99.754 276.369 99.754" />
+        <path d="M 256.15 101.439 C 255 99.715 249.41 91.329 249.41 91.329" />
+        <path d="M 246.882 107.337 C 244.993 104.503 238.457 99.979 238.457 98.069" />
+        <path d="M 219.991 88.064 C 218.59 85.962 213.724 77.094 211.865 77.094" />
+        <path
+          d="M 197.238 88.877 C 196.282 86.009 191.957 81.815 191.957 79.532 C 191.957 79.399 191.144 76.282 191.144 76.282" />
+        <path d="M 169.204 77.501 C 169.204 71.908 161.891 68.978 161.891 65.312" />
+        <path d="M 157.828 63.281 C 156.65 62.495 150.515 55.155 150.515 55.155" />
+        <path
+          d="M 148.483 84.001 C 145.345 80.863 144.487 77.567 141.983 75.063 C 141.799 74.879 140.358 71.813 140.358 71.813" />
+        <path d="M 135.076 71 C 133.904 69.242 131.013 65.841 131.013 64.093" />
+        <path
+          d="M 115.98 85.627 C 111.595 84.165 109.873 80.332 107.448 77.907 C 106.89 77.349 104.604 73.438 104.604 73.438" />
+        <path
+          d="M 98.103 107.16 C 96.485 104.732 91.603 100.855 91.603 98.222 C 91.603 97.643 89.977 94.971 89.977 94.971" />
+        <path
+          d="M 145.639 106.754 C 144.641 103.759 140.358 99.588 140.358 97.815 C 140.358 97.351 139.545 95.784 139.545 95.784" />
+        <path
+          d="M 198.457 105.941 C 198.457 102.501 195.207 100.418 195.207 98.222 C 195.207 96.973 195.643 94.565 194.394 94.565 C 194.364 94.565 192.769 94.159 192.769 94.159" />
+        <path d="M 213.49 117.724 C 211.797 117.159 208.615 112.848 208.615 112.848" />
+        <path d="M 229.742 119.755 C 229.38 118.669 227.71 112.848 227.71 112.848" />
+        <path d="M 214.709 131.944 C 213.893 131.672 209.021 128.694 209.021 128.694" />
+        <path d="M 270.777 130.725 C 268.449 129.173 264.277 120.13 264.277 117.724" />
+        <path
+          d="M 269.152 135.601 C 268.303 134.326 264.377 127.881 263.87 127.881 C 263.069 127.881 261.839 126.256 261.839 126.256" />
+        <path
+          d="M 312.625 131.538 C 308.785 130.258 308.585 125.059 306.125 122.599 C 305.906 122.381 304.093 118.536 304.093 118.536" />
+        <path d="M 305.718 147.383 C 303.089 145.63 297.593 135.601 297.593 135.601" />
+        <path
+          d="M 300.03 163.228 C 298.212 160.501 298.813 155.916 296.78 153.884 C 296.599 153.703 295.561 150.633 295.561 150.633" />
+        <path d="M 292.717 158.353 C 291.638 155.115 289.06 151.195 289.06 148.602" />
+        <path
+          d="M 250.463 146.57 C 249.287 143.043 245.493 140.381 243.556 138.445 C 243.269 138.158 241.118 134.382 241.118 134.382" />
+        <path
+          d="M 191.144 135.601 C 189.767 133.535 185.456 128.437 185.456 126.662 C 185.456 126.315 184.237 123.412 184.237 123.412" />
+        <path
+          d="M 168.798 124.631 C 167.186 122.212 166.476 119.058 165.141 117.724 C 164.705 117.287 165.003 113.661 164.329 113.661" />
+        <path d="M 161.485 134.382 C 159.176 130.919 153.765 124.866 153.765 120.568" />
+        <path
+          d="M 116.793 127.475 C 115.147 125.006 114.079 121.104 112.323 119.349 C 112.322 119.348 111.511 115.692 111.511 115.692" />
+        <path
+          d="M 133.044 145.758 C 130.922 145.05 126.95 139.078 126.95 137.632 C 126.95 136.858 126.137 134.382 126.137 134.382" />
+        <path d="M 117.199 151.446 C 114.458 149.618 111.846 142.507 109.886 142.507" />
+        <path
+          d="M 78.195 149.821 C 76.259 146.918 74.429 143.617 72.507 141.695 C 71.457 140.645 68.444 139.11 68.444 137.632" />
+        <path
+          d="M 297.593 179.932 C 295.851 178.77 292.311 172.362 292.311 170.993 C 292.311 170.802 291.092 167.743 291.092 167.743" />
+        <path
+          d="M 260.62 170.587 C 258.086 166.786 255.919 161.416 253.307 158.804 C 252.286 157.784 249.65 155.681 249.65 153.523" />
+        <path d="M 220.803 156.773 C 219.003 154.072 216.334 150.257 216.334 147.022" />
+        <path
+          d="M 196.832 155.148 C 193.407 152.865 192.019 148.709 189.519 146.209 C 189.501 146.191 188.3 143.365 188.3 143.365" />
+        <path d="M 170.017 164.899 C 168.814 163.696 163.11 155.554 163.11 155.554" />
+        <path
+          d="M 165.954 174.65 C 161.335 173.11 160.562 169.664 157.828 166.93 C 157.432 166.534 155.797 165.878 155.797 165.305 C 155.797 165.154 153.359 162.461 153.359 162.461" />
+        <path d="M 130.607 172.618 C 129.773 171.368 124.919 164.086 124.919 164.086" />
+        <path
+          d="M 154.984 183.182 C 151.733 182.098 148.559 175.869 146.452 175.869 C 145.786 175.869 143.608 175.462 143.608 175.462" />
+        <path d="M 110.698 186.838 C 108.83 185.593 106.589 181.15 105.01 181.15" />
+        <path d="M 98.916 177.494 C 96.866 176.81 91.196 170.773 91.196 168.962" />
+        <path d="M 97.291 218.123 C 97.291 212.106 89.977 208.251 89.977 203.903" />
+        <path d="M 62.756 192.12 C 61.872 191.531 56.255 186.432 56.255 186.432" />
+        <path
+          d="M 252.494 184.807 C 250.866 183.722 248.025 178.461 248.025 177.087 C 248.025 176.419 246.806 174.243 246.806 174.243" />
+        <path d="M 222.429 189.276 C 219.879 187.576 216.106 181.15 214.303 181.15" />
+        <path
+          d="M 202.927 179.119 C 200.648 178.359 197.799 176.275 195.613 176.275 C 195.421 176.275 193.582 175.869 193.582 175.869" />
+        <path d="M 187.487 174.243 C 185.896 173.183 179.768 165.816 179.768 164.899" />
+        <path
+          d="M 294.749 197.808 C 294.749 195.185 292.967 191.152 291.498 189.683 C 291.479 189.663 290.686 186.432 290.686 186.432" />
+        <path d="M 275.653 203.09 C 274.904 202.591 271.59 199.84 271.59 199.84" />
+        <path d="M 242.743 199.84 C 241.547 199.042 235.024 193.339 235.024 193.339" />
+        <path
+          d="M 245.994 217.717 C 245.994 213.508 243.248 210.096 240.712 207.559 C 240.531 207.379 239.493 204.715 239.493 204.715" />
+        <path d="M 256.963 217.717 C 256.963 216.581 254.119 208.778 254.119 208.778" />
+        <path
+          d="M 264.277 247.376 C 263.036 243.654 258.589 238.51 258.589 235.593 C 258.589 234.846 256.557 231.124 256.557 231.124" />
+        <path
+          d="M 279.716 235.593 C 276.694 233.579 274.979 231.263 272.809 229.093 C 272.682 228.966 271.59 227.061 271.59 227.061" />
+        <path
+          d="M 310.594 250.626 C 308.579 247.604 307.697 244.073 305.718 242.094 C 305.544 241.92 304.5 239.25 304.5 239.25" />
+        <path d="M 307.75 215.279 C 307.25 214.529 304.906 211.216 304.906 211.216" />
+        <path d="M 30.704 219.342 C 35.297 219.342 35.166 230.312 38.83 230.312" />
+        <path
+          d="M 42.08 253.877 C 44.153 256.986 45.132 260.992 47.362 263.221 C 47.858 263.717 51.831 266.065 51.831 266.065" />
+        <path
+          d="M 67.27 241.282 C 71.738 242.771 73.559 247.57 76.209 250.22 C 76.455 250.466 79.053 252.251 79.053 252.251" />
+        <path d="M 84.334 234.781 C 88.044 234.781 88.841 242.907 92.054 242.907" />
+        <path
+          d="M 96.523 231.531 C 97.692 233.284 100.992 236.836 100.992 238.031 C 100.992 238.121 102.211 240.469 102.211 240.469" />
+        <path
+          d="M 118.463 223.405 C 119.978 224.415 125.776 229.469 125.776 230.312 C 125.776 230.778 126.995 233.156 126.995 233.156" />
+        <path
+          d="M 133.496 246.563 C 137.648 250.715 138.944 256.887 142.434 260.377 C 143.377 261.32 142.726 264.034 144.059 264.034 C 144.647 264.034 149.341 267.691 149.341 267.691" />
+        <path
+          d="M 115.619 264.034 C 117.63 266.045 122.526 270.644 122.526 273.785 C 122.526 274.39 123.745 276.223 123.745 276.223" />
+        <path
+          d="M 152.592 192.12 C 153.82 195.804 158.28 198.854 158.28 201.871 C 158.28 203.046 159.905 205.122 159.905 205.122" />
+        <path
+          d="M 145.685 205.934 C 150.375 207.498 151.443 216.498 155.029 216.498 C 156.384 216.498 158.28 218.936 158.28 218.936" />
+        <path
+          d="M 174.531 205.528 C 178.209 206.754 180.848 209.406 183.063 211.622 C 183.523 212.082 187.126 213.247 187.126 213.247" />
+        <path
+          d="M 195.252 205.122 C 197.071 207.85 202.159 214.316 202.159 216.091 C 202.159 216.455 202.647 219.342 202.972 219.342" />
+        <path d="M 190.783 234.375 C 192.822 237.433 198.909 241.813 198.909 245.751" />
+        <path
+          d="M 166.812 244.938 C 167.894 245.66 175.344 251.852 175.344 252.251 C 175.344 252.423 176.969 254.689 176.969 254.689" />
+        <path d="M 191.189 252.251 C 191.931 252.746 197.69 259.565 197.69 259.565" />
+        <path d="M 162.343 276.629 C 164.465 278.751 165.754 285.974 168.437 285.974" />
+        <path d="M 166.405 275.41 C 169.222 276.349 172.635 280.286 174.125 280.286" />
+        <path
+          d="M 218.005 252.658 C 221.54 257.961 222.806 265.179 226.943 269.316 C 227.742 270.114 230.6 273.135 230.6 273.785 C 230.6 275.089 233.85 278.66 233.85 278.66" />
+        <path
+          d="M 208.254 224.624 C 210.224 227.58 211.107 231.134 213.535 233.562 C 213.654 233.68 214.348 236 214.348 236" />
+        <path
+          d="M 237.1 253.47 C 237.1 255.759 241.418 262.257 242.788 263.628 C 242.962 263.801 243.195 266.878 243.195 266.878" />
+        <path d="M 280.573 256.721 C 282.39 257.629 286.262 265.253 286.262 265.253" />
+        <path d="M 268.385 271.347 C 269.976 273.735 273.26 276.789 273.26 279.067" />
+        <path d="M 146.903 297.666 C 151.165 297.666 152.159 308.636 157.873 308.636" />
+        <path
+          d="M 196.065 302.948 C 199.09 304.965 199.7 308.208 201.753 310.261 C 201.854 310.362 202.565 312.292 202.565 312.292" />
+        <path d="M 228.568 293.603 C 229.248 294.623 234.662 303.354 234.662 303.354" />
+        <path d="M 240.757 293.603 C 242.895 296.81 246.039 299.212 246.039 302.135" />
+        <path
+          d="M 293.981 271.257 C 293.981 274.742 298.641 281.605 300.888 283.852 C 301.168 284.131 302.513 288.321 302.513 288.321" />
+        <path
+          d="M 286.262 292.926 C 288.673 295.337 289.922 297.805 291.95 299.833 C 292.269 300.152 293.154 303.083 293.575 303.083 C 293.754 303.083 296.013 305.521 296.013 305.521" />
+      </g>
+    </symbol>
+
+    <!-- Icons -->
+    <symbol id="check-circle" viewBox="0 0 16 16">
+      <path fill="currentcolor"
+        d="M8 0a8 8 0 100 16A8 8 0 008 0zm2.72 5.22a.75.75 0 111.06 1.06l-4.5 4.5a.75.75 0 01-1.06 0l-2-2a.75.75 0 011.06-1.06l1.47 1.47 3.97-3.97z" />
+    </symbol>
+
+    <symbol id="coil" viewBox="0 0 16 16">
+      <circle fill="currentcolor" cx="10.5" cy="2.5" r="2.5" />
+      <g fill="none" stroke="currentcolor" stroke-linecap="round" stroke-width="1.5">
+        <ellipse cx="8" cy="3.75" rx="6.5" ry="2.25" transform="rotate(5, 8, 3.75)" stroke-dasharray="14.57 14.57"
+          stroke-dashoffset="-7.28" />
+        <ellipse cx="8" cy="8.25" rx="6.5" ry="2.25" transform="rotate(5, 8, 8.25)" />
+        <ellipse cx="8" cy="12.75" rx="6.5" ry="2.25" transform="rotate(5, 8, 12.75)" />
+      </g>
+    </symbol>
+
+    <symbol id="link" viewBox="0 0 32 32">
+      <path fill="none" opacity="0.8" stroke="currentcolor" stroke-width="3"
+        d="M 4.5 4.5 C 4.5 4.5 30 0.048 30 8 C 30 16 2 16 2 24 C 2 32.035 27.5 27.5 27.5 27.5" />
+      <g fill="currentcolor">
+        <circle cx="4.5" cy="4.5" r="4.5" />
+        <circle cx="27.5" cy="27.5" r="4.5" />
+      </g>
+    </symbol>
+
+    <symbol id="people" viewBox="0 0 20 20">
+      <circle fill="currentcolor" opacity="0.8" cx="10" cy="3.5" r="2.5" />
+      <g fill="none" stroke="currentcolor" stroke-linecap="round" stroke-width="2">
+        <ellipse cx="6.5" cy="13" rx="7" ry="4" transform="rotate(50, 6.5, 13)" />
+        <ellipse cx="13.5" cy="13" rx="7" ry="4" transform="rotate(-50, 13.5, 13)" stroke-dasharray="26.4 8.8"
+          stroke-dashoffset="-17.6" />
+      </g>
+    </symbol>
+
+    <symbol id="ribbon" viewBox="0 0 40 40">
+      <path fill="currentcolor"
+        d="M 27.552 2.225 C 29.228 2.225 29.831 4.845 31.379 5.486 C 32.927 6.128 35.206 4.701 36.391 5.886 C 37.576 7.071 36.149 9.35 36.791 10.898 C 37.432 12.446 40.052 13.049 40.052 14.725 C 40.052 16.401 37.432 17.004 36.791 18.552 C 36.149 20.1 37.576 22.379 36.391 23.564 C 35.206 24.749 32.927 23.322 31.379 23.964 C 29.831 24.605 29.228 27.225 27.552 27.225 C 25.876 27.225 25.273 24.605 23.725 23.964 C 22.177 23.322 19.898 24.749 18.713 23.564 C 17.528 22.379 18.955 20.1 18.313 18.552 C 17.672 17.004 15.052 16.401 15.052 14.725 C 15.052 13.049 17.672 12.446 18.313 10.898 C 18.955 9.35 17.528 7.071 18.713 5.886 C 19.898 4.701 22.177 6.128 23.725 5.486 C 25.273 4.845 25.876 2.225 27.552 2.225 Z"
+        transform="rotate(10, 27.6, 14.7)" />
+      <g fill="none" opacity="0.8" stroke="currentcolor" stroke-linecap="round" stroke-width="3">
+        <path d="M 15.255 23.668 C 11.883 26.637 7.678 28.147 2 27" />
+        <path d="M 24 30 C 20.362 36.586 14 36 14 36" />
+      </g>
+    </symbol>
+
+    <symbol id="star" viewBox="0 0 64 64">
+      <path fill="currentcolor"
+        d="M62.799,23.737c-0.47-1.399-1.681-2.419-3.139-2.642l-16.969-2.593L35.069,2.265C34.419,0.881,33.03,0,31.504,0c-1.527,0-2.915,0.881-3.565,2.265l-7.623,16.238L3.347,21.096c-1.458,0.223-2.669,1.242-3.138,2.642c-0.469,1.4-0.115,2.942,0.916,4l12.392,12.707l-2.935,17.977c-0.242,1.488,0.389,2.984,1.62,3.854c1.23,0.87,2.854,0.958,4.177,0.228l15.126-8.365l15.126,8.365c0.597,0.33,1.254,0.492,1.908,0.492c0.796,0,1.592-0.242,2.269-0.72c1.231-0.869,1.861-2.365,1.619-3.854l-2.935-17.977l12.393-12.707C62.914,26.68,63.268,25.138,62.799,23.737z" />
+    </symbol>
+
+    <symbol id="star-8" viewBox="0 0 100 100">
+      <path fill="currentcolor" stroke-linejoin="round"
+        d="M 49.988 0 C 56.69 0 59.1 10.477 65.292 13.042 C 71.484 15.607 80.596 9.902 85.335 14.641 C 90.074 19.38 84.369 28.492 86.934 34.684 C 89.499 40.876 99.976 43.286 99.976 49.988 C 99.976 56.69 89.499 59.1 86.934 65.292 C 84.369 71.484 90.074 80.596 85.335 85.335 C 80.596 90.074 71.484 84.369 65.292 86.934 C 59.1 89.499 56.69 99.976 49.988 99.976 C 43.286 99.976 40.876 89.499 34.684 86.934 C 28.492 84.369 19.38 90.074 14.641 85.335 C 9.902 80.596 15.607 71.484 13.042 65.292 C 10.477 59.1 0 56.69 0 49.988 C 0 43.286 10.477 40.876 13.042 34.684 C 15.607 28.492 9.902 19.38 14.641 14.641 C 19.38 9.902 28.492 15.607 34.684 13.042 C 40.876 10.477 43.286 0 49.988 0 Z" />
+    </symbol>
+  </svg>
+      </div>
+    </div>
+  </div>
+
+
+<script src="/js/search.js"></script>
+<script src="/js/playlist.js"></script>
+  
+<script>
+
+function focusMusicSearch() {
+  document.getElementById('musicSearch').focus();
+}
+
+$(document).ready(function () {
+    let currentType = 'all';
+
+    function search(keyword) {
+        $.ajax({
+            url: '/searchMusic',
+            type: 'POST',
+            data: {
+                keyword: keyword,
+                type: currentType,
+                lastMusicId: localStorage.getItem("lastMusicId") || ""
+            },
+            success: function (response) {
+                $('#searchResults').html(response);
+
+                if ($('#musicSearch').val().trim().length > 0) {
+                    $('.card_cloase, .content-title1').hide();
+                } else {
+                    $('.card_cloase, .content-title1').show();
+                }
+            }
+        });
+    }
+
+    $('#musicSearch').on('input', function() {
+        const keyword = $(this).val().trim();
+        if (keyword.length > 0) {
+            search(keyword);
+            $('.card_cloase, .content-title1').hide();
+        } else {
+            $('#searchResults').empty();
+            $('.card_cloase, .content-title1').show();
+        }
+    });
+
+    $('.s-button').on('click', function () {
+        $('.s-button').removeClass('active');
+        $(this).addClass('active');
+        currentType = $(this).data('type');
+        const keyword = $('#musicSearch').val().trim();
+        if (keyword.length > 0) {
+            search(keyword);
+        }
+    });
+});
+
+ let allSliders = [];
+        let currentSliderIndex = 0;
+        let currentCardIndex = 0;
+        var isMobile = isTrueMobile();
+
+        // Global state untuk mengelola card aktif
+        let activeCardTracker = {
+            slider1: 0, // Indeks card aktif di slider1
+            slider2: 0  // Indeks card aktif di slider2
+        };
+
+        // Fungsi untuk menutup semua card kecuali yang di-spesifik
+        function closeOtherCards(exceptSliderId, exceptCardIndex) {
+            allSliders.forEach(slider => {
+                if (slider.id !== exceptSliderId) {
+                    // Tutup semua card di slider lain
+                    slider.cards.forEach((card, index) => {
+                        if (card.hasAttribute('active')) {
+                            card.removeAttribute('active');
+                            slider.dots[index].classList.remove('active');
+                        }
+                    });
+                } else {
+                    // Untuk slider yang sama, tutup card lain
+                    slider.cards.forEach((card, index) => {
+                        if (index !== exceptCardIndex && card.hasAttribute('active')) {
+                            card.removeAttribute('active');
+                            slider.dots[index].classList.remove('active');
+                        }
+                    });
+                }
+            });
+        }
+
+        // Fungsi untuk membuat slider
+        function createSlider(sliderId, trackId, dotsId) {
+            const track = document.getElementById(trackId);
+            const wrap = document.getElementById(sliderId);
+            const cards = Array.from(track.children);
+            const dotsBox = document.getElementById(dotsId);
+
+            const supportsHover = !isMobile && window.matchMedia("(hover:hover)").matches;
+
+            // Buat dots
+            cards.forEach((_, i) => {
+                const dot = document.createElement("span");
+                dot.className = "dot";
+                dot.onclick = () => {
+                    currentSliderIndex = allSliders.findIndex(s => s.id === sliderId);
+                    activate(i, true);
+                };
+                dotsBox.appendChild(dot);
+            });
+            const dots = Array.from(dotsBox.children);
+
+            let current = 0;
+            let isDragging = false;
+
+            function center(i) {
+                const card = cards[i];
+                const axis = isMobile ? "top" : "left";
+                const size = isMobile ? "clientHeight" : "clientWidth";
+                const start = isMobile ? card.offsetTop : card.offsetLeft;
+                wrap.scrollTo({
+                    [axis]: start - (wrap[size] / 2 - card[size] / 2),
+                    behavior: "smooth"
+                });
+            }
+
+            function toggleUI(i) {
+                cards.forEach((c, k) => c.toggleAttribute("active", k === i));
+                dots.forEach((d, k) => d.classList.toggle("active", k === i));
+                
+                // Update global active tracker
+                activeCardTracker[sliderId] = i;
+                
+                // Update tombol navigasi global
+                updateNavButtons();
+            }
+
+            function activate(i, scroll) {
+                if (i === current) return;
+                current = i;
+                
+                // Di mobile, hanya boleh ada 1 card aktif di semua slider
+                if (isMobile) {
+                    closeOtherCards(sliderId, i);
+                }
+                
+                toggleUI(i);
+                if (scroll) center(i);
+                
+                // Update indeks global
+                currentCardIndex = i;
+                currentSliderIndex = allSliders.findIndex(s => s.id === sliderId);
+            }
+
+            function go(step) {
+                const newIndex = Math.min(Math.max(current + step, 0), cards.length - 1);
+                activate(newIndex, true);
+            }
+
+            // Click events untuk semua device
+            cards.forEach((card, i) => {
+                card.addEventListener("click", (e) => {
+                    if (isDragging) return;
+                    currentSliderIndex = allSliders.findIndex(s => s.id === sliderId);
+                    activate(i, true);
+                });
+            });
+
+            // Hover events jika device mendukung
+            if (supportsHover) {
+                cards.forEach((card, i) => {
+                    card.addEventListener("mouseenter", () => {
+                        currentSliderIndex = allSliders.findIndex(s => s.id === sliderId);
+                        activate(i, true);
+                    });
+                });
+            }
+
+            // Touch/swipe handling
+            let sx = 0, sy = 0;
+            let startTime = 0;
+            let touchStartTime = 0;
+            let touchStartY = 0;
+            let isVerticalScroll = false;
+
+            track.addEventListener(
+                "touchstart",
+                (e) => {
+                    sx = e.touches[0].clientX;
+                    sy = e.touches[0].clientY;
+                    touchStartY = sy;
+                    startTime = Date.now();
+                    touchStartTime = Date.now();
+                    isDragging = false;
+                    isVerticalScroll = false;
+                },
+                { passive: true }
+            );
+
+            track.addEventListener(
+                "touchmove",
+                (e) => {
+                    const dx = Math.abs(e.touches[0].clientX - sx);
+                    const dy = Math.abs(e.touches[0].clientY - sy);
+                    
+                    // Deteksi jika user sedang scroll vertikal
+                    if (dy > dx && dy > 10) {
+                        isVerticalScroll = true;
+                    }
+                    
+                    if (dx > 5 || dy > 5) {
+                        isDragging = true;
+                    }
+                },
+                { passive: true }
+            );
+
+            track.addEventListener(
+                "touchend",
+                (e) => {
+                    const endTime = Date.now();
+                    const dx = e.changedTouches[0].clientX - sx;
+                    const dy = e.changedTouches[0].clientY - sy;
+                    const timeDiff = endTime - startTime;
+                    const touchDuration = endTime - touchStartTime;
+                    
+                    // Jika ini adalah scroll vertikal (bukan tap), jangan aktifkan card
+                    if (isVerticalScroll && Math.abs(dy) > 20) {
+                        return;
+                    }
+                    
+                    // Hanya anggap sebagai tap jika durasinya singkat dan pergerakan minimal
+                    if ((Math.abs(dx) > 30 || Math.abs(dy) > 30) && timeDiff < 300 && Math.abs(dx) > 10) {
+                        go((isMobile ? dy : dx) > 0 ? -1 : 1);
+                    } else if (!isDragging && touchDuration < 250 && Math.abs(dx) < 10 && Math.abs(dy) < 10) {
+                        // Hanya tap singkat dan diam, cari card yang di-tap
+                        const tapX = e.changedTouches[0].clientX;
+                        const tapY = e.changedTouches[0].clientY;
+                        
+                        for (let i = 0; i < cards.length; i++) {
+                            const rect = cards[i].getBoundingClientRect();
+                            if (tapX >= rect.left && tapX <= rect.right && 
+                                tapY >= rect.top && tapY <= rect.bottom) {
+                                activate(i, true);
+                                break;
+                            }
+                        }
+                    }
+                    
+                    isDragging = false;
+                    isVerticalScroll = false;
+                },
+                { passive: true }
+            );
+
+            // Sembunyikan dots di mobile
+            if (isMobile) dotsBox.hidden = true;
+
+            // Initialize
+            toggleUI(0);
+            center(0);
+
+            const slider = {
+                id: sliderId,
+                cards: cards,
+                dots: dots,
+                activate: activate,
+                go: go,
+                center: center,
+                currentIndex: () => current,
+                getCardCount: () => cards.length,
+                getActiveIndex: () => current
+            };
+
+            return slider;
+        }
+
+        // Fungsi untuk update tombol navigasi
+        function updateNavButtons() {
+            const prevBtn = document.getElementById('prev');
+            const nextBtn = document.getElementById('next');
+            
+            // Hitung total semua card di semua slider
+            const totalCards = allSliders.reduce((sum, slider) => sum + slider.getCardCount(), 0);
+            
+            // Hitung indeks global saat ini
+            let globalIndex = 0;
+            for (let i = 0; i < currentSliderIndex; i++) {
+                globalIndex += allSliders[i].getCardCount();
+            }
+            globalIndex += currentCardIndex;
+            
+            prevBtn.disabled = globalIndex === 0;
+            nextBtn.disabled = globalIndex === totalCards - 1;
+        }
+
+        // Fungsi untuk navigasi global
+        function navigateGlobal(step) {
+            const currentSlider = allSliders[currentSliderIndex];
+            const currentCardCount = currentSlider.getCardCount();
+            
+            // Coba navigasi dalam slider saat ini dulu
+            const newCardIndex = currentCardIndex + step;
+            
+            if (newCardIndex >= 0 && newCardIndex < currentCardCount) {
+                // Masih dalam slider yang sama
+                currentCardIndex = newCardIndex;
+                currentSlider.activate(currentCardIndex, true);
+            } else if (step > 0 && currentSliderIndex < allSliders.length - 1) {
+                // Pindah ke slider berikutnya
+                currentSliderIndex++;
+                currentCardIndex = 0;
+                allSliders[currentSliderIndex].activate(0, true);
+            } else if (step < 0 && currentSliderIndex > 0) {
+                // Pindah ke slider sebelumnya
+                currentSliderIndex--;
+                const prevSlider = allSliders[currentSliderIndex];
+                currentCardIndex = prevSlider.getCardCount() - 1;
+                prevSlider.activate(currentCardIndex, true);
+            }
+        }
+
+        // Inisialisasi sliders
+        document.addEventListener('DOMContentLoaded', function() {
+            // Buat slider pertama
+            const slider1 = createSlider('slider1', 'track1', 'dots1');
+            
+            // Buat slider kedua
+            const slider2 = createSlider('slider2', 'track2', 'dots2');
+            
+            // Simpan semua slider
+            allSliders = [slider1, slider2];
+            
+            // Di mobile, inisialisasi hanya slider1 yang aktif
+            if (isMobile) {
+                // Tutup semua card di slider2
+                slider2.cards.forEach((card, index) => {
+                    if (card.hasAttribute('active')) {
+                        card.removeAttribute('active');
+                        slider2.dots[index].classList.remove('active');
+                    }
+                });
+                // Hanya aktifkan card pertama di slider1
+                slider1.activate(0, false);
+            }
+            
+            // Setup tombol navigasi global
+            const prevBtn = document.getElementById('prev');
+            const nextBtn = document.getElementById('next');
+            
+            prevBtn.onclick = () => navigateGlobal(-1);
+            nextBtn.onclick = () => navigateGlobal(1);
+            
+            // Event listeners untuk keyboard
+            document.addEventListener(
+                "keydown",
+                (e) => {
+                    if (["ArrowRight", "ArrowDown"].includes(e.key)) navigateGlobal(1);
+                    if (["ArrowLeft", "ArrowUp"].includes(e.key)) navigateGlobal(-1);
+                },
+                { passive: true }
+            );
+            
+            // Initialize tombol
+            updateNavButtons();
+            
+            // Handle resize
+            window.addEventListener("resize", () => {
+                const newIsMobile = isTrueMobile();
+                if (newIsMobile !== isMobile) {
+                    location.reload();
+                } else {
+                    allSliders.forEach(slider => {
+                        slider.center(slider.currentIndex());
+                    });
+                }
+            });
+        });
+
+
+function PopularTracks() {
+    $.ajax({
+        url: '/popularTracks',
+        type: 'POST',
+        dataType: 'json',
+        success: function(response) {
+            if (response.success && response.hashid) {
+                // Panggil showMusic dengan hashid
+                showMusicMobile(response.hashid);
+            } else {
+                console.error('Gagal mengambil data popular tracks:', response.message);
+                alert('Gagal memuat lagu paling populer. Silakan coba lagi.');
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Error:', error);
+            alert('Terjadi kesalahan saat mengambil data popular tracks.');
+        }
+    });
+}
+
+
+function top50track(push = true) {
+  saveScrollPosition();
+  hideAll();
+  
+  const startTime = Date.now();
+  const container = document.querySelector(".main-content");
+  const top50Page = container.querySelector(".page_top50");
+  const header = document.querySelector(".sticky-header");
+  
+  $(".loader").show();
+  
+  $.ajax({
+    url: `/top50tracks`,
+    method: "GET",
+    success: function (response) {
+      top50Page.innerHTML = response;
+      top50Page.style.display = "block";
+      header.style.display = "none";
+      
+      // Pastikan header dalam state hidden awal
+      const playlistHeader = top50Page.querySelector('.playlist-header');
+      if (playlistHeader) {
+        playlistHeader.classList.remove('visible');
+      }
+      
+      // Tambahkan script playlist.js untuk fungsionalitas yang sama
+      const oldScript = document.querySelector('script[src="/js/playlist.js"]');
+      if (oldScript) oldScript.remove();
+      
+      const script = document.createElement("script");
+      script.src = "/js/playlist.js";
+      script.defer = true;
+      document.body.appendChild(script);
+
+      const img = top50Page.querySelector(".top50-img");
+      if (img) {
+        img.crossOrigin = "anonymous";
+        img.onload = () => extractColorTopTrack(img);
+      }
+      
+      // **PERBAIKAN: Set icon awal berdasarkan state pemutaran yang BENAR**
+      const lastPlayedMusic = localStorage.getItem("lastPlayedMusic");
+      const lastPlayedPlaylist = localStorage.getItem("lastPlayedPlaylist");
+      const lastPlayedPage = localStorage.getItem("lastPlayedPage");
+      const wasPlaying = localStorage.getItem("wasPlaying") === "true";
+      const currentPlaying = !audioPlayer.paused; // Cek apakah audio player sedang play
+      
+      const isTop50Playing = lastPlayedPlaylist === "top50" && lastPlayedPage === "top50";
+      
+      // **LOGIKA YANG BENAR:**
+      // 1. Jika musik dari top50 sedang diputar DAN sedang play -> icon pause
+      // 2. Jika musik dari top50 sedang diputar TAPI sedang pause -> icon play
+      // 3. Jika musik dari playlist lain yang sedang diputar -> icon play
+      let initialIconHTML = playIcon;
+      
+      if (isTop50Playing) {
+        // Cek apakah musik yang sama masih ada di localStorage
+        const currentAudioSrc = audioPlayer.src;
+        const isSameAudioPlaying = currentAudioSrc.includes(lastPlayedMusic) || 
+                                   (lastPlayedMusic && currentPlaying);
+        
+        if (isSameAudioPlaying && currentPlaying) {
+          initialIconHTML = pauseIcon;
+        } else if (isSameAudioPlaying && !currentPlaying) {
+          initialIconHTML = playIcon;
+        } else {
+          // Jika bukan audio yang sama, cek dari localStorage
+          initialIconHTML = wasPlaying ? pauseIcon : playIcon;
+        }
+        
+        console.log('Top 50 state check:', {
+          isTop50Playing,
+          isSameAudioPlaying,
+          currentPlaying,
+          wasPlaying,
+          currentAudioSrc: currentAudioSrc.substring(currentAudioSrc.lastIndexOf('/') + 1),
+          lastPlayedMusic: lastPlayedMusic?.substring(lastPlayedMusic.lastIndexOf('/') + 1)
+        });
+      }
+      
+      // Set icon di semua button play di halaman Top 50
+      setTimeout(() => {
+        document.querySelectorAll(".page_top50 .svg-icon.playlist-play").forEach((icon) => {
+          icon.innerHTML = initialIconHTML;
+        });
+        
+        // Highlight track yang sedang diputar jika konteks sesuai
+        if (isTop50Playing) {
+          document.querySelectorAll(".page_top50 .listmusic").forEach(track => {
+            const trackSrc = track.getAttribute("data-src");
+            const trackPlaylist = track.getAttribute("data-playlist");
+            const shouldHighlight = trackSrc === lastPlayedMusic && trackPlaylist === "top50";
+            if (shouldHighlight) {
+              track.classList.add("playing");
+              console.log('Highlighting playing track:', track.getAttribute('data-title'));
+            } else {
+              track.classList.remove("playing");
+            }
+          });
+        }
+        
+        // **PERBAIKAN TAMBAHAN:** Update juga berdasarkan event listener audio player
+        // Karena mungkin ada delay antara load halaman dan update state
+        const checkAndUpdateIcon = () => {
+          const isTop50Current = localStorage.getItem("lastPlayedPlaylist") === "top50" &&
+                                 localStorage.getItem("lastPlayedPage") === "top50";
+          const isPlaying = !audioPlayer.paused;
+          
+          if (isTop50Current) {
+            const correctIcon = isPlaying ? pauseIcon : playIcon;
+            document.querySelectorAll(".page_top50 .svg-icon.playlist-play").forEach((icon) => {
+              icon.innerHTML = correctIcon;
+            });
+            console.log('Updated icon based on audio state:', isPlaying ? 'pause' : 'play');
+          }
+        };
+        
+        // Panggil sekali saat load
+        checkAndUpdateIcon();
+        
+        // Juga tambahkan event listener untuk perubahan state audio
+        audioPlayer.addEventListener('play', checkAndUpdateIcon);
+        audioPlayer.addEventListener('pause', checkAndUpdateIcon);
+        
+        // Simpan reference untuk bisa di-remove nanti
+        window.top50AudioListeners = {
+          play: checkAndUpdateIcon,
+          pause: checkAndUpdateIcon
+        };
+        
+      }, 100);
+      
+      console.log('Top 50 page loaded - Playback state:', {
+        lastPlayedPlaylist,
+        lastPlayedPage,
+        wasPlaying,
+        currentPlaying,
+        audioPlayerState: audioPlayer.paused ? 'paused' : 'playing',
+        initialIcon: initialIconHTML === playIcon ? 'play' : 'pause'
+      });
+      
+     if (push) {
+        history.pushState({ page: "top50" }, "", "/top50tracks");
+        pushPageToHistory({ page: "top50" });
+      }
+      
+      updateNavIcons();
+    },
+    complete: function () {
+      const elapsed = Date.now() - startTime;
+      const remaining = Math.max(0, 600 - elapsed);
+      setTimeout(() => $(".loader").hide(), remaining);
+    },
+    error: function () {
+      $(".loader").hide();
+      alert("Gagal memuat Top 50 tracks.");
+    }
+  });
+}
+
+
+
+function mostPlayed(push = true) {
+  saveScrollPosition();
+  hideAll();
+  
+  const startTime = Date.now();
+  const container = document.querySelector(".main-content");
+  const mostPlayedPage = container.querySelector(".page_mostplayed");
+  const header = document.querySelector(".sticky-header");
+  
+  $(".loader").show();
+  
+  $.ajax({
+    url: `/mostPlayed`,
+    method: "GET",
+    success: function (response) {
+      mostPlayedPage.innerHTML = response;
+      mostPlayedPage.style.display = "block";
+      header.style.display = "none";
+      
+
+      // **PERBAIKAN: Set icon awal berdasarkan state pemutaran yang BENAR**
+      const lastPlayedMusic = localStorage.getItem("lastPlayedMusic");
+      const lastPlayedPlaylist = localStorage.getItem("lastPlayedPlaylist");
+      const lastPlayedPage = localStorage.getItem("lastPlayedPage");
+      const wasPlaying = localStorage.getItem("wasPlaying") === "true";
+      const currentPlaying = !audioPlayer.paused;
+      
+      const isMostPlayedPlaying = lastPlayedPlaylist === "mostplayed" && lastPlayedPage === "mostplayed";
+      
+      let initialIconHTML = playIcon;
+      
+      if (isMostPlayedPlaying) {
+        const currentAudioSrc = audioPlayer.src;
+        const isSameAudioPlaying = currentAudioSrc.includes(lastPlayedMusic) || 
+                                   (lastPlayedMusic && currentPlaying);
+        
+        if (isSameAudioPlaying && currentPlaying) {
+          initialIconHTML = pauseIcon;
+        } else if (isSameAudioPlaying && !currentPlaying) {
+          initialIconHTML = playIcon;
+        } else {
+          initialIconHTML = wasPlaying ? pauseIcon : playIcon;
+        }
+      }
+      
+      // Set icon di semua button play di halaman Most Played
+      setTimeout(() => {
+        document.querySelectorAll(".page_mostplayed .svg-icon.playlist-play").forEach((icon) => {
+          icon.innerHTML = initialIconHTML;
+        });
+        
+        // Highlight track yang sedang diputar jika konteks sesuai
+        if (isMostPlayedPlaying) {
+          document.querySelectorAll(".page_mostplayed .listmusic").forEach(track => {
+            const trackSrc = track.getAttribute("data-src");
+            const trackPlaylist = track.getAttribute("data-playlist");
+            const shouldHighlight = trackSrc === lastPlayedMusic && trackPlaylist === "mostplayed";
+            if (shouldHighlight) {
+              track.classList.add("playing");
+            } else {
+              track.classList.remove("playing");
+            }
+          });
+        }
+        
+        // Tambahkan event listener untuk update icon real-time
+        const checkAndUpdateMostPlayedIcon = () => {
+          const isMostPlayedCurrent = localStorage.getItem("lastPlayedPlaylist") === "mostplayed" &&
+                                       localStorage.getItem("lastPlayedPage") === "mostplayed";
+          const isPlaying = !audioPlayer.paused;
+          
+          if (isMostPlayedCurrent) {
+            const correctIcon = isPlaying ? pauseIcon : playIcon;
+            document.querySelectorAll(".page_mostplayed .svg-icon.playlist-play").forEach((icon) => {
+              icon.innerHTML = correctIcon;
+            });
+          }
+        };
+        
+        checkAndUpdateMostPlayedIcon();
+        
+        audioPlayer.addEventListener('play', checkAndUpdateMostPlayedIcon);
+        audioPlayer.addEventListener('pause', checkAndUpdateMostPlayedIcon);
+        
+        window.mostPlayedAudioListeners = {
+          play: checkAndUpdateMostPlayedIcon,
+          pause: checkAndUpdateMostPlayedIcon
+        };
+        
+      }, 100);
+      
+
+      const playlistHeader = mostPlayedPage.querySelector('.playlist-header');
+      if (playlistHeader) {
+        playlistHeader.classList.remove('visible');
+      }
+      
+      // Tambahkan script playlist.js untuk fungsionalitas yang sama
+      const oldScript = document.querySelector('script[src="/js/playlist.js"]');
+      if (oldScript) oldScript.remove();
+      
+      const script = document.createElement("script");
+      script.src = "/js/playlist.js";
+      script.defer = true;
+      document.body.appendChild(script);
+
+      const img = mostPlayedPage.querySelector(".most-img");
+      if (img) {
+        img.crossOrigin = "anonymous";
+        img.onload = () => extractColorMostPlayed(img);
+      }
+      
+
+
+          
+      if (push) {
+        history.pushState({ page: "mostplayed" }, "", "/mostplayed");
+        pushPageToHistory({ page: "mostplayed" });
+      }
+      
+      updateNavIcons();
+    },
+    complete: function () {
+      const elapsed = Date.now() - startTime;
+      const remaining = Math.max(0, 600 - elapsed);
+      setTimeout(() => $(".loader").hide(), remaining);
+    },
+    error: function () {
+      $(".loader").hide();
+      alert("Gagal memuat Most Played tracks.");
+    }
+  });
+}
+
+
+
+
+
+
+
+</script>
+
+
+
+
