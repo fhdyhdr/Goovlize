@@ -3,5 +3,4 @@
 node_modules/
 logs/
 *.log
-uploads/
 public/uploads/
