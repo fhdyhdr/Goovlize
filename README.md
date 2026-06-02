@@ -43,7 +43,7 @@ Before running this project, make sure the following software is installed:
 ### 1. Clone Repository
 
 ```bash
-git clone https://github.com/fhdyhdr/goovlize.git
+git clone https://github.com/fhdyhdr/Goovlize.git
 ```
 
 ### 2. Install Dependencies
